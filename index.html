@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dimensione Avventura - Fighting Fantasy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@600;700&family=Metamorphous&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      background-color: #0f0d0b;
+      background-image: radial-gradient(#1a1510 1px, transparent 0);
+      background-size: 24px 24px;
+      color: #e5d3b3;
+    }
+    .font-fantasy { font-family: 'MedievalSharp', cursive; }
+    .font-title { font-family: 'Cinzel', serif; }
+    .parchment {
+      background: #181410;
+      border: 2px solid #5a4327;
+      box-shadow: inset 0 0 30px #000000, 0 8px 20px rgba(0,0,0,0.8);
+    }
+    .parchment-inner {
+      background: linear-gradient(135deg, #241d15 0%, #1a140e 100%);
+      border: 1px solid #3d2d1a;
+    }
+    .btn-fantasy {
+      background: linear-gradient(180deg, #4a341b 0%, #2a1c0d 100%);
+      border: 1px solid #8c6733;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+      transition: all 0.2s ease;
+    }
+    .btn-fantasy:hover:not(:disabled) {
+      background: linear-gradient(180deg, #664827 0%, #3d2812 100%);
+      border-color: #cca352;
+      transform: translateY(-1px);
+    }
+    .btn-fantasy:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+    .btn-fantasy:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      filter: grayscale(80%);
+    }
+    .btn-loot {
+      background: linear-gradient(180deg, #1b4a22 0%, #0d2a13 100%);
+      border: 1px solid #338c43;
+    }
+    .btn-loot:hover:not(:disabled) {
+      background: linear-gradient(180deg, #276633 0%, #123d1c 100%);
+      border-color: #52cc6c;
+    }
+    .btn-dice {
+      background: linear-gradient(180deg, #8b0000 0%, #4a0000 100%);
+      border: 1px solid #ff4500;
+    }
+    .btn-dice:hover {
+      background: linear-gradient(180deg, #a50000 0%, #660000 100%);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #120e0b;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #3d2d1a;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-2 md:p-6 custom-scrollbar relative">
+
+  <!-- FANTASY MODAL / POPUP OVERLAY -->
+  <div id="fantasy-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="parchment p-6 rounded-lg max-w-md w-full border-2 border-amber-600 text-center space-y-4 shadow-2xl animate-fade-in">
+      <h3 id="modal-title" class="font-fantasy text-2xl text-amber-400">Notifica</h3>
+      <div id="modal-body" class="text-amber-100 text-base leading-relaxed"></div>
+      <button id="modal-btn" onclick="closeModal()" class="btn-fantasy py-2 px-6 rounded text-amber-200 font-bold border border-amber-600 hover:border-amber-400">
+        Prosegui
+      </button>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="text-center my-4 parchment p-4 rounded-lg border-b-4 border-amber-900 max-w-5xl mx-auto w-full">
+    <h1 class="font-title text-2xl md:text-4xl text-amber-500 tracking-wider font-bold mb-1 drop-shadow-md">DIMENSIONE AVVENTURA</h1>
+    <h2 class="font-fantasy text-base md:text-xl text-amber-200/80">Fighting Fantasy - Supporto Scolastico</h2>
+    <p class="text-xs text-amber-500/60 mt-1 italic">di Steve Jackson e Ian Livingstone • Traduzione di Mauro Longo</p>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-5xl mx-auto w-full flex-grow grid grid-cols-1 md:grid-cols-3 gap-6 my-2">
+    
+    <!-- LEFT PANEL: STATS & INVENTORY -->
+    <aside class="md:col-span-1 parchment p-4 rounded-lg flex flex-col justify-between h-fit">
+      <div>
+        <h3 class="font-fantasy text-xl text-amber-400 border-b border-amber-900/60 pb-2 mb-4 text-center">Scheda Eroe</h3>
+        
+        <!-- STAMINA -->
+        <div class="mb-5 bg-black/40 p-3 rounded border border-amber-950">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-sm font-semibold text-amber-200">Resistenza</span>
+            <span id="stamina-text" class="text-lg font-bold text-red-400">12 / 12</span>
+          </div>
+          <div class="w-full bg-red-950 rounded-full h-3 border border-red-900 overflow-hidden">
+            <div id="stamina-bar" class="bg-gradient-to-r from-red-700 to-red-500 h-full rounded-full transition-all duration-300" style="width: 100%;"></div>
+          </div>
+        </div>
+
+        <!-- GOLD -->
+        <div class="mb-5 bg-black/40 p-3 rounded border border-amber-950 flex justify-between items-center">
+          <span class="text-sm font-semibold text-amber-200 flex items-center gap-2">
+            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zM8 12a1 1 0 102 0 1 1 0 00-2 0zm1-8a1 1 0 00-1 1v3a1 1 0 102 0V5a1 1 0 00-1-1z"/></svg>
+            Pezzi d'Oro
+          </span>
+          <span id="gold-value" class="text-xl font-bold text-amber-400">0</span>
+        </div>
+
+        <!-- INVENTORY -->
+        <div class="bg-black/40 p-3 rounded border border-amber-950">
+          <h4 class="text-xs uppercase tracking-wider text-amber-500/80 mb-2 font-semibold border-b border-amber-900/40 pb-1">Zaino & Oggetti</h4>
+          <ul id="inventory-list" class="space-y-1 text-sm text-amber-100 min-h-[80px]">
+            <li class="text-amber-600/60 italic text-xs">Lo zaino è vuoto.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- RESTART BUTTON -->
+      <button onclick="resetGame()" class="w-full mt-6 py-2 px-4 rounded text-xs font-semibold text-amber-400/80 hover:text-amber-300 border border-amber-900/40 hover:bg-amber-950/40 transition">
+        ↺ Ricomincia da Capo
+      </button>
+    </aside>
+
+    <!-- RIGHT PANEL: GAME TEXT & ACTIONS -->
+    <section class="md:col-span-2 parchment p-5 rounded-lg flex flex-col justify-between parchment-inner">
+      <div>
+        <!-- PARAGRAPH TITLE -->
+        <div class="flex items-center justify-between border-b border-amber-900/60 pb-3 mb-4">
+          <h3 id="node-title" class="font-fantasy text-2xl text-amber-400">1. Ingresso</h3>
+          <span id="node-badge" class="text-xs px-2 py-1 rounded bg-amber-950 text-amber-300 border border-amber-800">Paragrafo</span>
+        </div>
+
+        <!-- MAIN TEXT CONTENT -->
+        <div id="node-text" class="text-amber-100/90 leading-relaxed space-y-3 mb-6 text-base md:text-lg">
+          <!-- Text dynamically loaded -->
+        </div>
+
+        <!-- LOOT CONTAINER -->
+        <div id="loot-box" class="hidden my-4 p-4 bg-emerald-950/30 border border-emerald-800/80 rounded-lg space-y-2">
+          <h4 class="font-fantasy text-lg text-emerald-400 border-b border-emerald-900/60 pb-1 mb-2">🎁 Oggetti da Raccogliere (Obbligatori):</h4>
+          <div id="loot-buttons" class="space-y-2"></div>
+        </div>
+
+        <!-- COMBAT SECTION -->
+        <div id="combat-box" class="hidden my-4 p-4 bg-red-950/30 border border-red-800/80 rounded-lg">
+          <h4 id="enemy-name" class="font-fantasy text-xl text-red-400 mb-2 border-b border-red-900/60 pb-1">Nemico</h4>
+          <div class="flex justify-between items-center mb-4 text-sm">
+            <span>Resistenza Mostro:</span>
+            <span id="enemy-stamina" class="text-xl font-bold text-red-400">0</span>
+          </div>
+
+          <!-- COMBAT LOG -->
+          <div id="combat-log" class="bg-black/60 p-3 rounded text-xs font-mono text-amber-200/80 mb-4 border border-amber-900/40 text-center">
+            <p class="text-amber-500/60 italic">Inizia lo scontro! Tira i dadi per combattere.</p>
+          </div>
+
+          <button id="btn-roll-dice" onclick="handleCombatRound()" class="w-full btn-fantasy btn-dice py-3 rounded text-white font-bold flex items-center justify-center gap-2 shadow-lg">
+            <span>🎲 Tira i Dadi</span>
+          </button>
+        </div>
+
+        <!-- RIDDLE INPUT SECTION -->
+        <div id="riddle-box" class="hidden my-4 p-4 bg-amber-950/30 border border-amber-800 rounded-lg">
+          <label id="riddle-label" for="riddle-input" class="block text-sm font-semibold text-amber-300 mb-2">Inserisci la tua risposta:</label>
+          <div class="flex gap-2">
+            <input type="text" id="riddle-input" class="flex-grow bg-black/60 border border-amber-700 rounded px-3 py-2 text-amber-100 focus:outline-none focus:border-amber-400" placeholder="Scrivi qui...">
+            <button onclick="submitRiddle()" class="btn-fantasy px-4 py-2 rounded text-amber-200 font-semibold">Conferma</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHOICES & BUTTONS CONTAINER -->
+      <div id="choices-container" class="mt-6 pt-4 border-t border-amber-900/60 space-y-3">
+        <!-- Dynamic choice buttons inserted here -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="text-center text-xs text-amber-600/60 my-2">
+    Fighting Fantasy™ © Steve Jackson & Ian Livingstone. Progetto di Supporto Scolastico.
+  </footer>
+
+  <script>
+    const gamebook = {
+      title: "Dimensione Avventura - Fighting Fantasy: Supporto Scolastico",
+      initial_state: {
+        stamina: 12,
+        max_stamina: 12,
+        gold: 0,
+        inventory: [],
+        current_node: "1"
+      },
+      nodes: {
+        "1": {
+          title: "1. Ingresso",
+          text: `Alto tra i Colli Esterni, vicino alla città di Sonoria si trova Monte Pauroso. Il monte è chiamato così per le creature che vivono lì attorno. C'è un vero e proprio tesoro da trovare qui, frutto delle venature d'oro estratte in passato, sorvegliato però da feroci mostri.<br><br>
+                 Dopo una dura marcia di alcuni giorni attraverso i Colli esterni, il nostro Eroe è finalmente giunto di fronte l'ingresso del vecchio Pandoro. Di fronte a lui c'è un'oscura caverna. Le stalattiti pendono dal soffitto della grotta. Brrrr. Entrare in questo luogo sembra come camminare tra le zanne di un'immensa bestia. La prima cosa che si nota è una scritta incisa sulla roccia. Ecco cosa dice:<br>
+                 <strong class="text-amber-400">REЖTA A DEЖTRA</strong><br>
+                 E un'altra scritta dice:<br>
+                 <strong class="text-emerald-400">VERDE = VAI</strong><br><br>
+                 Forse si tratta di una specie di antichi graffiti..<br>
+                 Entrando nella caverna, il nostro Eroe segue la parete alla sua destra, quando sente il rumore di un grande crollo!<br>
+                 Alla sua sinistra, un'immensa stalattite è caduta a terra e si è infranta in mille pezzi. Accende la sua torcia e avanza nella grotta.<br>
+                 Ad un tratto si sente di nuovo qualcosa. Presto! Un enorme macigno sta rotolando verso di lui. Cosa deve fare il nostro eroe? Lanciarsi sulla sinistra e cercare di evitarlo? O schiacciarsi contro la parete a destra?`,
+          choices: [
+            { text: "Lanciarsi sulla Sinistra per evitarlo", target: "2" },
+            { text: "Schiacciarsi contro la parete a Destra", target: "3" }
+          ]
+        },
+        "2": {
+          title: "2. Lanciarsi a Sinistra",
+          text: `Il nostro Eroe si lancia a sinistra.. dritto in direzione del macigno rotolante. <strong>Splat!</strong>`,
+          is_game_over: true,
+          choices: [
+            { text: "Ricomincia l'Avventura", target: "1", reset_game: true }
+          ]
+        },
+        "3": {
+          title: "3. Rimanere a Destra",
+          text: `Il macigno rotola con fragore alle sue spalle.<br>
+                 Il nostro Eroe procede lungo un passaggio nell'oscurità. L'aria è fredda e umida. La tremolante luce della sua torcia danza sulle viscide pareti di roccia, attraverso le inquietanti ombre che lo circondano. Un brivido corre lungo la sua schiena. Quali pericoli potrebbero nascondersi dinnanzi a lui?<br>
+                 Presto egli arriva ad una biforcazione. Dove decidi di dirigerti?`,
+          choices: [
+            { text: "Svolta a Destra", target: "4" },
+            { text: "Svolta a Sinistra", target: "4" }
+          ]
+        },
+        "4": {
+          title: "4. Lupi di Montagna",
+          text: `Avanzando nel passaggio, immediatamente si sente un cupo ringhio.<br>
+                 Sei entrato nella tana di un branco di Lupi di Montagna affamati che ti saltano addosso! Aaargh! Mordono!<br>
+                 Inizia il combattimento!`,
+          combat: {
+            enemy_name: "Lupi di Montagna",
+            enemy_stamina: 2
+          },
+          on_victory: {
+            text: `Bene! Un rapido colpo della spada ricaccia indietro le creature. I Lupi sono sconfitti e ritornano nelle buie profondità della caverna a leccarsi le ferite.<br><br>
+                   Non appena il nostro Eroe muove qualche passo per riprendere il cammino, inciampa in qualcosa di morbido. É un cadavere!<br>
+                   Deve essere stato qualcuno ucciso dai Lupi.<br>
+                   Mmmhhh.. Non ha un buon odore. Vediamo se possiede dell'oro..<br>
+                   Aha! Si. Ha 5 Pezzi d'Oro in tasca. E c'è anche qualcos'altro.. Un foglio di pergamena! C'è sopra un numero, il Numero 1.<br><br>
+                   Lasciando perdere il cadavere, poco più avanti si trova un altro incrocio. Che direzione prendere?`,
+            loot: {
+              gold: 5,
+              items: ["Pergamena B"]
+            },
+            choices: [
+              { text: "Prendi il cunicolo di Destra", target: "5" },
+              { text: "Prendi il cunicolo di Sinistra", target: "5" }
+            ]
+          }
+        },
+        "5": {
+          title: "5. Il Troll delle Caverne",
+          text: `Il nostro Eroe segue il passaggio con cautela, finché non giunge ad una vasta caverna scavata nella roccia. Ad un tratto si sente un rumore di passi strascicati provenire da dietro...<br><br>
+                 Il nostro Eroe si lancia istintivamente da un lato, appena in tempo per evitare la clava di legno che si abbatte a terra. Apre gli occhi e sobbalza di paura: è finito nella tana di un Troll delle Caverne!<br><br>
+                 La battaglia comincia! Il Troll ha 3 punti di Resistenza.`,
+          trap_damage: true,
+          combat: {
+            enemy_name: "Troll delle Caverne",
+            enemy_stamina: 3
+          },
+          on_victory: {
+            text: `Bene! La spada si infila in profondità nel suo ventre. La creatura ruggisce di dolore e cade in ginocchio. È finita.<br><br>
+                   Attaccato alla cintura del Troll c'è un borsello. Dentro ci sono 3 Pezzi d'Oro e una Chiave di Rame. C'è anche un foglio di pergamena.<br><br>
+                   Proseguendo dalla caverna del Troll, il nostro Eroe scopre una porta sul muro a destra. È difficile da distinguere bene, ma sembra dipinta di verde. O forse è semplicemente ammuffita. Che fare?`,
+            loot: {
+              gold: 3,
+              items: ["Chiave di Rame", "Pergamena E"]
+            },
+            choices: [
+              { text: "Apri la Porta Verde ed entra", target: "6" },
+              { text: "Prosegui dritto per il corridoio", target: "7" }
+            ]
+          }
+        },
+        "6": {
+          title: "6. La Porta",
+          text: `La porta è vecchia e arrugginita, con cardini induriti. Scricchiola rumorosamente quando viene aperta. Dietro la porta c'è una piccola stanza e nel centro della stanza c'è un tavolo con una campanella sopra. Una scritta davanti al campanello dice <strong class="text-amber-300">"Suonare Per Chiamare Aiuto"</strong>. Che fare?`,
+          choices: [
+            { text: "Suonare la campanella", target: "6_genie" },
+            { text: "Uscire e percorrere il passaggio", target: "7" }
+          ]
+        },
+        "6_genie": {
+          title: "Incontro con il Genio",
+          text: `Un Genio appare magicamente nella stanza. "Salve," dice, "perché mi hai convocato? Io non ti ho mai visto prima. Posso servire solamente chi conosce il mio nome. Tu conosci il mio nome?"`,
+          input_riddle: {
+            correct_answer: "aiuto",
+            success: {
+              text: `Il Genio sorride! Riconoscendo che lo hai chiamato per nome ("Aiuto"), prima di svanire ti lascia in dono <strong>10 Pezzi d'Oro</strong>!<br><br>Raccogli la ricompensa qui sotto prima di proseguire:`,
+              loot: { gold: 10, items: [] },
+              target: "7"
+            },
+            failure: {
+              text: `Il Genio scuote la testa: "Non è questo il mio nome!" e svanisce nel nulla. Non ti resta che uscire e percorrere il passaggio.`,
+              target: "7"
+            }
+          }
+        },
+        "7": {
+          title: "7. Proseguire",
+          text: `Il passaggio prosegue nell'oscurità finché non giungi a un vicolo cieco formato da enormi massi che sbarrano la strada.<br><br>
+                 Osservando bene le rocce, scorgi delle antiche incisioni magiche. Sembra serva un incantesimo per smuovere la roccia...`
+        },
+        "7_deadend": {
+          title: "Vicolo Cieco Senza Uscita",
+          text: `Sei giunto di fronte a un vicolo cieco! Non possiedi la Pergamena B e non conosci l'incantesimo per smuovere le rocce. Sei intrappolato per sempre nel cunicolo.`,
+          is_game_over: true,
+          choices: [
+            { text: "Ricomincia l'Avventura", target: "1", reset_game: true }
+          ]
+        },
+        "7_unlocked": {
+          title: "7. Proseguire (Sbloccato)",
+          text: `Completando la rima della Pergamena B con la parola <strong class="text-amber-300">"MAGO"</strong>:<br><br>
+                 Ehi! Accade qualcosa! Il cunicolo sta diventando più scuro. Ci sono strani suoni stridenti di rocce che si spostano! Il terreno sotto i tuoi piedi diventa rapidamente scintillante. Ben presto l'oscurità si schiarisce e i rumori si fermano.<br>
+                 Il nostro Eroe si trova ora all'interno di un passaggio differente. Dopo averlo percorso, giunge ad un'altra intersezione. Quale via scegliere?`,
+          choices: [
+            { text: "Prosegui Dritto", target: "8" },
+            { text: "Girare a Sinistra", target: "8" }
+          ]
+        },
+        "8": {
+          title: "8. L'Eremita",
+          text: `Il passaggio termina ben presto contro una porta di legno. Il nostro Eroe si appoggia silenziosamente e la apre con cautela. All'interno di una stanza c'è un uomo anziano, vestito di stracci, con una lunga barba grigia. Molto più preoccupante è la sua Pantera delle Montagne dal pelo nero e dall'aspetto feroce, che ringhia attaccata ad un guinzaglio. La camera sembra la dimora di un Eremita, con un vecchio forziere di legno come comodino. Una porta dall'altro lato della stanza permette di proseguire. Cosa fare?`,
+          choices: [
+            { text: "Frugare nel forziere dell'eremita", target: "9" },
+            { text: "Salutare con un cortese 'Buon Giorno' e uscire dall'altra porta", target: "10" }
+          ]
+        },
+        "9": {
+          title: "9. Il Forziere",
+          text: `L'anziano individuo sguinzaglia la sua Pantera, che ruggisce e parte all'attacco, sfregiando al petto il nostro Eroe con i suoi artigli! Perde 1 punto Resistenza!<br><br>
+                 Comincia la battaglia! La Pantera ha 2 punti Resistenza!`,
+          stamina_change: -1,
+          combat: {
+            enemy_name: "Pantera delle Montagne",
+            enemy_stamina: 2
+          },
+          on_victory: {
+            text: `La creatura salta di nuovo! Ma stavolta il nostro Eroe è pronto con la sua spada. Il colpo si abbatte sul collo della bestia. Sgozz! La belva è morta.<br><br>
+                   Adesso il forziere può essere aperto. Dentro ci sono 6 Pezzi d'Oro, un paio di fetide mutande e un foglio di Pergamena con su scritto "3" (Pergamena H).<br>
+                   Il nostro Eroe prende i Pezzi d'Oro e il foglio ed esce dalla porta dall'altro lato della stanza.`,
+            loot: {
+              gold: 6,
+              items: ["Pergamena H"]
+            },
+            choices: [
+              { text: "Uscici dalla stanza e continua", target: "10" }
+            ]
+          }
+        },
+        "10": {
+          title: "10. Uscire",
+          text: `Il passaggio dall'altro lato prosegue lungo un corridoio scavato nella roccia. Lungo il percorso ci sono due Porte: una con Serratura di Rame e una con Serratura d'Argento. Che fare?`,
+          choices: [
+            { text: "Prova ad aprire le Porte", target: "11" },
+            { text: "Ignora le porte e continua dritto", target: "12" }
+          ]
+        },
+        "11": {
+          title: "11. Le Porte",
+          text: `Con quale delle due porte decidi di provare?`,
+          choices: [
+            { text: "Sblocca la Porta con Serratura d'Argento", target: "13" },
+            { text: "Sblocca la Porta con Serratura di Rame", target: "14" }
+          ]
+        },
+        "12": {
+          title: "12. Continuare",
+          text: `Finalmente raggiungi un incrocio a T. Ci sono dei segni scolpiti nella roccia. Una freccia punta a sinistra e dice <strong class="text-amber-400">"MORTI"</strong>. Un'altra indica la destra e dice <strong class="text-purple-400">"NONMORTI"</strong>. Che fare?`,
+          choices: [
+            { text: "Svolta a Sinistra (MORTI)", target: "16" },
+            { text: "Svolta a Destra (NONMORTI)", target: "16" }
+          ]
+        },
+        "13": {
+          title: "13. Argento",
+          text: `La Porta è chiusa a chiave. Non possiedi la Chiave d'Argento per aprirla. Non ti resta che proseguire lungo il corridoio.`,
+          choices: [
+            { text: "Prosegui lungo il corridoio", target: "12" }
+          ]
+        },
+        "14": {
+          title: "14. Rame",
+          text: `Inserisci la Chiave di Rame nella serratura della porta di rame e prova ad aprirla...`
+        },
+        "14_unlocked": {
+          title: "14. Rame (Sbloccato)",
+          text: `La Chiave di Rame entra nella serratura e gira perfettamente! La porta si apre su una stanza buia con un grande forziere.<br><br>
+                 Aprendolo, trovi 8 Pezzi d'Oro e una bottiglia di Pozione con una grande croce rossa sopra. Che fare?`,
+          loot: {
+            gold: 8,
+            items: []
+          },
+          choices: [
+            { text: "Stappa e bevi la Pozione", target: "15" },
+            { text: "Lascia la pozione ed esci dalla stanza", target: "12" }
+          ]
+        },
+        "15": {
+          title: "15. Pozione",
+          text: `Non appena la bottiglia viene stappata, un Genio appare! "Oh, perdonami", dice. "Mi sembrava di aver sentito qualcuno Chiamare Aiuto".<br>
+                 Chiedi se la pozione sia velenosa, ma il Genio pretende che tu indovini il suo nome per risponderti... Qual è il suo nome?`,
+          input_riddle: {
+            correct_answer: "aiuto",
+            success: {
+              text: `Il Genio sorride! Riconoscendo che hai indovinato il suo nome ("Aiuto"), ti svela che la pozione è sicura e svanisce nel nulla.`,
+              target: "15_drink"
+            },
+            failure: {
+              text: `Il Genio scuote la testa: "Non è questo il mio nome!" e svanisce nel nulla, lasciandoti con i tuoi dubbi.`,
+              target: "15_drink"
+            }
+          }
+        },
+        "15_drink": {
+          title: "15. Bevi la Pozione",
+          text: `Decidi di bere la Pozione... Il nostro Eroe comincia ad addormentarsi in un pesante sonno... quando ad un tratto qualcuno suona alla porta! Aaargh! È un disgustoso Hobgoblin che ti aggredisce!<br><br>
+                 La battaglia comincia! L'Hobgoblin ha 4 punti di Resistenza.`,
+          combat: {
+            enemy_name: "Hobgoblin",
+            enemy_stamina: 4
+          },
+          on_victory: {
+            text: `Sconfitto l'Hobgoblin, ti risvegli e continui lungo il passaggio!`,
+            choices: [
+              { text: "Prosegui il cammino", target: "12" }
+            ]
+          }
+        },
+        "16": {
+          title: "16. Zombi",
+          text: `Il passaggio conduce in un'ampia caverna, al centro della quale si trova un forziere di legno. Ci sono tre larghe pietre piatte oltre il forziere. Che fare?`,
+          choices: [
+            { text: "Fermarsi ad aprire il forziere", target: "17" },
+            { text: "Ignorare il forziere e proseguire", target: "18" }
+          ]
+        },
+        "17": {
+          title: "17. Aprire il Forziere",
+          text: `Dentro il forziere ci sono 7 Pezzi d'Oro, ma non appena lo apri, il terreno si spacca e tre Zombi scheletrici escono dalle tombe!<br><br>
+                 Devi combatterli uno alla volta. Ciascuno possiede 2 punti di Resistenza!`,
+          combat: {
+            enemy_name: "3 Zombi (uno alla volta)",
+            enemy_stamina: 2
+          },
+          on_victory: {
+            text: `Sconfitti i tre non-morti, questi tornano polvere. Raccogli il tesoro e prosegui!`,
+            loot: {
+              gold: 7,
+              items: []
+            },
+            choices: [
+              { text: "Prosegui verso l'uscita", target: "18" }
+            ]
+          }
+        },
+        "18": {
+          title: "18. Il Vecchio",
+          text: `Un passaggio ventoso conduce a una porta di legno guardata da un vecchio con la barba: Grand Alf!<br><br>
+                 "Se vuoi passare dovrai prima darmi 6 Pezzi d'Oro. Altrimenti non lascerai mai più Monte Pauroso!" Che fare?`,
+          choices: [
+            { text: "Affronta e combatti Grand Alf", target: "19" },
+            { text: "Paga i 6 Pezzi d'Oro pretesi", target: "20" }
+          ]
+        },
+        "19": {
+          title: "19. Combattere",
+          text: `Grand Alf ha 18 punti di Resistenza ed è invincibile. Il nostro Eroe è prigioniero per sempre nel suo dominio..<br><br>
+                 <strong class="text-red-500 font-fantasy text-xl">Fine dell'Avventura (Sconfitta)</strong>`,
+          is_game_over: true,
+          choices: [
+            { text: "Ricomincia l'Avventura", target: "1", reset_game: true }
+          ]
+        },
+        "20": {
+          title: "20. Pagare",
+          text: `"Molte grazie!" Il vecchio apre la porta e il nostro Eroe può finalmente uscire alla luce del sole.<br><br>
+                 <strong class="text-emerald-400 font-fantasy text-2xl">FINE DELL'AVVENTURA - VITTORIA!</strong>`,
+          gold_change: -6,
+          is_victory: true
+        }
+      }
+    };
+
+    let gameState = {
+      stamina: 12,
+      max_stamina: 12,
+      gold: 0,
+      inventory: [],
+      current_node: "1",
+      current_enemy_stamina: 0
+    };
+
+    const staminaText = document.getElementById('stamina-text');
+    const staminaBar = document.getElementById('stamina-bar');
+    const goldValue = document.getElementById('gold-value');
+    const inventoryList = document.getElementById('inventory-list');
+    
+    const nodeTitle = document.getElementById('node-title');
+    const nodeText = document.getElementById('node-text');
+    const choicesContainer = document.getElementById('choices-container');
+    
+    const lootBox = document.getElementById('loot-box');
+    const lootButtons = document.getElementById('loot-buttons');
+
+    const combatBox = document.getElementById('combat-box');
+    const enemyName = document.getElementById('enemy-name');
+    const enemyStamina = document.getElementById('enemy-stamina');
+    const combatLog = document.getElementById('combat-log');
+    
+    const riddleBox = document.getElementById('riddle-box');
+    const riddleInput = document.getElementById('riddle-input');
+
+    const fantasyModal = document.getElementById('fantasy-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+    const modalBtn = document.getElementById('modal-btn');
+
+    function showModal(title, message, buttonText = "Prosegui") {
+      modalTitle.textContent = title;
+      modalBody.innerHTML = message;
+      modalBtn.textContent = buttonText;
+      fantasyModal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      fantasyModal.classList.add('hidden');
+    }
+
+    function initGame() {
+      resetGame();
+    }
+
+    function resetGame() {
+      gameState = {
+        stamina: gamebook.initial_state.stamina,
+        max_stamina: gamebook.initial_state.max_stamina,
+        gold: gamebook.initial_state.gold,
+        inventory: [...gamebook.initial_state.inventory],
+        current_node: gamebook.initial_state.current_node,
+        current_enemy_stamina: 0
+      };
+      updateUI();
+      goToNode(gameState.current_node);
+    }
+
+    function updateUI() {
+      staminaText.textContent = `${gameState.stamina} / ${gameState.max_stamina}`;
+      const percentage = Math.max(0, Math.min(100, (gameState.stamina / gameState.max_stamina) * 100));
+      staminaBar.style.width = `${percentage}%`;
+      
+      goldValue.textContent = gameState.gold;
+
+      inventoryList.innerHTML = '';
+      if (gameState.inventory.length === 0) {
+        inventoryList.innerHTML = '<li class="text-amber-600/60 italic text-xs">Lo zaino è vuoto.</li>';
+      } else {
+        gameState.inventory.forEach(item => {
+          const li = document.createElement('li');
+          li.className = 'flex items-center justify-between text-amber-200 bg-black/30 px-2 py-1 rounded border border-amber-950';
+          
+          let actionBtn = '';
+          if (item === 'Pergamena E') {
+            actionBtn = `<button onclick="usePotion()" class="text-xs text-emerald-400 hover:underline">Usa (+5 HP)</button>`;
+          }
+          
+          li.innerHTML = `<span>📜 ${item}</span> ${actionBtn}`;
+          inventoryList.appendChild(li);
+        });
+      }
+    }
+
+    function usePotion() {
+      if (gameState.inventory.includes('Pergamena E')) {
+        gameState.stamina = Math.min(gameState.max_stamina, gameState.stamina + 5);
+        gameState.inventory = gameState.inventory.filter(i => i !== 'Pergamena E');
+        updateUI();
+        showModal("Incantesimo della Pergamena E", "Hai recitato la formula magica! Recuperi fino a <strong>5 Punti di Resistenza</strong>.", "Accetta Cura");
+      }
+    }
+
+    function hasRemainingLoot() {
+      return !lootBox.classList.contains('hidden') && lootButtons.children.length > 0;
+    }
+
+    function showLoot(lootData) {
+      if (!lootData) return;
+      lootButtons.innerHTML = '';
+      let hasLoot = false;
+
+      if (lootData.gold && lootData.gold > 0) {
+        hasLoot = true;
+        const btn = document.createElement('button');
+        btn.className = 'w-full text-left btn-fantasy btn-loot p-2 rounded text-emerald-200 font-semibold text-sm flex items-center gap-2';
+        btn.innerHTML = `<span>💰 Raccogli ${lootData.gold} Pezzi d'Oro</span>`;
+        btn.onclick = () => {
+          gameState.gold += lootData.gold;
+          lootData.gold = 0;
+          btn.remove();
+          updateUI();
+          if (!hasRemainingLoot()) lootBox.classList.add('hidden');
+        };
+        lootButtons.appendChild(btn);
+      }
+
+      if (lootData.items && lootData.items.length > 0) {
+        lootData.items.forEach(item => {
+          if (!gameState.inventory.includes(item)) {
+            hasLoot = true;
+            const btn = document.createElement('button');
+            btn.className = 'w-full text-left btn-fantasy btn-loot p-2 rounded text-emerald-200 font-semibold text-sm flex items-center gap-2';
+            btn.innerHTML = `<span>📜 Prendi ${item}</span>`;
+            btn.onclick = () => {
+              gameState.inventory.push(item);
+              btn.remove();
+              updateUI();
+              if (!hasRemainingLoot()) lootBox.classList.add('hidden');
+            };
+            lootButtons.appendChild(btn);
+          }
+        });
+      }
+
+      if (hasLoot) {
+        lootBox.classList.remove('hidden');
+      } else {
+        lootBox.classList.add('hidden');
+      }
+    }
+
+    function handleChoiceClick(targetNodeId, resetGameFlag = false) {
+      if (hasRemainingLoot()) {
+        showModal(
+          "Attenzione, Eroe!",
+          "Ci sono ancora oggetti o monete da raccogliere davanti a te! <strong>Raccogli tutto il bottino</strong> prima di proseguire il tuo cammino.",
+          "Ho Capito"
+        );
+        return;
+      }
+
+      if (resetGameFlag) {
+        resetGame();
+      } else {
+        goToNode(targetNodeId);
+      }
+    }
+
+    function goToNode(nodeId) {
+      // Controllo Chiave di Rame (Paragrafo 14)
+      if (nodeId === "14") {
+        if (gameState.inventory.includes("Chiave di Rame")) {
+          nodeId = "14_unlocked";
+        } else {
+          nodeId = "13";
+        }
+      }
+
+      gameState.current_node = nodeId;
+      const node = gamebook.nodes[nodeId];
+
+      if (!node) {
+        console.error("Nodo non trovato:", nodeId);
+        return;
+      }
+
+      combatBox.classList.add('hidden');
+      riddleBox.classList.add('hidden');
+      lootBox.classList.add('hidden');
+
+      if (node.gold_change) {
+        gameState.gold = Math.max(0, gameState.gold + node.gold_change);
+        node.gold_change = 0;
+      }
+
+      if (node.stamina_change) {
+        gameState.stamina = Math.max(0, gameState.stamina + node.stamina_change);
+        node.stamina_change = 0;
+      }
+
+      if (node.trap_damage) {
+        const trapRoll = Math.floor(Math.random() * 6) + 1;
+        gameState.stamina = Math.max(0, gameState.stamina - trapRoll);
+        
+        const woundText = trapRoll === 1 ? "-1 Ferita" : `-${trapRoll} Ferite`;
+        showModal(
+          "Agguato del Troll!", 
+          `Il Troll ti ha sorpreso con un pesante colpo di clava alle spalle!<br>Il dado segna <strong>${trapRoll}</strong>.<br><br>Perdi <strong class="text-red-400">${trapRoll} Punti di Resistenza</strong>!`,
+          woundText
+        );
+        node.trap_damage = false;
+      }
+
+      updateUI();
+
+      nodeTitle.textContent = node.title;
+      nodeText.innerHTML = node.text;
+
+      if (node.loot) {
+        showLoot(node.loot);
+      }
+
+      choicesContainer.innerHTML = '';
+
+      if (nodeId === "7") {
+        if (gameState.inventory.includes("Pergamena B")) {
+          const btn = document.createElement('button');
+          btn.className = 'w-full text-left btn-fantasy p-3 rounded-lg text-emerald-300 font-semibold text-sm md:text-base flex items-center justify-between border border-emerald-800';
+          btn.innerHTML = `<span>📜 Leggi la Pergamena B (Usa Magia)</span> <span class="text-emerald-400">➔</span>`;
+          btn.onclick = () => handleChoiceClick("7_unlocked");
+          choicesContainer.appendChild(btn);
+        } else {
+          const btn = document.createElement('button');
+          btn.className = 'w-full text-left btn-fantasy p-3 rounded-lg text-red-300 font-semibold text-sm md:text-base flex items-center justify-between border border-red-800';
+          btn.innerHTML = `<span>Non possiedi la Pergamena B (Bloccato)</span> <span class="text-red-500">➔</span>`;
+          btn.onclick = () => handleChoiceClick("7_deadend");
+          choicesContainer.appendChild(btn);
+        }
+      } else if (node.combat) {
+        setupCombat(node.combat);
+      } else if (node.input_riddle) {
+        riddleBox.classList.remove('hidden');
+      } else if (node.choices) {
+        node.choices.forEach(choice => {
+          const btn = document.createElement('button');
+          btn.className = 'w-full text-left btn-fantasy p-3 rounded-lg text-amber-100 font-semibold text-sm md:text-base flex items-center justify-between border border-amber-800/80';
+          btn.innerHTML = `<span>${choice.text}</span> <span class="text-amber-500">➔</span>`;
+          btn.onclick = () => handleChoiceClick(choice.target, choice.reset_game);
+          choicesContainer.appendChild(btn);
+        });
+      }
+
+      if (gameState.stamina <= 0 && !node.is_game_over) {
+        nodeTitle.textContent = "Sei Stato Sconfitto!";
+        nodeText.innerHTML = "<p class='text-red-400 font-bold'>La tua Resistenza è scesa a 0. Sei caduto nelle profondità di Monte Pauroso...</p>";
+        choicesContainer.innerHTML = `
+          <button onclick="resetGame()" class="w-full btn-fantasy p-3 rounded text-amber-200 font-bold text-center">
+            🔄 Ricomincia l'Avventura
+          </button>
+        `;
+      }
+    }
+
+    function setupCombat(combatData) {
+      combatBox.classList.remove('hidden');
+      enemyName.textContent = combatData.enemy_name;
+      gameState.current_enemy_stamina = combatData.enemy_stamina;
+      enemyStamina.textContent = gameState.current_enemy_stamina;
+      combatLog.innerHTML = '<p class="text-amber-500/60 italic">Inizia lo scontro! Tira i dadi per combattere.</p>';
+    }
+
+    function handleCombatRound() {
+      const heroDice = Math.floor(Math.random() * 6) + 1;
+      const enemyDice = Math.floor(Math.random() * 6) + 1;
+
+      let logMessage = `Tiro: Eroe = [${heroDice}] | Mostro = [${enemyDice}] -> `;
+
+      if (heroDice === 6) {
+        gameState.current_enemy_stamina -= 1;
+        logMessage += `<span class="text-emerald-400">Colpo a segno! Il mostro perde 1 HP.</span>`;
+      } else if (enemyDice === 6) {
+        gameState.stamina -= 1;
+        logMessage += `<span class="text-red-400">Sei stato colpito! Perdi 1 HP.</span>`;
+      } else {
+        logMessage += `<span class="text-amber-400/80">Nessun colpo critico (serve un 6).</span>`;
+      }
+
+      combatLog.innerHTML = `<p>${logMessage}</p>`;
+
+      enemyStamina.textContent = Math.max(0, gameState.current_enemy_stamina);
+      updateUI();
+
+      if (gameState.current_enemy_stamina <= 0) {
+        combatBox.classList.add('hidden');
+        const currentNode = gamebook.nodes[gameState.current_node];
+        if (currentNode.on_victory) {
+          nodeText.innerHTML = currentNode.on_victory.text;
+          
+          if (currentNode.on_victory.loot) {
+            showLoot(currentNode.on_victory.loot);
+          }
+
+          updateUI();
+
+          choicesContainer.innerHTML = '';
+          if (currentNode.on_victory.choices) {
+            currentNode.on_victory.choices.forEach(choice => {
+              const btn = document.createElement('button');
+              btn.className = 'w-full text-left btn-fantasy p-3 rounded-lg text-amber-100 font-semibold text-sm md:text-base flex items-center justify-between border border-amber-800/80';
+              btn.innerHTML = `<span>${choice.text}</span> <span class="text-amber-500">➔</span>`;
+              btn.onclick = () => handleChoiceClick(choice.target);
+              choicesContainer.appendChild(btn);
+            });
+          } else if (currentNode.on_victory.target) {
+            const btn = document.createElement('button');
+            btn.className = 'w-full text-left btn-fantasy p-3 rounded-lg text-amber-100 font-semibold text-sm md:text-base flex items-center justify-between border border-amber-800/80';
+            btn.innerHTML = `<span>Prosegui l'Avventura</span> <span class="text-amber-500">➔</span>`;
+            btn.onclick = () => handleChoiceClick(currentNode.on_victory.target);
+            choicesContainer.appendChild(btn);
+          }
+        }
+      } else if (gameState.stamina <= 0) {
+        combatBox.classList.add('hidden');
+        goToNode(gameState.current_node);
+      }
+    }
+
+    function submitRiddle() {
+      const answer = riddleInput.value.trim().toLowerCase();
+      const currentNode = gamebook.nodes[gameState.current_node];
+
+      if (!currentNode.input_riddle) return;
+
+      riddleBox.classList.add('hidden');
+      riddleInput.value = '';
+
+      if (answer === currentNode.input_riddle.correct_answer) {
+        showModal("Indovinello Risolto!", currentNode.input_riddle.success.text, "Prosegui");
+        goToNode(currentNode.input_riddle.success.target);
+      } else {
+        showModal("Risposta Errata", currentNode.input_riddle.failure.text, "Continua");
+        goToNode(currentNode.input_riddle.failure.target);
+      }
+    }
+
+    window.onload = initGame;
+  </script>
+</body>
+</html>
