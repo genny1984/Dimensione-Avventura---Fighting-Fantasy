@@ -174,9 +174,9 @@
 
         <!-- RIDDLE INPUT SECTION -->
         <div id="riddle-box" class="hidden my-4 p-4 bg-amber-950/30 border border-amber-800 rounded-lg">
-          <label id="riddle-label" for="riddle-input" class="block text-sm font-semibold text-amber-300 mb-2">Inserisci la tua risposta:</label>
+          <label id="riddle-label" for="riddle-input" class="block text-sm font-semibold text-amber-300 mb-2">Inserisci la tua risposta all'indovinello:</label>
           <div class="flex gap-2">
-            <input type="text" id="riddle-input" class="flex-grow bg-black/60 border border-amber-700 rounded px-3 py-2 text-amber-100 focus:outline-none focus:border-amber-400" placeholder="Scrivi qui...">
+            <input type="text" id="riddle-input" class="flex-grow bg-black/60 border border-amber-700 rounded px-3 py-2 text-amber-100 focus:outline-none focus:border-amber-400" placeholder="Scrivi la risposta...">
             <button onclick="submitRiddle()" class="btn-fantasy px-4 py-2 rounded text-amber-200 font-semibold">Conferma</button>
           </div>
         </div>
@@ -327,11 +327,30 @@
             { text: "Ricomincia l'Avventura", target: "1", reset_game: true }
           ]
         },
-        "7_unlocked": {
+        "7_riddle": {
+          title: "7. Lettura della Pergamena B",
+          text: `Osservi attentamente il foglio della Pergamena B. Sopra vi è inciso il seguente enigma:<br><br>
+                 <div class="p-3 bg-black/50 border border-amber-700/60 rounded italic text-amber-200">
+                 "Se Grand Alf, nonostante sembri un tipo assai paziente, è potente più di un drago di sicuro è un grande ____?"
+                 </div><br>
+                 Inserisci la parola corretta per completare la formula magica e sbloccare la via:`,
+          input_riddle: {
+            correct_answer: "mago",
+            success: {
+              text: `Hai pronunciato la parola magica corretta!<br><br>
+                     Ehi! Accade qualcosa! Il cunicolo sta diventando più scuro. Ci sono strani suoni stridenti di rocce che si spostano! Il terreno sotto i tuoi piedi diventa rapidamente scintillante. Ben presto l'oscurità si schiarisce e i rumori si fermano.<br>
+                     Il nostro Eroe si trova ora all'interno di un passaggio differente. Dopo averlo percorso, giunge ad un'altra intersezione. Quale via scegliere?`,
+              target: "7_unlocked_choices"
+            },
+            failure: {
+              text: `La parola inserita non è corretta. Le incisioni magiche non reagiscono. Riprova a leggere la pergamena.`,
+              target: "7_riddle"
+            }
+          }
+        },
+        "7_unlocked_choices": {
           title: "7. Proseguire (Sbloccato)",
-          text: `Completando la rima della Pergamena B con la parola <strong class="text-amber-300">"MAGO"</strong>:<br><br>
-                 Ehi! Accade qualcosa! Il cunicolo sta diventando più scuro. Ci sono strani suoni stridenti di rocce che si spostano! Il terreno sotto i tuoi piedi diventa rapidamente scintillante. Ben presto l'oscurità si schiarisce e i rumori si fermano.<br>
-                 Il nostro Eroe si trova ora all'interno di un passaggio differente. Dopo averlo percorso, giunge ad un'altra intersezione. Quale via scegliere?`,
+          text: `Il nostro Eroe si trova ora all'interno di un passaggio differente. Dopo averlo percorso, giunge ad un'altra intersezione. Quale via scegliere?`,
           choices: [
             { text: "Prosegui Dritto", target: "8" },
             { text: "Girare a Sinistra", target: "8" }
@@ -475,8 +494,9 @@
         },
         "18": {
           title: "18. Il Vecchio",
-          text: `Un passaggio ventoso conduce a una porta di legno guardata da un vecchio con la barba: Grand Alf!<br><br>
-                 "Se vuoi passare dovrai prima darmi 6 Pezzi d'Oro. Altrimenti non lascerai mai più Monte Pauroso!" Che fare?`,
+          text: `Un passaggio ventoso lascia la caverna, lungo un percorso che normalmente condurrebbe il nostro Eroe ancora più addentro nella montagna. Ma i Nani che hanno scavato il passaggio hanno sentito che a noi rimane poco tempo per quest'avventura e, per tirarci fuori, hanno preparato una deviazione che conduce a una porta di legno. Accanto alla porta c'è un vecchio con una lunga barba, che intima al nostro Eroe di fermarsi.<br><br>
+                 “E così, vorresti abbandonare Monte Pauroso?” ridacchia. “Lascia che mi presenti. Il mio nome è Alf. Sebbene non sia molto grande di taglia mi chiamano Grand Alf. Se vuoi passare attraverso questa porta dovrai prima darmi 6 Pezzi d'Oro. Altrimenti ho paura che non lascerai mai più il Monte Pauroso.”<br><br>
+                 Che fare? Il vecchio non sembra molto forte, ma d'altra parte forse il nostro Eroe si sente generoso...`,
           choices: [
             { text: "Affronta e combatti Grand Alf", target: "19" },
             { text: "Paga i 6 Pezzi d'Oro pretesi", target: "20" }
@@ -580,7 +600,7 @@
           
           let actionBtn = '';
           if (item === 'Pergamena E') {
-            actionBtn = `<button onclick="usePotion()" class="text-xs text-emerald-400 hover:underline">Usa (+5 HP)</button>`;
+            actionBtn = `<button onclick="usePotion()" class="text-xs text-emerald-400 hover:underline">Usa (+4 HP)</button>`;
           }
           
           li.innerHTML = `<span>📜 ${item}</span> ${actionBtn}`;
@@ -591,10 +611,11 @@
 
     function usePotion() {
       if (gameState.inventory.includes('Pergamena E')) {
-        gameState.stamina = Math.min(gameState.max_stamina, gameState.stamina + 5);
+        const cureAmount = 4;
+        gameState.stamina = Math.min(gameState.max_stamina, gameState.stamina + cureAmount);
         gameState.inventory = gameState.inventory.filter(i => i !== 'Pergamena E');
         updateUI();
-        showModal("Incantesimo della Pergamena E", "Hai recitato la formula magica! Recuperi fino a <strong>5 Punti di Resistenza</strong>.", "Accetta Cura");
+        showModal("Pozione della Pergamena E", `Hai bevuto la pozione e recitato la formula magica!<br><br>Recuperi <strong class="text-emerald-400">+${cureAmount} Punti di Resistenza</strong> (PF).`, "Accetta Cura");
       }
     }
 
@@ -725,7 +746,7 @@
           const btn = document.createElement('button');
           btn.className = 'w-full text-left btn-fantasy p-3 rounded-lg text-emerald-300 font-semibold text-sm md:text-base flex items-center justify-between border border-emerald-800';
           btn.innerHTML = `<span>📜 Leggi la Pergamena B (Usa Magia)</span> <span class="text-emerald-400">➔</span>`;
-          btn.onclick = () => handleChoiceClick("7_unlocked");
+          btn.onclick = () => handleChoiceClick("7_riddle");
           choicesContainer.appendChild(btn);
         } else {
           const btn = document.createElement('button');
@@ -836,7 +857,7 @@
         showModal("Indovinello Risolto!", currentNode.input_riddle.success.text, "Prosegui");
         goToNode(currentNode.input_riddle.success.target);
       } else {
-        showModal("Risposta Errata", currentNode.input_riddle.failure.text, "Continua");
+        showModal("Risposta Errata", currentNode.input_riddle.failure.text, "Riprova");
         goToNode(currentNode.input_riddle.failure.target);
       }
     }
