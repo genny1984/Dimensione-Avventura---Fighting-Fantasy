@@ -647,7 +647,7 @@
         trait: "Pesante (+1 Danno)",
         encumbrance: "pesante",
         damage_bonus: 1,
-        desc: "Spadone possente a due mani. Devastante nei fendenti, ma impedisce di nuotare o passare strettoie."
+        desc: "Un massiccio spadone d'acciaio a due mani forgiato per i capitani della guardia. I suoi fendenti sprigionano una potenza devastante."
       },
       elven_rapier: {
         id: "elven_rapier",
@@ -655,7 +655,7 @@
         trait: "Agile (Leggera)",
         encumbrance: "leggera",
         damage_bonus: 0,
-        desc: "Lama affilata ed elastica. Consente manovre acrobatiche e colpi di precisione."
+        desc: "Lama affilata ed elastica intarsiata con rune silvestri. Consente manovre acrobatiche e colpi di precisione."
       },
       dwarven_axe: {
         id: "dwarven_axe",
@@ -664,8 +664,7 @@
         encumbrance: "pesante",
         damage_bonus: 0, // gestito con +2 su doppio 6
         is_axe: true,
-        encumbrance: "pesante",
-        desc: "Una pesante scure in ferro di forgia profonda. Letale, ma ingombrante per il nuoto."
+        desc: "Una robusta scure da guerra battuta nel ferro delle profondità montane. Un'arma solida, massiccia e letale nei corpi a corpo."
       }
     };
 
@@ -700,441 +699,615 @@
     // 34 STORY NODES - LE CRONACHE DI AETHELGARD
     // ==========================================
     const storyNodes = {
-      "1": {
-        title: "1. Ai Confini del Bosco d'Argento",
-        text: (p) => `Una pioggia sottile picchietta sulle foglie dorate del Bosco d'Argento. Sotto il mantello bruno da ramingo, ${p.name} osserva la sagoma tetra della <em>Rocca del Crepuscolo</em> ergersi contro i lampi dell'orizzonte.<br><br>
-                     Sono trascorsi cinque lunghi anni da quando il tiranno <strong>Malakor l'Ombromante</strong> assassinò il Re tuo padre, costringendoti all'esilio tra i boschi di frontiera. Ora, ventenne e temprat${p.o_a} dalle intemperie, sei tornat${p.o_a} per liberare Aethelgard.<br><br>
-                     Due vie si aprono davanti a te per raggiungere la cittadella: l'oscuro <strong>Sentiero dei Contrabbandieri</strong> celato tra rovi e nebbie d'acquitrino, oppure la <strong>Vecchia Strada Reale</strong> solcata dal fango e dalle torce delle ronde nemiche.`,
-        choices: [
-          { text: "Infiltrati nel Sentiero dei Contrabbandieri (Furtivo)", target: "2" },
-          { text: "Avanza lungo la Vecchia Strada Reale (Pattugliata)", target: "3" }
-        ]
+  "1": {
+    title: "1. Ai Confini del Bosco d'Argento",
+    text: (p) => `Una pioggia sottile picchietta sulle foglie dorate del Bosco d'Argento. Sotto il mantello bruno da ramingo, ${p.hero_title} osserva la sagoma tetra della <em>Rocca del Crepuscolo</em> ergersi contro i lampi dell'orizzonte.<br><br>
+                 Sono trascorsi cinque lunghi anni da quando il tiranno <strong>Malakor l'Ombromante</strong> assassinò il Re tuo padre, costringendoti all'esilio tra i boschi di frontiera. Ora, ventenne e ${p.temprato_a} dalle intemperie, sei ${p.tornato_a} per liberare Aethelgard.<br><br>
+                 Due vie si aprono davanti a te per raggiungere la cittadella: l'oscuro <strong>Sentiero dei Contrabbandieri</strong> celato tra rovi e nebbie d'acquitrino, oppure la <strong>Vecchia Strada Reale</strong> solcata dal fango e dalle torce delle ronde nemiche.`,
+    choices: [
+      { text: "Infiltrati nel Sentiero dei Contrabbandieri (Furtivo)", target: "2" },
+      { text: "Avanza lungo la Vecchia Strada Reale (Pattugliata)", target: "3" }
+    ]
+  },
+  "2": {
+    title: "2. Il Sentiero dei Contrabbandieri",
+    text: (p) => `Avanzi nell'ombra della boscaglia evitando con maestria rami spezzati e acquitrini. Il sentiero serpeggia fino a una scogliera calcarea alla base della rocca.<br><br>
+                 Il cammino si divide ai piedi del contrafforte: a sinistra, una fenditura nella roccia si spalanca verso le <strong>Grotte dei Sussurri</strong>, da cui spira un'aria gelida e salmastra; a destra, una vertiginosa gola è scavalcata da un cigolante <strong>Ponte Sospeso di Corda</strong> che punta dritto alle alture del borgo. Più in alto, una via arrampicata conduce direttamente verso le cenge dell'Eremita.`,
+    choices: [
+      { text: "Scendi nell'oscurità delle Grotte dei Sussurri", target: "4" },
+      { text: "Attraversa il Ponte Sospeso del Crepaccio", target: "5" },
+      { text: "Arrampicati lungo la parete rocciosa verso la cengia dell'Eremita", target: "11" }
+    ]
+  },
+  "3": {
+    title: "3. La Vecchia Strada Reale",
+    text: (p) => `Cammini calando il cappuccio sul volto, muovendoti tra le ombre dei pioppi che costeggiano l'antico lastricato imperiale. In lontananza brillano le torce di una pattuglia di mercenari al servizio di Malakor.<br><br>
+                 Proseguire lungo il lastricato significa marciare dritto contro il picchetto armato dei <strong>Guardiani Neri</strong>; al margine della carreggiata, l'insegna cigolante della <strong>Locanda del Cinghiale Cieco</strong> offre invece un riparo fumoso tra reietti e cospiratori. Più oltre, un fossato di scolo permette di scivolare verso i canali bassi.`,
+    choices: [
+      { text: "Affronta a viso aperto la pattuglia nemica", target: "6" },
+      { text: "Trova riparo nella Locanda del Cinghiale Cieco", target: "7" },
+      { text: "Scivola nel fossato laterale verso i canali di scolo della fortezza", target: "19" }
+    ]
+  },
+  "4": {
+    title: "4. Le Grotte dei Sussurri",
+    text: (p) => `L'aria sotterranea è intrisa di gocce d'acqua e riecheggia di strani sussurri magici. Avanzando con la torcia, scorgi un arco di pietra intagliato con l'emblema solare della tua stirpe: l'ingresso alla <strong>Cripta degli Antichi Sovrani</strong>.<br><br>
+                 Dall'altro lato della caverna, le acque nere di un torrente sotterraneo si inabissano in un <strong>Sifone Sommerso</strong>, le cui correnti conducono alla darsena inferiore della fortezza. Una fenditura ripida sale inoltre verso le alture del crepaccio.`,
+    choices: [
+      { text: "Varca l'arco della Cripta degli Antichi Sovrani", target: "8" },
+      { 
+        text: "Nuota attraverso il Sifone Sommerso sotterraneo", 
+        target: "9",
+        require_light_weapon: true
       },
-      "2": {
-        title: "2. Il Sentiero dei Contrabbandieri",
-        text: (p) => `Avanzi nell'ombra della boscaglia evitando con maestria rami spezzati e acquitrini. Il sentiero serpeggia fino a una scogliera calcarea alla base della rocca.<br><br>
-                     Il cammino si divide ai piedi del contrafforte: a sinistra, una fenditura nella roccia si spalanca verso le <strong>Grotte dei Sussurri</strong>, da cui spira un'aria gelida e salmastra; a destra, una vertiginosa gola è scavalcata da un cigolante <strong>Ponte Sospeso di Corda</strong> che punta dritto alle alture del borgo.`,
-        choices: [
-          { text: "Scendi nell'oscurità delle Grotte dei Sussurri", target: "4" },
-          { text: "Attraversa il Ponte Sospeso del Crepaccio", target: "5" }
-        ]
+      { text: "Risali la stretta fessura verso il Rifugio dell'Eremita", target: "11" }
+    ]
+  },
+  "5": {
+    title: "5. Il Ponte Sospeso del Crepaccio",
+    text: (p) => `Le assi di legno del ponte scricchiolano lugubremente sopra un precipizio senza fondo. Il vento montano sibila tra le corde consunte.<br><br>
+                 I canapi logori oscillano minacciosamente nel vuoto. Più in basso, una cengia rocciosa sembra aggirare il baratro discendendo verso un piccolo <strong>Rifugio scavato nella pietra</strong>, avvolto da cespugli di erbe medicinali. Sul fondo della gola si intravedono anche gli accessi alle caverne inferiori.`,
+    choices: [
+      { text: "Attraversa di corsa il ponte oscillante", target: "10" },
+      { text: "Scendi lungo la cengia verso il Rifugio tra le rocce", target: "11" },
+      { text: "Discendi con cautela tra gli spuntoni verso le Grotte dei Sussurri", target: "4" }
+    ]
+  },
+  "6": {
+    title: "6. Agguato dei Guardiani Neri",
+    text: (p) => `«Chi va là? Fermati e deponi le armi nel nome dell'Ombromante!»<br><br>
+                 Due soldati in armatura scura sguainano le spade corte e ti sbarrano la strada. I loro sguardi sono vitrei, asserviti alla volontà oscura di Malakor. «Che tu sia ${p.heir_title} o un miserabile ribelle, da qui non si passa!» I dardi delle loro balestre sono incoccati e puntati al tuo petto a bruciapelo.`,
+    choices: [
+      { text: "Estrai la lama e combatti i Guardiani Neri!", target: "6_combat" },
+      { text: "Getta l'arma e arrenditi confidando nella clemenza nemica", target: "12" },
+      { text: "Lancia polvere accecante e fuggi verso la Locanda del Cinghiale Cieco", target: "7" }
+    ]
+  },
+  "6_combat": {
+    title: "6. Duello con i Guardiani Neri",
+    text: (p) => `Schivi d'istinto il primo dardo che si conficca nel tronco alle tue spalle e ti lanci all'attacco a spada sguainata!`,
+    combat: {
+      enemy_name: "Pattuglia dei Guardiani Neri",
+      enemy_stamina: 3
+    },
+    on_victory: {
+      text: (p) => `Con un affondo preciso spezzi la guardia dei due soldati, che crollano a terra privi di sensi. Frugando tra i loro equipaggiamenti trovi <strong>6 Monete d'Oro</strong> e l'imponente <strong>Spadone del Crociato</strong> abbandonato dal capitano.<br><br>Davanti a te si aprono diverse vie per penetrare le difese di Aethelgard.`,
+      loot: {
+        gold: 6,
+        items: [],
+        weapon: "greatsword"
       },
-      "3": {
-        title: "3. La Vecchia Strada Reale",
-        text: (p) => `Cammini calando il cappuccio sul volto, muovendoti tra le ombre dei pioppi che costeggiano l'antico lastricato imperiale. In lontananza brillano le torce di una pattuglia di mercenari al servizio di Malakor.<br><br>
-                     Proseguire lungo il lastricato significa marciare dritto contro il picchetto armato dei <strong>Guardiani Neri</strong>; al margine della carreggiata, l'insegna cigolante della <strong>Locanda del Cinghiale Cieco</strong> offre invece un riparo fumoso tra reietti e cospiratori.`,
-        choices: [
-          { text: "Affronta a viso aperto la pattuglia nemica", target: "6" },
-          { text: "Trova riparo nella Locanda del Cinghiale Cieco", target: "7" }
-        ]
+      choices: [
+        { text: "Raccogli le spoglie e risali verso il Passaggio delle Forche", target: "13" },
+        { text: "Trascina i corpi tra le fratte e scendi verso le Grotte dei Sussurri", target: "4" },
+        { text: "Infiltrati nel borgo basso riparandoti nella Locanda del Cinghiale Cieco", target: "7" }
+      ]
+    }
+  },
+  "7": {
+    title: "7. La Locanda del Cinghiale Cieco",
+    text: (p) => `La porta di legno massiccio cigola mentre entri nella locanda. Tra l'odore di spezzatino e birra rancida, contadini impauriti siedono a testa bassa sotto gli occhi di guardie ubriache.<br><br>
+                 In un angolo, un vecchio cantastorie cieco pizzica un liuto intonando strofe clandestine sulla dinastia caduta. Lo sguardo cieco del bardo si volge verso di te intuendo la tua stirpe reale: <em>“${p.vocative_cap}... il vostro passo ha la fierezza dell'antico Re!”</em> sussurra a mezza voce.<br><br>
+                 Dall'altro capo della sala, un caporale nemico rovescia la panca sguainando il ferro con un grido d'allarme!`,
+    choices: [
+      { text: "Avvicinati al Bardo Ribelle e ascolta il suo messaggio segreto", target: "14" },
+      { text: "Balza sui tavoli e fuggi attraverso la finestra sui tetti", target: "15" },
+      { text: "Rovescia una botte di sidro e sgattaiola nella cantina verso il Canale di Scolo", target: "19" }
+    ]
+  },
+  "8": {
+    title: "8. Cripta degli Antichi Sovrani",
+    text: (p) => `Polvere e silenzio sacro regnano in questa maestosa sala sepolcrale. Al centro, sopra il sarcofago del Reale Fondatore, splende incontaminato il <strong>Sigillo dei Sovrani</strong>, anello d'oro puro intarsiato con rubini dell'Alba.<br><br>
+                 Quando indossi l'anello, senti il calore degli antenati scorrere nelle tue vene (Recuperi +3 PF). Davanti a te, gli antichi corridoi collegano la cripta sia alle altezze dell'eremo che alle profondità della rocca.`,
+    loot: {
+      gold: 4,
+      relic: "Sigillo dei Sovrani",
+      heal: 3
+    },
+    choices: [
+      { text: "Risali l'antica scalinata nella roccia verso il Rifugio dell'Eremita", target: "11" },
+      { text: "Infiltrati nel Portale delle Radici Arcane verso i giardini alti", target: "16" },
+      { text: "Percorri la galleria sotterranea che conduce alle Prigioni della Rocca", target: "21" }
+    ]
+  },
+  "9": {
+    title: "9. Sifone Sommerso",
+    text: (p) => `L'acqua è gelida come ghiaccio fuso. Trattieni il respiro e ti immergi nella condotta allagata. Grazie all'agilità del tuo equipaggiamento, nuoti tra le alghe sotterranee fino a riemergere con un colpo di reni in una grotta illuminata da fiaccole: sei ${p.entrato_a} nella <strong>Darsena Sotterranea</strong> della Rocca! Accanto all'attracco, un cunicolo secondario conduce alle fondamenta della Cripta.`,
+    choices: [
+      { text: "Arrampicati sui pontili della Darsena Sotterranea", target: "17" },
+      { text: "Esplora la galleria laterale asciutta che risale verso la Cripta dei Sovrani", target: "8" }
+    ]
+  },
+  "10": {
+    title: "10. Il Tracollo del Ponte",
+    text: (p) => `Le funi centrali, corrose dal tempo e dall'umidità, cedono di colpo sotto il tuo peso. Con uno strappo terrificante il ponte si spezza a metà!<br><br>
+                 Cerchi disperatamente un appiglio, ma la roccia umida scivola via tra le tue dita mentre precipiti nell'abisso senza fine del crepaccio...<br><br>
+                 <strong class="text-red-500 font-fantasy text-xl">Fine dell'Impresa (Caduta Fatale)</strong>`,
+    is_game_over: true,
+    choices: [
+      { text: "Ricarica Ultimo Salvataggio", load_game: true },
+      { text: "Ricomincia dall'Inizio", target: "1", reset_game: true }
+    ]
+  },
+  "11": {
+    title: "11. Il Rifugio dell'Eremita Erborista",
+    text: (p) => `Scendendo lungo la cengia rocciosa raggiungi una caverna riscaldata da un piccolo braciere profumato d'incenso e salvia selvatica. Un vecchio speziale dalla barba nivea alza lo sguardo su di te.<br><br>
+                 «Ti aspettavo, ${p.vocative},» sussurra con voce commossa inginocchiandosi al tuo cospetto. «I venti dell'Alba mi avevano annunciato che ${p.heir_title} sarebbe ${p.tornato_a}. Malakor tiene il tuo compagno d'infanzia, <strong>Roland</strong>, prigioniero di una maledizione mentale: il <em>Sigillo Notturno</em>. Se lo incontrerai nel palazzo egli ti attaccherà come un nemico mortale!<br><br>
+                 Prendi questa fiala: è l'<strong>Elisir Spezzaincanto</strong>. Soltanto infrangendola su di lui potrai risvegliare la sua vera anima!»`,
+    loot: {
+      items: ["Elisir Spezzaincanto"],
+      is_elisir: true
+    },
+    choices: [
+      { text: "Scendi per l'antica scala intagliata nella roccia verso la Cripta dei Sovrani", target: "8" },
+      { text: "Risali la cengia verso il Portale delle Radici Arcane", target: "16" },
+      { text: "Segui il sentiero dei cornicioni verso il Passaggio delle Forche", target: "18" }
+    ]
+  },
+  "12": {
+    title: "12. Prigioniero alle Gole",
+    text: (p) => `Circondat${p.o_a} dai rinforzi nemici, deponi le armi sperando nella clemenza. Ma i servi di Malakor non conoscono pietà: vieni trascinat${p.o_a} nelle segrete più oscure e giustiziat${p.o_a} all'alba.<br><br>
+                 <strong class="text-red-500 font-fantasy text-xl">Fine dell'Impresa (Catturato)</strong>`,
+    is_game_over: true,
+    choices: [
+      { text: "Ricarica Ultimo Salvataggio", load_game: true },
+      { text: "Ricomincia dall'Inizio", target: "1", reset_game: true }
+    ]
+  },
+  "13": {
+    title: "13. Spoglie del Capitano",
+    text: (p) => `Pesi tra le mani l'arma strappata al capitano nemico. Lo <strong>Spadone del Crociato</strong> vibra d'acciaio temprato: un'arma massiccia, capace di infliggere colpi tremendi in battaglia.<br><br>
+                 Davanti a te il cammino si snoda verso i camminamenti della fortezza, mentre una botola murata porta ai livelli inferiori.`,
+    choices: [
+      { text: "Avanza verso il Passaggio delle Forche lungo i bastioni", target: "18" },
+      { text: "Solleva una botola di servizio per scendere nelle Prigioni sotterranee", target: "21" },
+      { text: "Aggira le fortificazioni verso il Portale delle Radici Arcane", target: "16" }
+    ]
+  },
+  "14": {
+    title: "14. L'Enigma del Bardo Ribelle",
+    text: (p) => `Il cantastorie ti afferra la manica mentre le guardie avanzano rovesciando sedie: «Ascoltami, ${p.vocative}! Riconosco il passo fiero e l'odore della stirpe reale! Per aprire la grata segreta delle fogne devi conoscere la parola d'ordine che solo ${p.heir_title} può ricordare:<br><br>
+                 <div class="p-3.5 bg-black/60 border border-amber-600/80 rounded-xl italic text-amber-200 text-center text-sm sm:text-base">
+                   “Non ha voce ma parla nei canti,<br>
+                   risplende nell'oro e nei cuori costanti.<br>
+                   Caccia le ombre che coprono il mondo,<br>
+                   chi è la signora del giorno giocondo?”
+                 </div><br>
+                 Pronuncia la parola che spezza il silenzio:`,
+    input_riddle: {
+      correct_answer: "luce",
+      alt_answers: ["la luce", "sole", "il sole", "aurora", "alba", "l'alba"],
+      success: {
+        text: (p) => `«Esatto! La Luce d'Alba!» esclama il bardo con le lacrime agli occhi ciechi. «Che gli Dei proteggano ${p.hero_title}!» Ti infila in mano una chiave di ferro e tira una leva: una botola si apre sotto i tuoi piedi conducendoti direttamente nel <strong>Canale di Scolo</strong> della fortezza!`,
+        target: "19"
       },
-      "4": {
-        title: "4. Le Grotte dei Sussurri",
-        text: (p) => `L'aria sotterranea è intrisa di gocce d'acqua e riecheggia di strani sussurri magici. Avanzando con la torcia, scorgi un arco di pietra intagliato con l'emblema solare della tua stirpe: l'ingresso alla <strong>Cripta degli Antichi Sovrani</strong>.<br><br>
-                     Dall'altro lato della caverna, le acque nere di un torrente sotterraneo si inabissano in un <strong>Sifone Sommerso</strong>, le cui correnti sembrano condurre direttamente alla darsena inferiore della fortezza.`,
-        choices: [
-          { text: "Varca l'arco della Cripta degli Antichi Sovrani", target: "8" },
-          { 
-            text: "Nuota attraverso il Sifone Sommerso sotterraneo", 
-            target: "9",
-            require_light_weapon: true
-          }
-        ]
-      },
-      "5": {
-        title: "5. Il Ponte Sospeso del Crepaccio",
-        text: (p) => `Le assi di legno del ponte scricchiolano lugubremente sopra un precipizio senza fondo. Il vento montano sibila tra le corde consunte.<br><br>
-                     I canapi logori oscillano minacciosamente nel vuoto. Più in basso, una cengia rocciosa sembra aggirare il baratro discendendo verso un piccolo <strong>Rifugio scavato nella pietra</strong>, avvolto da cespugli di erbe medicinali.`,
-        choices: [
-          { text: "Attraversa di corsa il ponte oscillante", target: "10" },
-          { text: "Scendi lungo la cengia verso il Rifugio tra le rocce", target: "11" }
-        ]
-      },
-      "6": {
-        title: "6. Agguato dei Guardiani Neri",
-        text: (p) => `«Chi va là? Fermati e deponi le armi nel nome dell'Ombromante!»<br><br>
-                     Due soldati in armatura scura sguainano le spade corte e ti sbarrano la strada. I loro sguardi sono vitrei, asserviti alla volontà oscura di Malakor. I dardi delle loro balestre sono incoccati e puntati al tuo petto a bruciapelo.`,
-        choices: [
-          { text: "Estrai la spada e combatti i Guardiani Neri!", target: "6_combat" },
-          { text: "Getta la spada e arrenditi confidando nella clemenza", target: "12" }
-        ]
-      },
-      "6_combat": {
-        title: "6. Duello con i Guardiani Neri",
-        text: (p) => `Schivi d'istinto il primo dardo che si conficca nel tronco alle tue spalle e ti lanci all'attacco a spada sguainata!`,
-        combat: {
-          enemy_name: "Pattuglia dei Guardiani Neri",
-          enemy_stamina: 3
-        },
-        on_victory: {
-          text: (p) => `Con un affondo preciso spezzi la guardia dei due soldati, che crollano a terra privi di sensi. Frugando tra i loro equipaggiamenti trovi <strong>6 Monete d'Oro</strong> e l'imponente <strong>Spadone del Crociato</strong> abbandonato dal capitano.<br><br>Davanti a te la strada prosegue verso le forche dei bastioni.`,
-          loot: {
-            gold: 6,
-            items: [],
-            weapon: "greatsword"
-          },
-          target: "13"
-        }
-      },
-      "7": {
-        title: "7. La Locanda del Cinghiale Cieco",
-        text: (p) => `La porta di legno massiccio cigola mentre entri nella locanda. Tra l'odore di spezzatino e birra rancida, contadini impauriti siedono a testa bassa sotto gli occhi di guardie ubriache.<br><br>
-                     In un angolo, un vecchio cantastorie cieco pizzica un liuto intonando strofe clandestine sulla dinastia caduta. Lo sguardo cieco del bardo si volge verso di te intuendo la tua stirpe, mentre dall'altro capo della sala un caporale nemico rovescia la panca sguainando il ferro con un grido d'allarme!`,
-        choices: [
-          { text: "Avvicinati al Bardo Ribelle e ascolta il suo messaggio", target: "14" },
-          { text: "Balza sui tavoli e fuggi attraverso la finestra sui tetti", target: "15" }
-        ]
-      },
-      "8": {
-        title: "8. Cripta degli Antichi Sovrani",
-        text: (p) => `Polvere e silenzio regnano in questa maestosa sala sepolcrale. Al centro, sopra il sarcofago del Reale Fondatore, splende incontaminato il <strong>Sigillo dei Sovrani</strong>, anello d'oro puro intarsiato con rubini dell'Alba.<br><br>
-                     Quando indossi l'anello, senti il calore degli antenati scorrere nelle tue vene (Recuperi +3 PF). Sul retro della cripta, un passaggio segreto tra le radici giganti porta verso i sotterranei della Rocca.`,
-        loot: {
-          gold: 4,
-          relic: "Sigillo dei Sovrani",
-          heal: 3
-        },
-        choices: [
-          { text: "Avanza nel Portale delle Radici Arcane", target: "16" }
-        ]
-      },
-      "9": {
-        title: "9. Sifone Sommerso",
-        text: (p) => `L'acqua è gelida come ghiaccio fuso. Trattieni il respiro e ti immergi nella condotta allagata. Grazie all'agilità del tuo equipaggiamento, nuoti tra le alghe sotterranee fino a riemergere con un colpo di reni in una grotta illuminata da fiaccole: sei entrat${p.o_a} nella <strong>Darsena Sotterranea</strong> della Rocca!`,
-        choices: [
-          { text: "Arrampicati sui pontili della Darsena", target: "17" }
-        ]
-      },
-      "10": {
-        title: "10. Il Tracollo del Ponte",
-        text: (p) => `Le funi centrali, corrose dal tempo e dall'umidità, cedono di colpo sotto il tuo peso. Con uno strappo terrificante il ponte si spezza a metà!<br><br>
-                     Cerchi disperatamente un appiglio, ma la roccia umida scivola via tra le tue dita mentre precipiti nell'abisso senza fine del crepaccio...<br><br>
-                     <strong class="text-red-500 font-fantasy text-xl">Fine dell'Impresa (Caduta Fatale)</strong>`,
-        is_game_over: true,
-        choices: [
-          { text: "Ricarica Ultimo Salvataggio", load_game: true },
-          { text: "Ricomincia dall'Inizio", target: "1", reset_game: true }
-        ]
-      },
-      "11": {
-        title: "11. Il Rifugio dell'Eremita Erborista",
-        text: (p) => `Scendendo lungo la cengia rocciosa raggiungi una caverna riscaldata da un piccolo braciere profumato d'incenso e salvia selvatica. Un vecchio speziale dalla barba nivea alza lo sguardo su di te.<br><br>
-                     «Ti aspettavo, erede d'Aethelgard,» sussurra con voce commossa. «Malakor tiene il tuo compagno d'infanzia, <strong>Roland</strong>, prigioniero di una maledizione mentale: il <em>Sigillo Notturno</em>. Se lo incontrerai nel palazzo egli ti attaccherà come un nemico mortale! Prendi questa fiala: è l'<strong>Elisir Spezzaincanto</strong>. Soltanto infrangendola su di lui potrai risvegliare la sua vera anima!»<br><br>
-                     Custodisci con cura l'Elisir e prendi il sentiero protetto che risale verso le radici della fortezza.`,
-        loot: {
-          items: ["Elisir Spezzaincanto"],
-          is_elisir: true
-        },
-        choices: [
-          { text: "Ringrazia l'Eremita e prosegui verso il Portale delle Radici", target: "16" }
-        ]
-      },
-      "12": {
-        title: "12. Prigioniero alle Gole",
-        text: (p) => `Circondat${p.o_a} dai rinforzi nemici, deponi le armi sperando nella clemenza. Ma i servi di Malakor non conoscono pietà: vieni trascinat${p.o_a} nelle segrete più oscure e giustiziat${p.o_a} all'alba.<br><br>
-                     <strong class="text-red-500 font-fantasy text-xl">Fine dell'Impresa (Catturato)</strong>`,
-        is_game_over: true,
-        choices: [
-          { text: "Ricarica Ultimo Salvataggio", load_game: true },
-          { text: "Ricomincia dall'Inizio", target: "1", reset_game: true }
-        ]
-      },
-      "13": {
-        title: "13. Spoglie del Capitano",
-        text: (p) => `Rifletti sull'arma appena raccolta. Lo <strong>Spadone del Crociato</strong> offre colpi devastanti in mischia, ma il suo peso imponente ti impedirà di nuotare agilmente o strisciare in cunicoli stretti.<br><br>
-                     Davanti a te il cammino sale verso il <strong>Passaggio delle Forche</strong>, che costeggia i bastioni della rocca.`,
-        choices: [
-          { text: "Avanza verso il Passaggio delle Forche", target: "18" }
-        ]
-      },
-      "14": {
-        title: "14. L'Enigma del Bardo Ribelle",
-        text: (p) => `Il cantastorie ti afferra il braccio mentre le guardie avanzano rovesciando sedie: «Ascoltami, mio erede! Per aprire la grata segreta delle fogne devi conoscere la parola d'ordine che solo i figli d'Aethelgard ricordano:<br><br>
-                     <div class="p-3.5 bg-black/60 border border-amber-600/80 rounded-xl italic text-amber-200 text-center text-sm sm:text-base">
-                       “Non ha voce ma parla nei canti,<br>
-                       risplende nell'oro e nei cuori costanti.<br>
-                       Caccia le ombre che coprono il mondo,<br>
-                       chi è la signora del giorno giocondo?”
-                     </div><br>
-                     Pronuncia la parola che spezza il silenzio:`,
-        input_riddle: {
-          correct_answer: "luce",
-          alt_answers: ["la luce", "sole", "il sole", "aurora", "alba", "l'alba"],
-          success: {
-            text: `«Esatto! La Luce d'Alba!» esclama il bardo. Ti infila in mano una chiave di ferro e tira una leva dietro il bancone: una botola si apre sotto i tuoi piedi conducendoti direttamente nel <strong>Canale di Scolo</strong> della fortezza!`,
-            target: "19"
-          },
-          failure: {
-            text: `«No, non è questa la risposta!» Il tempo stringe: le guardie ti piombano addosso rovesciando boccali. Non ti resta che sfondare la finestra sul retro e arrampicarti sui tetti del borgo!`,
-            target: "15"
-          }
-        }
-      },
-      "15": {
-        title: "15. Fuga sui Tetti del Borgo",
-        text: (p) => `Con un balzo scavalchi la grondaia e corri sulle tegole umide mentre i dardi delle balestre fischiano a pochi centimetri dal tuo mantello. Scivolando lungo un cavo di carrucola atterri su un bastione secondario: sei giunt${p.o_a} al <strong>Passaggio delle Forche</strong>.`,
-        choices: [
-          { text: "Avanza con cautela verso i Bastioni", target: "18" }
-        ]
-      },
-      "16": {
-        title: "16. Portale delle Radici Arcane",
-        text: (p) => `Seguendo le immense radici di quercia che sostengono le fondamenta della fortezza, giungi a una terrazza coperta da rovi di rosa nera e brina magica. Sei entrat${p.o_a} nei <strong>Giardini d'Inverno</strong> di Malakor, un luogo corrotto dove le ombre prendono forma vivente.`,
-        choices: [
-          { text: "Avanza con la spada sguainata tra le siepi ghiacciate", target: "20" }
-        ]
-      },
-      "17": {
-        title: "17. Darsena Sotterranea",
-        text: (p) => `Sgattaioli fuori dall'acqua tra barili di pece e remi spezzati. Due sentinelle distratte giocano a dadi poco lontano. Oltrepassandole con passo felpato, raggiungi una scala a chiocciola che sale verso le <strong>Prigioni</strong> della fortezza.`,
-        choices: [
-          { text: "Sali verso le Prigioni della Fortezza", target: "21" }
-        ]
-      },
-      "18": {
-        title: "18. Il Passaggio delle Forche",
-        text: (p) => `Ti trovi su un camminamento sospeso sui bastioni orientali. Davanti a te si trova un passaggio strettissimo tra le merlature crollate. Se indossi un'arma troppo ingombrante, il passaggio è impraticabile e dovrai attirare l'attenzione sui parapetti; se sei agile, passi inosservat${p.o_a} verso il cortile del Grande Salone.`,
-        choices: [
-          { 
-            text: "Infiltrati nella stretta fessura tra le merlature (Furtivo)", 
-            target: "25",
-            require_light_weapon: true
-          },
-          { text: "Affronta il camminamento principale del Bastione Esterno", target: "22" }
-        ]
-      },
-      "19": {
-        title: "19. Canale di Scolo della Fortezza",
-        text: (p) => `Avanzi nell'acqua melmosa usando la chiave del bardo per sbloccare la pesante grata di scarico. Con uno sforzo sollevi una botola arrugginita che conduce all'interno delle <strong>Prigioni</strong> sotterranee.`,
-        choices: [
-          { text: "Entra nelle Prigioni della Fortezza", target: "21" }
-        ]
-      },
-      "20": {
-        title: "20. I Giardini d'Inverno Infestati",
-        text: (p) => `Dalle siepi gelide emerge una sagoma mostruosa: è una <strong>Bestia d'Ombra</strong>, un mastino con zanne di fiamme viola ed occhi privi di pupilla creato dalla stregoneria di Malakor. Ruggisce rabbioso e balza all'attacco!`,
-        combat: {
-          enemy_name: "Bestia d'Ombra Mutata",
-          enemy_stamina: 3
-        },
-        on_victory: {
-          text: (p) => `Con un fendente deciso trafiggi il cuore d'ombra della creatura, che si dissolve in fumo acre. Oltre le siepi scorgi un padiglione di cristallo intatto: il <strong>Santuario del Vetro</strong>.`,
-          target: "23"
-        }
-      },
-      "21": {
-        title: "21. Prigioni della Fortezza",
-        text: (p) => `Le celle sono piene di vecchi soldati fedeli alla dinastia caduta. Con una sbarra di ferro scardini le serrature liberandoli: i veterani ti riconoscono subito e si inginocchiano in lacrime.<br><br>
-                     Il loro capitano ti consegna la <strong>Chiave dell'Armeria Reale</strong> e ti indica una via d'accesso al piano superiore prima di organizzare la rivolta nelle caserme.`,
-        loot: {
-          gold: 5,
-          items: ["Chiave dell'Armeria"]
-        },
-        choices: [
-          { text: "Apri l'Armeria Reale Sigillata", target: "24" },
-          { text: "Sali direttamente verso il Grande Salone", target: "25" }
-        ]
-      },
-      "22": {
-        title: "22. Bastione Esterno",
-        text: (p) => `Mentre avanzi sui bastioni, una delle statue di pietra sui cornicioni prende vita con uno stridore agghiacciante: è un <strong>Gargoyle di Malakor</strong> con ali di roccia e artigli affilati!`,
-        combat: {
-          enemy_name: "Gargoyle Alato di Roccia",
-          enemy_stamina: 3
-        },
-        on_victory: {
-          text: (p) => `Il mostro di pietra si frantuma al suolo in mille schegge. La porta posteriore del bastione ti conduce direttamente nel <strong>Grande Salone</strong>.`,
-          target: "25"
-        }
-      },
-      "23": {
-        title: "23. Santuario del Vetro",
-        text: (p) => `All'interno del padiglione di cristallo, immune alla corruzione della nebbia oscura, riposa sopra un altare d'ebano la seconda Reliquia Ancestrale: il <strong>Prisma di Stella</strong>.<br><br>
-                     Quando lo raccogli, una luce calda pervade la tua mente, scacciando la fatica (Recuperi +4 PF). Ora non ti resta che varcare il portale dorato che conduce al Salone del Trono!`,
-        loot: {
-          relic: "Prisma di Stella",
-          heal: 4
-        },
-        choices: [
-          { text: "Varca le doppie porte verso il Salone del Trono", target: "26" }
-        ]
-      },
-      "24": {
-        title: "24. L'Armeria Reale Sigillata",
-        text: (p) => `La chiave gira perfettamente nella toppa di bronzo. L'armeria contiene le armi leggendarie dei Re dell'Alba. Sopra un piedistallo d'argento brilla la terza Reliquia Ancestrale: l'<strong>Egida d'Argento</strong>, scudo ancestrale indistruttibile.<br><br>
-                     Inoltre trovi lo <strong>Stocco Elfico delle Foglie</strong> e l'<strong>Ascia da Guerra dei Nani</strong>. Puoi decidere quale arma impugnare per la battaglia imminente!`,
-        loot: {
-          relic: "Egida d'Argento",
-          weapon_options: ["elven_rapier", "dwarven_axe"]
-        },
-        choices: [
-          { text: "Avanza verso il Salone del Trono", target: "26" }
-        ]
-      },
-      "25": {
-        title: "25. Il Grande Salone delle Guardie",
-        text: (p) => `Attraversi i corridoi affrescati dove un tempo suonavano le arpe dei Re. Gli arazzi sono strappati e le guardie corrotte dormono o fuggono udendo i clamori della rivolta che divampa dal basso.<br><br>
-                     Di fronte a te si stagliano le imponenti porte di ferro nero che aprono la sala del trono.`,
-        choices: [
-          { text: "Spalanca le porte del Salone del Trono d'Ossidiana", target: "26" }
-        ]
-      },
-      "26": {
-        title: "26. Il Salone del Trono: Roland il Campione Corrotto",
-        text: (p) => `Spalanchi le porte. Nel vasto salone colonnato, ai piedi del Trono d'Ossidiana avvolto da spire di nebbia nera, si staglia un guerriero in armatura scintillante con la spada sguainata.<br><br>
-                     Il tuo cuore ha un sussulto: è <strong>Roland</strong>, il tuo compagno d'infanzia, l'amico più fraterno con cui sei cresciut${p.o_a}! Ma i suoi occhi sono velati da un bagliore violaceo spettrale: sulla sua fronte pulsa il marchio del <em>Sigillo Notturno</em>.<br><br>
-                     «Fermati, intruso!» proclama Roland con voce roca e disumana. «Nessuno può sfidare il volere di Malakor!»`,
-        has_friend_encounter: true
-      },
-      "27": {
-        title: "27. Roland Liberato dal Sortilegio!",
-        text: (p) => `Con uno scatto fulmineo schivi il suo fendente e gli scagli sul petto l'<strong>Elisir Spezzaincanto</strong>! La fiala si infrange in una vampa di luce argentea.<br><br>
-                     Roland emette un grido straziante mentre il marchio nero sulla fronte si dissolve in fumo bianco. Cade in ginocchio, respirando a fatica... poi alza lo sguardo verso di te. Gli occhi grigi sono tornati limpidi.<br><br>
-                     «${p.name}... sei davvero tu?» mormora con voce tremante, stringendoti l'avambraccio. «Che cosa ho fatto in questi anni bui...? Malakor è oltre quel portale, nella Torre Alta. Permettimi di combattere al tuo fianco per riparare ai miei peccati!»`,
-        friend_saved: true,
-        choices: [
-          { text: "Avanza fianco a fianco con Roland verso lo Scontro Finale", target: "29" }
-        ]
-      },
-      "28": {
-        title: "28. La Caduta di Roland",
-        text: (p) => `Non possiedi l'Elisir per spezzare il sortilegio oscuro. Roland ti attacca a testa bassa, con furia cieca alimentata dalla magia nera. Non hai scelta: devi difenderti con la spada per non morire!`,
-        combat: {
-          enemy_name: "Roland (Asservito dall'Ombra)",
-          enemy_stamina: 3
-        },
-        on_victory: {
-          text: (p) => `La tua lama trafigge il suo fianco. Roland crolla al suolo. Con il colpo mortale, la nebbia purpurea svanisce dai suoi occhi. «${p.name}... perdonami... ti ho riconosciuto... troppo tardi...» sussurra con un filo di voce prima di spirare tra le tue braccia.<br><br>
-                       Con il cuore straziato dal dolore e le lacrime agli occhi, ti rialzi. Ora non c'è pietà: Malakor pagherà per ogni vita spezzata!`,
-          target: "30"
-        }
-      },
-      "29": {
-        title: "29. Duello Finale: Malakor l'Ombromante (con Roland)",
-        text: (p) => `Varcate la terrazza sommitale. Al centro di un vortice di tempesta fluttua <strong>Malakor l'Ombromante</strong>, avvolto da vesti di fumo nero e con il bastone sormontato da un teschio di drago.<br><br>
-                     «Maledetti ribelli!» urla lo stregone scagliando dardi d'ombra. Ma Roland para un colpo col suo scudo dandoti spazio per l'assalto: insieme siete invincibili!`,
-        combat: {
-          enemy_name: "Malakor l'Ombromante",
-          enemy_stamina: 4,
-          hero_buff: true
-        },
-        on_victory: {
-          text: (p) => `Unendo le vostre forze, la tua lama fende il petto del mago oscuro mentre il suo bastone si spezza in mille frammenti incandescenti. Malakor si dissolve in un urlo d'agonia disperso dal vento dell'Alba!`,
-          check_true_ending: true
-        }
-      },
-      "30": {
-        title: "30. Duello Finale: Malakor l'Ombromante (da Solo)",
-        text: (p) => `Varchi da sol${p.o_a} la terrazza sommitale, con la spada lorda del sangue del tuo migliore amico e il cuore colmo d'ira. Malakor ridacchia dall'alto del suo vortice oscuro:<br><br>
-                     «Hai dovuto uccidere il tuo cavaliere più fedele con le tue stesse mani! Sei solo, ultimo rampollo di una stirpe estinta!»<br><br>
-                     «Non sono sol${p.o_a},» ribatti con voce d'acciaio. «Tutta Aethelgard combatte con me!»`,
-        combat: {
-          enemy_name: "Malakor l'Ombromante",
-          enemy_stamina: 4
-        },
-        on_victory: {
-          text: (p) => `Con un affondo disperato guidato dalla memoria di tuo padre e di Roland, trafiggi il cuore corrotto dello stregone. Malakor si disintegra in cenere mentre le nubi scure si diradano.`,
-          target: "33"
-        }
-      },
-      "31": {
-        title: "31. IL RINASCIMENTO DI AETHELGARD (FINALE OTTIMO)",
-        text: (p) => `<div class="p-4 bg-amber-950/40 border-2 border-amber-500 rounded-2xl text-center space-y-4 shadow-2xl">
-                       <span class="text-4xl">👑</span>
-                       <h2 class="font-title text-2xl sm:text-3xl text-amber-300 font-bold">LA LUCE DELL'ALBA RISORGE</h2>
-                       <p class="text-sm sm:text-base text-amber-100 leading-relaxed italic">
-                         Hai compiuto l'impresa più grande mai cantata dai bardi. Roland è al tuo fianco, salvo e redento; tutte e tre le Reliquie Ancestrali dell'Alba (il Sigillo dei Sovrani, il Prisma di Stella e l'Egida d'Argento) brillano all'unisono sul trono reale, purificando la terra da ogni traccia di corruzione.
-                       </p>
-                       <p class="text-sm sm:text-base text-emerald-300 font-semibold">
-                         Il popolo di Aethelgard accorre acclamando ${p.title} ${p.name}! Roland viene nominato Primo Guardiano del Reame, e sotto la tua guida saggia e valorosa ha inizio una nuova, splendida Età dell'Oro.
-                       </p>
-                       <div class="pt-3 border-t border-amber-900/60 font-fantasy text-amber-400 text-lg">
-                         ✨ VITTORIA LEGGENDARIA - VERO FINALE RAGGIUNTO ✨
-                       </div>
-                       <p class="text-xs text-amber-300/80 italic mt-3 pt-2 border-t border-amber-900/40">
-                         Hai raggiunto uno dei finali possibili! Puoi rigiocare compiendo scelte differenti per scoprire gli altri due finali alternativi della storia.
-                       </p>
-                     </div>`,
-        is_victory: true,
-        choices: [
-          { text: "Ritorna al Menu Principale", to_menu: true }
-        ]
-      },
-      "32": {
-        title: "32. L'Alba della Ricostruzione (Finale Buono II)",
-        text: (p) => `<div class="p-4 bg-emerald-950/30 border border-emerald-600 rounded-2xl text-center space-y-4">
-                       <span class="text-4xl">🕊️</span>
-                       <h2 class="font-title text-2xl text-emerald-300 font-bold">LA PACE RITROVATA</h2>
-                       <p class="text-sm sm:text-base text-amber-100 leading-relaxed italic">
-                         Malakor è stato distrutto per sempre e il tuo fedele amico Roland è salvo al tuo fianco. Anche se non tutte le antiche Reliquie dei Re sono state recuperate, la tirannia è spezzata.
-                       </p>
-                       <p class="text-sm sm:text-base text-amber-200">
-                         Insieme a Roland e ai capitani ribelli inizi la grande opera di ricostruzione di Aethelgard. Ci vorranno anni di fatiche, ma la libertà è tornata a fiorire nei cuori della gente.
-                       </p>
-                       <div class="pt-3 border-t border-emerald-900/60 font-fantasy text-emerald-400">
-                         🌟 FINALE POSITIVO RAGGIUNTO 🌟
-                       </div>
-                       <p class="text-xs text-amber-300/80 italic mt-3 pt-2 border-t border-amber-900/40">
-                         Hai raggiunto uno dei finali possibili! Puoi rigiocare compiendo scelte differenti per scoprire gli altri due finali alternativi della storia.
-                       </p>
-                     </div>`,
-        is_victory: true,
-        choices: [
-          { text: "Ritorna al Menu Principale", to_menu: true }
-        ]
-      },
-      "33": {
-        title: "33. Il Trono Solitario (Finale Buono I)",
-        text: (p) => `<div class="p-4 bg-blue-950/30 border border-blue-700 rounded-2xl text-center space-y-4">
-                       <span class="text-4xl">⚔️</span>
-                       <h2 class="font-title text-2xl text-blue-300 font-bold">IL TRIONFO AMARO</h2>
-                       <p class="text-sm sm:text-base text-amber-100 leading-relaxed italic">
-                         La campana della cattedrale suona a festa: Aethelgard è libera dal giogo di Malakor l'Ombromante. Sali i gradini del trono paterno mentre la folla applaude in festa.
-                       </p>
-                       <p class="text-sm sm:text-base text-amber-200/90">
-                         Eppure, il tuo sguardo rimane fisso sulla spada d'ordinanza posata accanto allo scettro: l'arma di Roland, caduto per tua mano sotto l'incantesimo del mago. Governerai con saggezza e rettitudine, ma il tuo cuore porterà per sempre il peso del sacrificio.
-                       </p>
-                       <div class="pt-3 border-t border-blue-900/60 font-fantasy text-blue-300">
-                         🛡️ FINALE AMARO CONSEGUITO 🛡️
-                       </div>
-                       <p class="text-xs text-amber-300/80 italic mt-3 pt-2 border-t border-amber-900/40">
-                         Hai raggiunto uno dei finali possibili! Puoi rigiocare compiendo scelte differenti per scoprire gli altri due finali alternativi della storia.
-                       </p>
-                     </div>`,
-        is_victory: true,
-        choices: [
-          { text: "Ritorna al Menu Principale", to_menu: true }
-        ]
-      },
-      "34": {
-        title: "34. Caduto in Battaglia",
-        text: (p) => `<div class="text-center space-y-3">
-                       <span class="text-4xl">💀</span>
-                       <h3 class="font-fantasy text-2xl text-red-400">La Tua Resistenza è Scaduta</h3>
-                       <p class="text-sm sm:text-base text-amber-200/90 leading-relaxed">
-                         Le tue forze ti abbandonano mentre crolli sul freddo suolo di pietra. L'eco dei tuoi passi si spegne nell'oscurità e il destino di Aethelgard resta avvolto nelle ombre di Malakor...
-                       </p>
-                     </div>`,
-        is_game_over: true,
-        choices: [
-          { text: "Ricarica Ultimo Salvataggio", load_game: true },
-          { text: "Ricomincia l'Avventura", target: "1", reset_game: true }
-        ]
+      failure: {
+        text: (p) => `«No, non è questa la risposta!» Il tempo stringe: le guardie ti piombano addosso rovesciando boccali. Non ti resta che sfondare la finestra sul retro e arrampicarti sui tetti del borgo!`,
+        target: "15"
       }
-    };
+    }
+  },
+  "15": {
+    title: "15. Fuga sui Tetti del Borgo",
+    text: (p) => `Con un balzo scavalchi la grondaia e corri sulle tegole umide mentre i dardi delle balestre fischiano a pochi centimetri dal tuo mantello. Scivolando lungo un cavo atterri sui parapetti della rocca.<br><br>
+                 Da quassù scorgi diverse vie d'infiltrazione: il camminamento delle forche, un tubo di scolo verso il basso, o i pontili della darsena.`,
+    choices: [
+      { text: "Avanza con cautela verso il Passaggio delle Forche", target: "18" },
+      { text: "Calati da una grondaia nel Canale di Scolo della rocca", target: "19" },
+      { text: "Salta su un tetto spiovente per scendere verso la Darsena Sotterranea", target: "17" }
+    ]
+  },
+  "16": {
+    title: "16. Portale delle Radici Arcane",
+    text: (p) => `Seguendo le immense radici di quercia che sostengono le fondamenta della fortezza, giungi a un crocevia monumentale coperto da rovi di rosa nera e brina magica. Sei ai margini dei <strong>Giardini d'Inverno</strong> di Malakor.<br><br>
+                 Da questo snodo strategico, i rami cavi e le scale di pietra permettono di raggiungere sia le serre alte sia le segrete sotterranee.`,
+    choices: [
+      { text: "Avanza furtivamente tra le siepi ghiacciate dei Giardini d'Inverno", target: "20" },
+      { text: "Scendi lungo le radici cave verso le Prigioni della fortezza", target: "21" },
+      { text: "Costeggia il parapetto esterno verso il Passaggio delle Forche", target: "18" },
+      { text: "Discendi la galleria rocciosa verso la Cripta degli Antichi Sovrani", target: "8" }
+    ]
+  },
+  "17": {
+    title: "17. Darsena Sotterranea",
+    text: (p) => `Sgattaioli fuori dall'acqua tra barili di pece e remi spezzati. Due sentinelle distratte giocano a dadi poco lontano. Oltrepassandole con passo felpato, ti trovi di fronte a un bivio sotterraneo: una scala a chiocciola che sale alle prigioni e una galleria scavata che porta all'antica Cripta Reale.`,
+    choices: [
+      { text: "Sali per la scala a chiocciola verso le Prigioni della fortezza", target: "21" },
+      { text: "Imbocca la galleria dei contrabbandieri verso la Cripta dei Sovrani", target: "8" },
+      { 
+        text: "Nuota a ritroso nel sifone verso le Grotte dei Sussurri", 
+        target: "4",
+        require_light_weapon: true
+      }
+    ]
+  },
+  "18": {
+    title: "18. Il Passaggio delle Forche",
+    text: (p) => `Ti trovi su un camminamento sospeso sui bastioni orientali. Davanti a te si trova un passaggio strettissimo tra le merlature crollate. Se indossi un'arma troppo ingombrante, il passaggio è impraticabile e dovrai attirare l'attenzione sui parapetti; se sei agile, passi inosservat${p.o_a} verso il cortile del Grande Salone.`,
+    choices: [
+      { 
+        text: "Infiltrati nella stretta fessura tra le merlature (Furtivo)", 
+        target: "25",
+        require_light_weapon: true
+      },
+      { text: "Affronta il camminamento principale del Bastione Esterno", target: "22" },
+      { text: "Calati lungo la corda del bastione verso il Portale delle Radici", target: "16" }
+    ]
+  },
+  "19": {
+    title: "19. Canale di Scolo della Fortezza",
+    text: (p) => `Avanzi nell'acqua melmosa facendoti strada tra melma e ruggine. Davanti a te il condotto principale si biforca verso le grate inferiori delle prigioni o verso i pontili bagnati della darsena.`,
+    choices: [
+      { text: "Solleva la grata arrugginita ed entra nelle Prigioni della fortezza", target: "21" },
+      { text: "Segui la condotta secondaria verso la Darsena Sotterranea", target: "17" },
+      { text: "Risali una conduttura d'aerazione murata verso il Grande Salone", target: "25" }
+    ]
+  },
+  "20": {
+    title: "20. I Giardini d'Inverno Infestati",
+    text: (p) => `Dalle siepi gelide emerge una sagoma mostruosa: è una <strong>Bestia d'Ombra</strong>, un mastino con zanne di fiamme viola ed occhi privi di pupilla creato dalla stregoneria di Malakor. Ruggisce rabbioso e balza all'attacco!`,
+    combat: {
+      enemy_name: "Bestia d'Ombra Mutata",
+      enemy_stamina: 3
+    },
+    on_victory: {
+      text: (p) => `Con un fendente deciso trafiggi il cuore d'ombra della creatura, che si dissolve in fumo acre. Oltre le siepi scorgi il padiglione di cristallo del <strong>Santuario del Vetro</strong>, mentre un colonnato conduce alle sale centrali.`,
+      choices: [
+        { text: "Esplora il padiglione di cristallo del Santuario del Vetro", target: "23" },
+        { text: "Attraversa il colonnato monumentale verso il Grande Salone delle Guardie", target: "25" },
+        { text: "Scendi per il passaggio delle serre verso le Prigioni", target: "21" }
+      ]
+    }
+  },
+  "21": {
+    title: "21. Prigioni della Fortezza",
+    text: (p) => `Le celle sono piene di vecchi soldati fedeli alla dinastia caduta. Con una sbarra di ferro scardini le serrature liberandoli: i veterani scorgono i tuoi tratti regali e cadono in ginocchio commossi:<br><br>
+                 <em>“${p.hero_title}! Siete ${p.vivo_a}! Il sangue dei Re è tornato a guidarci!”</em><br><br>
+                 Il loro capitano ti consegna la <strong>Chiave dell'Armeria Reale</strong> e ti mostra i passaggi per risalire alle stanze del castello prima di radunare i ribelli per l'assalto alle caserme.`,
+    loot: {
+      gold: 5,
+      items: ["Chiave dell'Armeria"]
+    },
+    choices: [
+      { text: "Apri con la chiave la massiccia porta dell'Armeria Reale", target: "24" },
+      { text: "Risali la scala delle guardie verso il Portale delle Radici e i Giardini", target: "16" },
+      { text: "Sali direttamente verso il Grande Salone delle Guardie", target: "25" }
+    ]
+  },
+  "22": {
+    title: "22. Bastione Esterno",
+    text: (p) => `Mentre avanzi sui bastioni, una delle statue di pietra sui cornicioni prende vita con uno stridore agghiacciante: è un <strong>Gargoyle di Malakor</strong> con ali di roccia e artigli affilati!`,
+    combat: {
+      enemy_name: "Gargoyle Alato di Roccia",
+      enemy_stamina: 3
+    },
+    on_victory: {
+      text: (p) => `Il mostro di pietra si frantuma al suolo in mille schegge. I camminamenti dei bastioni si aprono verso diverse ali della fortezza.`,
+      choices: [
+        { text: "Varca la porta posteriore verso il Grande Salone delle Guardie", target: "25" },
+        { text: "Scendi per la scala elicoidale verso le Prigioni inferiori", target: "21" },
+        { text: "Accedi al passaggio coperto che porta all'Armeria Reale", target: "24" }
+      ]
+    }
+  },
+  "23": {
+    title: "23. Santuario del Vetro",
+    text: (p) => `All'interno del padiglione di cristallo, immune alla corruzione della nebbia oscura, riposa sopra un altare d'ebano la seconda Reliquia Ancestrale: il <strong>Prisma di Stella</strong>.<br><br>
+                 Quando lo raccogli, una luce calda pervade la tua mente, scacciando la fatica (Recuperi +4 PF). Dalla loggia vetrata, una rampa discende verso l'Armeria Reale, mentre i corridoi affrescati conducono verso le sale del potere.`,
+    loot: {
+      relic: "Prisma di Stella",
+      heal: 4
+    },
+    choices: [
+      { text: "Scendi per il passaggio coperto verso l'Armeria Reale", target: "24" },
+      { text: "Avanza lungo la galleria affrescata verso il Grande Salone delle Guardie", target: "25" },
+      { text: "Raggiungi direttamente le porte monumentali del Salone del Trono", target: "26" }
+    ]
+  },
+  "24": {
+    title: "24. L'Armeria Reale Sigillata",
+    text: (p) => `La chiave gira perfettamente nella toppa di bronzo. L'armeria custodisce le armi leggendarie dei Re dell'Alba. Sopra un piedistallo d'argento brilla la terza Reliquia Ancestrale: l'<strong>Egida d'Argento</strong>, scudo ancestrale indistruttibile.<br><br>
+                 Inoltre trovi lo <strong>Stocco Elfico delle Foglie</strong> e l'<strong>Ascia da Guerra dei Nani</strong>. Da qui un corridoio nobiliare si ricongiunge con il Santuario del Vetro, mentre il portone principale affaccia sul Grande Salone.`,
+    loot: {
+      relic: "Egida d'Argento",
+      weapon_options: ["elven_rapier", "dwarven_axe"]
+    },
+    choices: [
+      { text: "Sali per il corridoio segreto verso il Santuario del Vetro e i Giardini", target: "23" },
+      { text: "Raggiungi i ribelli radunati nel Grande Salone delle Guardie", target: "25" },
+      { text: "Marcia a testa alta verso le imponenti porte del Salone del Trono", target: "26" }
+    ]
+  },
+  "25": {
+    title: "25. Il Grande Salone delle Guardie",
+    text: (p) => `Attraversi i corridoi affrescati dove un tempo suonavano le arpe dei Re. Gli arazzi sono lacerati e le guardie corrotte dormono o fuggono udendo i clamori della rivolta che divampa dal basso.<br><br>
+                 Ti trovi nel fulcro del palazzo: a sinistra si apre l'Armeria Reale, a destra le vetrate dei Giardini e del Santuario, mentre di fronte a te si stagliano le imponenti porte di ferro nero del Salone del Trono.`,
+    choices: [
+      { text: "Spalanca con decisione le porte del Salone del Trono d'Ossidiana", target: "26" },
+      { text: "Perlustra l'ala orientale per visitare l'Armeria Reale", target: "24" },
+      { text: "Raggiungi la terrazza dei Giardini verso il Santuario del Vetro", target: "23" }
+    ]
+  },
+  "26": {
+    title: "26. Il Salone del Trono: Roland il Campione Corrotto",
+    text: (p) => `Spalanchi le porte. Nel vasto salone colonnato, ai piedi del Trono d'Ossidiana avvolto da spire di nebbia nera, si staglia un guerriero in armatura scintillante con la spada sguainata.<br><br>
+                 Il tuo cuore ha un sussulto: è <strong>Roland</strong>, il tuo compagno d'infanzia, l'amico più fraterno con cui sei ${p.cresciuto_a}! Ma i suoi occhi sono velati da un bagliore violaceo spettrale: sulla sua fronte pulsa il marchio del <em>Sigillo Notturno</em>.<br><br>
+                 «Fermati!» proclama Roland con voce roca e disumana. «Riconosco il tuo volto nei frammenti perduti della mia memoria... dicono che sei ${p.heir_title}... ma Malakor è il solo e unico padrone di Aethelgard! Muori!»`,
+    has_friend_encounter: true
+  },
+  "27": {
+    title: "27. Roland Liberato dal Sortilegio!",
+    text: (p) => `Con uno scatto fulmineo schivi il suo fendente e gli scagli sul petto l'<strong>Elisir Spezzaincanto</strong>! La fiala si infrange in una vampa di luce argentea.<br><br>
+                 Roland emette un grido straziante mentre il marchio nero sulla fronte si dissolve in fumo bianco. Cade in ginocchio, respirando a fatica... poi alza lo sguardo verso di te. Gli occhi grigi sono tornati limpidi e pieni di vita.<br><br>
+                 «${p.name}... ${p.brother_sister}... sei davvero tu?» mormora con voce rotta dal pianto, stringendoti forte l'avambraccio. «Che cosa ho fatto in questi anni di tenebra...? Stavo per colpire ${p.il_la} mi${p.o_a} stess${p.o_a} ${p.vocative}! Malakor è oltre quel portale, nella Torre Alta. Permettimi di combattere al tuo fianco per riparare ai miei peccati e liberare il regno!»`,
+    friend_saved: true,
+    choices: [
+      { text: "Avanza fianco a fianco con Roland verso la Torre Alta per lo scontro frontale", target: "29" },
+      { text: "Fiancheggia lo stregone sfruttando la copertura tattica dello scudo di Roland", target: "29" }
+    ]
+  },
+  "28": {
+    title: "28. La Caduta di Roland",
+    text: (p) => `Non possiedi l'Elisir per spezzare il sortilegio oscuro. Roland ti attacca a testa bassa, con furia cieca alimentata dalla magia nera. Non hai scelta: devi difenderti con la spada per non morire!`,
+    combat: {
+      enemy_name: "Roland (Asservito dall'Ombra)",
+      enemy_stamina: 3
+    },
+    on_victory: {
+      text: (p) => `La tua lama trafigge il suo fianco. Roland crolla al suolo. Con il colpo mortale, la nebbia purpurea svanisce dai suoi occhi. «${p.name}... ${p.brother_sister}... perdonami... ti ho riconosciut${p.o_a}... troppo tardi... perdonami, ${p.vocative}...» sussurra con un filo di voce prima di spirare tra le tue braccia.<br><br>
+                   Con il cuore straziato dal dolore e le lacrime agli occhi, ti rialzi. Ora non c'è pietà: Malakor pagherà per ogni vita spezzata!`,
+      choices: [
+        { text: "Sali con il cuore straziato e la spada in pugno verso la Torre Alta", target: "30" }
+      ]
+    }
+  },
+  "29": {
+    title: "29. Duello Finale: Malakor l'Ombromante (con Roland)",
+    text: (p) => `Varcate la terrazza sommitale. Al centro di un vortice di tempesta fluttua <strong>Malakor l'Ombromante</strong>, avvolto da vesti di fumo nero e con il bastone sormontato da un teschio di drago.<br><br>
+                 «Maledetti ribelli!» sibila lo stregone con una risata gelida. «Dunque ${p.heir_title} è ${p.tornato_a} a reclamare la cenere del suo trono! E tu, stolto Roland, hai osato spezzare il mio giogo? Morirete entrambi tra le fiamme d'ombra!»<br><br>
+                 Ma Roland solleva lo scudo bloccando una raffica di dardi oscuri: «Non vincerai, stregone! Per ${p.hero_title} e per Aethelgard!»`,
+    combat: {
+      enemy_name: "Malakor l'Ombromante",
+      enemy_stamina: 4,
+      hero_buff: true
+    },
+    on_victory: {
+      text: (p) => `Unendo le vostre forze, la tua lama fende il petto del mago oscuro mentre il suo bastone si spezza in mille frammenti incandescenti. Malakor si dissolve in un urlo d'agonia disperso dal vento dell'Alba!`,
+      check_true_ending: true
+    }
+  },
+  "30": {
+    title: "30. Duello Finale: Malakor l'Ombromante (da Solo)",
+    text: (p) => `Varchi da sol${p.o_a} la terrazza sommitale, con la spada intrisa del sangue del tuo migliore amico e il cuore colmo d'ira. Malakor ridacchia dall'alto del suo vortice oscuro:<br><br>
+                 «Hai dovuto uccidere il tuo cavaliere più fedele con le tue stesse mani! Sei ${p.solo_a}, ultim${p.o_a} rampoll${p.o_a} di una stirpe estinta!»<br><br>
+                 «Non sono ${p.solo_a},» ribatti con voce fiera che rimbomba tra le pietre della rocca. «Tutta Aethelgard combatte nel mio pugno!»`,
+    combat: {
+      enemy_name: "Malakor l'Ombromante",
+      enemy_stamina: 4
+    },
+    on_victory: {
+      text: (p) => `Con un affondo disperato guidato dalla memoria di tuo padre e di Roland, trafiggi il cuore corrotto dello stregone. Malakor si disintegra in cenere mentre le nubi scure si diradano.`,
+      target: "33"
+    }
+  },
+  "31": {
+    title: "31. IL RINASCIMENTO DI AETHELGARD (FINALE OTTIMO)",
+    text: (p) => `<div class="p-4 bg-amber-950/40 border-2 border-amber-500 rounded-2xl text-center space-y-4 shadow-2xl">
+                   <span class="text-4xl">👑</span>
+                   <h2 class="font-title text-2xl sm:text-3xl text-amber-300 font-bold">LA LUCE DELL'ALBA RISORGE</h2>
+                   <p class="text-sm sm:text-base text-amber-100 leading-relaxed italic">
+                     Hai compiuto l'impresa più grande mai cantata dai bardi. Roland è al tuo fianco, salvo e redento; tutte e tre le Reliquie Ancestrali dell'Alba (il Sigillo dei Sovrani, il Prisma di Stella e l'Egida d'Argento) brillano all'unisono sul trono reale, purificando la terra da ogni traccia di corruzione.
+                   </p>
+                   <p class="text-sm sm:text-base text-emerald-300 font-semibold">
+                     Il popolo di Aethelgard e i cavalieri liberati accorrono nella piazza acclamando a festa: <strong>“Lunga vita a ${p.title} ${p.name}!”</strong> Roland viene nominato Primo Paladino del Reame, e con ${p.hero_title} ${p.crowned_a} sul trono ha inizio una splendida Età dell'Oro.
+                   </p>
+                   <div class="pt-3 border-t border-amber-900/60 font-fantasy text-amber-400 text-lg">
+                     ✨ VITTORIA LEGGENDARIA - VERO FINALE RAGGIUNTO ✨
+                   </div>
+                   <p class="text-xs text-amber-300/80 italic mt-3 pt-2 border-t border-amber-900/40">
+                     Hai raggiunto uno dei finali possibili! Puoi rigiocare compiendo scelte differenti per scoprire gli altri due finali alternativi della storia.
+                   </p>
+                 </div>`,
+    is_victory: true,
+    choices: [
+      { text: "Ritorna al Menu Principale", to_menu: true }
+    ]
+  },
+  "32": {
+    title: "32. L'Alba della Ricostruzione (Finale Buono II)",
+    text: (p) => `<div class="p-4 bg-emerald-950/30 border border-emerald-600 rounded-2xl text-center space-y-4">
+                   <span class="text-4xl">🕊️</span>
+                   <h2 class="font-title text-2xl text-emerald-300 font-bold">LA PACE RITROVATA</h2>
+                   <p class="text-sm sm:text-base text-amber-100 leading-relaxed italic">
+                     Malakor è stato distrutto per sempre e il tuo fedele amico Roland è salvo al tuo fianco. Anche se non tutte le antiche Reliquie dei Re sono state recuperate, la tirannia dell'Ombromante è spezzata.
+                   </p>
+                   <p class="text-sm sm:text-base text-amber-200">
+                     Insieme a Roland e ai capitani ribelli, ${p.hero_title} inizia la grande opera di ricostruzione di Aethelgard. Ci vorranno anni di fatiche, ma la libertà è tornata a fiorire nei cuori della gente.
+                   </p>
+                   <div class="pt-3 border-t border-emerald-900/60 font-fantasy text-emerald-400">
+                     🌟 FINALE POSITIVO RAGGIUNTO 🌟
+                   </div>
+                   <p class="text-xs text-amber-300/80 italic mt-3 pt-2 border-t border-amber-900/40">
+                     Hai raggiunto uno dei finali possibili! Puoi rigiocare compiendo scelte differenti per scoprire gli altri due finali alternativi della storia.
+                   </p>
+                 </div>`,
+    is_victory: true,
+    choices: [
+      { text: "Ritorna al Menu Principale", to_menu: true }
+    ]
+  },
+  "33": {
+    title: "33. Il Trono Solitario (Finale Buono I)",
+    text: (p) => `<div class="p-4 bg-blue-950/30 border border-blue-700 rounded-2xl text-center space-y-4">
+                   <span class="text-4xl">⚔️</span>
+                   <h2 class="font-title text-2xl text-blue-300 font-bold">IL TRIONFO AMARO</h2>
+                   <p class="text-sm sm:text-base text-amber-100 leading-relaxed italic">
+                     La campana della cattedrale suona a festa: Aethelgard è libera dal giogo di Malakor l'Ombromante. Sali i gradini del trono paterno mentre la folla applaude in festa.
+                   </p>
+                   <p class="text-sm sm:text-base text-amber-200/90">
+                     Eppure, lo sguardo di ${p.hero_title} rimane fisso sulla spada d'ordinanza posata accanto allo scettro: l'arma di Roland, caduto per tua mano sotto l'incantesimo del mago. Governerai con saggezza e rettitudine, ma il tuo cuore porterà per sempre il peso del sacrificio.
+                   </p>
+                   <div class="pt-3 border-t border-blue-900/60 font-fantasy text-blue-300">
+                     🛡️ FINALE AMARO CONSEGUITO 🛡️
+                   </div>
+                   <p class="text-xs text-amber-300/80 italic mt-3 pt-2 border-t border-amber-900/40">
+                     Hai raggiunto uno dei finali possibili! Puoi rigiocare compiendo scelte differenti per scoprire gli altri due finali alternativi della storia.
+                   </p>
+                 </div>`,
+    is_victory: true,
+    choices: [
+      { text: "Ritorna al Menu Principale", to_menu: true }
+    ]
+  },
+  "34": {
+    title: "34. Caduto in Battaglia",
+    text: (p) => `<div class="text-center space-y-3">
+                   <span class="text-4xl">💀</span>
+                   <h3 class="font-fantasy text-2xl text-red-400">La Tua Resistenza è Scaduta</h3>
+                   <p class="text-sm sm:text-base text-amber-200/90 leading-relaxed">
+                     Le tue forze ti abbandonano mentre crolli sul freddo suolo di pietra. L'eco dei tuoi passi si spegne nell'oscurità e il destino di Aethelgard resta avvolto nelle ombre di Malakor...
+                   </p>
+                 </div>`,
+    is_game_over: true,
+    choices: [
+      { text: "Ricarica Ultimo Salvataggio", load_game: true },
+      { text: "Ricomincia l'Avventura", target: "1", reset_game: true }
+    ]
+  }
+};
 
     // Pronouns & Titles Helper
     function getPronouns(state) {
-      const g = state.gender || "M";
-      const name = state.hero_name || (g === 'F' ? 'Elysia' : (g === 'NB' ? 'Elen' : 'Elyan'));
-      return {
-        name: name,
-        title: g === 'F' ? 'la Regina' : (g === 'NB' ? "l'Erede Sovrano" : 'il Re'),
-        sub_title: g === 'F' ? "Principessa d'Aethelgard" : (g === 'NB' ? "Erede d'Aethelgard" : "Principe d'Aethelgard"),
-        o_a: g === 'F' ? 'a' : (g === 'NB' ? 'ə' : 'o'),
-        egli_ella: g === 'F' ? 'ella' : (g === 'NB' ? 'essa' : 'egli')
-      };
-    }
+  const g = state.gender || "M";
+  const name = state.hero_name || (g === 'F' ? 'Elysia' : (g === 'NB' ? 'Elen' : 'Elyan'));
+  if (g === 'F') {
+    return {
+      gender: 'F',
+      name: name,
+      title: "la Regina",
+      sub_title: "Principessa d'Aethelgard",
+      hero_title: `Principessa ${name}`,
+      vocative: "mia principessa",
+      vocative_cap: "Mia Principessa",
+      lord_lady: "mia signora",
+      lord_lady_cap: "Mia Signora",
+      heir: "la principessa",
+      heir_cap: "La Principessa",
+      heir_title: "la Principessa",
+      child: "figlia mia",
+      child_cap: "Figlia mia",
+      brother_sister: "sorella mia",
+      brother_sister_cap: "Sorella mia",
+      noble_child: "giovane principessa",
+      sovereign: "Regina",
+      o_a: "a",
+      il_la: "la",
+      un_una: "una",
+      lo_la: "la",
+      lui_lei: "lei",
+      egli_ella: "ella",
+      del_della: "della",
+      al_alla: "alla",
+      pronto_a: "pronta",
+      solo_a: "sola",
+      vivo_a: "viva",
+      salvato_a: "salvata",
+      cresciuto_a: "cresciuta",
+      tornato_a: "tornata",
+      temprato_a: "temprata",
+      entrato_a: "entrata",
+      giunto_a: "giunta",
+      passato_a: "passata",
+      circondato_a: "circondata",
+      giustiziato_a: "giustiziata",
+      crowned_a: "incoronata"
+    };
+  } else if (g === 'NB') {
+    return {
+      gender: 'NB',
+      name: name,
+      title: "il Sovrano",
+      sub_title: "Erede d'Aethelgard",
+      hero_title: `Erede ${name}`,
+      vocative: "nobile erede",
+      vocative_cap: "Nobile Erede",
+      lord_lady: "nobile custode",
+      lord_lady_cap: "Nobile Custode",
+      heir: "l'erede al trono",
+      heir_cap: "L'Erede al Trono",
+      heir_title: "l'Erede",
+      child: "sangue dell'Alba",
+      child_cap: "Sangue dell'Alba",
+      brother_sister: "compagno d'armi",
+      brother_sister_cap: "Compagno mio",
+      noble_child: "giovane erede",
+      sovereign: "Sovrano",
+      o_a: "o",
+      il_la: "l'",
+      un_una: "un",
+      lo_la: "l'",
+      lui_lei: "l'erede",
+      egli_ella: "l'erede",
+      del_della: "dell'",
+      al_alla: "all'",
+      pronto_a: "pronto",
+      solo_a: "in solitudine",
+      vivo_a: "in vita",
+      salvato_a: "in salvo",
+      cresciuto_a: "cresciuto negli anni",
+      tornato_a: "tornato",
+      temprato_a: "temprato",
+      entrato_a: "giunto",
+      giunto_a: "giunto",
+      passato_a: "passato",
+      circondato_a: "circondato",
+      giustiziato_a: "giustiziato",
+      crowned_a: "consacrato sul trono"
+    };
+  } else {
+    return {
+      gender: 'M',
+      name: name,
+      title: "il Re",
+      sub_title: "Principe d'Aethelgard",
+      hero_title: `Principe ${name}`,
+      vocative: "mio principe",
+      vocative_cap: "Mio Principe",
+      lord_lady: "mio signore",
+      lord_lady_cap: "Mio Signore",
+      heir: "il principe",
+      heir_cap: "Il Principe",
+      heir_title: "il Principe",
+      child: "figlio mio",
+      child_cap: "Figlio mio",
+      brother_sister: "fratello mio",
+      brother_sister_cap: "Fratello mio",
+      noble_child: "giovane principe",
+      sovereign: "Re",
+      o_a: "o",
+      il_la: "il",
+      un_una: "un",
+      lo_la: "lo",
+      lui_lei: "lui",
+      egli_ella: "egli",
+      del_della: "del",
+      al_alla: "al",
+      pronto_a: "pronto",
+      solo_a: "solo",
+      vivo_a: "vivo",
+      salvato_a: "salvato",
+      cresciuto_a: "cresciuto",
+      tornato_a: "tornato",
+      temprato_a: "temprato",
+      entrato_a: "entrato",
+      giunto_a: "giunto",
+      passato_a: "passato",
+      circondato_a: "circondato",
+      giustiziato_a: "giustiziato",
+      crowned_a: "incoronato"
+    };
+  }
+}
 
     // UI Elements
     const viewMainMenu = document.getElementById('view-main-menu');
@@ -1628,10 +1801,20 @@
       nodeTitle.textContent = node.title;
       nodeText.innerHTML = typeof node.text === 'function' ? node.text(pronouns) : node.text;
 
-      // Handle Healing / Relic effects
-      if (node.loot && node.loot.heal) {
+      // Handle Roland saved state
+      if (node.friend_saved) {
+        gameState.roland_saved = true;
+      }
+
+      // Handle Healing / Relic effects (only once per node)
+      if (!gameState.visited_nodes) gameState.visited_nodes = {};
+      if (node.loot && node.loot.heal && !gameState.visited_nodes[nodeId]) {
         gameState.stamina = Math.min(gameState.max_stamina, gameState.stamina + node.loot.heal);
       }
+      if (node.loot && node.loot.gold && !gameState.visited_nodes[nodeId]) {
+        gameState.gold += node.loot.gold;
+      }
+      gameState.visited_nodes[nodeId] = true;
 
       // Handle Loot
       if (node.loot) {
@@ -1851,18 +2034,41 @@
             showLoot(currentCombatVictory.loot);
           }
           if (currentCombatVictory.check_true_ending) {
-            // Check True Ending: 3 relics + Roland
-            if (gameState.relics.length >= 3) {
+            // Check True Ending: 3 relics + Roland saved
+            if (gameState.relics.length >= 3 && gameState.roland_saved) {
               goToNode("31"); // Finale Ottimo
             } else {
               goToNode("32"); // Finale Buono II
             }
             return;
           }
-          if (currentCombatVictory.target) {
+          if (currentCombatVictory.choices && Array.isArray(currentCombatVictory.choices)) {
+            choicesContainer.innerHTML = '';
+            currentCombatVictory.choices.forEach(choice => {
+              const btn = document.createElement('button');
+              const label = typeof choice.text === 'function' ? choice.text(pronouns) : choice.text;
+              let isBlocked = false;
+              let blockReason = "";
+              if (choice.require_light_weapon && gameState.weapon.encumbrance === 'pesante') {
+                isBlocked = true;
+                blockReason = ` [Bloccato: Troppo pesante per ${gameState.weapon.name}]`;
+              }
+              if (isBlocked) {
+                btn.disabled = true;
+                btn.className = 'w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-amber-500/50 font-semibold text-xs sm:text-sm flex items-center justify-between border border-amber-950 min-h-[48px] cursor-not-allowed';
+                btn.innerHTML = `<span class="pr-2 flex items-center gap-2"><span class="text-amber-600">🔒</span> <span>${label} <em class="text-red-400/80 font-normal text-[11px]">${blockReason}</em></span></span>`;
+              } else {
+                btn.className = 'w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-amber-100 font-semibold text-sm sm:text-base flex items-center justify-between border border-amber-800/80 shadow-md active:scale-98 min-h-[48px]';
+                btn.innerHTML = `<span class="pr-2">${label}</span> <span class="text-amber-400 text-lg shrink-0">➔</span>`;
+                btn.onclick = () => goToNode(choice.target);
+              }
+              choicesContainer.appendChild(btn);
+            });
+          } else if (currentCombatVictory.target) {
+            const btnText = currentCombatVictory.btn_text || "Prosegui l'Avventura";
             choicesContainer.innerHTML = `
               <button onclick="goToNode('${currentCombatVictory.target}')" class="w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-amber-100 font-semibold text-sm sm:text-base flex items-center justify-between border border-amber-800 shadow-md active:scale-98 min-h-[48px]">
-                <span>Prosegui l'Avventura</span> <span class="text-amber-400 text-lg shrink-0">➔</span>
+                <span>${btnText}</span> <span class="text-amber-400 text-lg shrink-0">➔</span>
               </button>
             `;
           }
@@ -1888,11 +2094,14 @@
       const r = currentNode.input_riddle;
       const isCorrect = answer === r.correct_answer || (r.alt_answers && r.alt_answers.includes(answer));
 
+      const pronouns = getPronouns(gameState);
       if (isCorrect) {
-        showModal("Enigma Risolto!", r.success.text, "Prosegui");
+        const modalText = typeof r.success.text === 'function' ? r.success.text(pronouns) : r.success.text;
+        showModal("Enigma Risolto!", modalText, "Prosegui");
         goToNode(r.success.target);
       } else {
-        showModal("Risposta Errata!", r.failure.text, "Continua la fuga");
+        const modalText = typeof r.failure.text === 'function' ? r.failure.text(pronouns) : r.failure.text;
+        showModal("Risposta Errata!", modalText, "Continua la fuga");
         goToNode(r.failure.target);
       }
     }
