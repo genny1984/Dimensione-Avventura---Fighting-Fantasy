@@ -2,42 +2,55 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
   <title>Dimensione Avventura - Fighting Fantasy</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@600;700&family=Metamorphous&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-top: env(safe-area-inset-top, 0px);
+    }
+    * {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
     body {
       font-family: 'Georgia', serif;
       background-color: #0f0d0b;
-      background-image: radial-gradient(#1a1510 1px, transparent 0);
-      background-size: 24px 24px;
+      background-image: radial-gradient(#1f1812 1px, transparent 0);
+      background-size: 20px 20px;
       color: #e5d3b3;
+      padding-bottom: calc(1rem + var(--safe-bottom));
+      padding-top: var(--safe-top);
     }
     .font-fantasy { font-family: 'MedievalSharp', cursive; }
     .font-title { font-family: 'Cinzel', serif; }
+    
     .parchment {
       background: #181410;
       border: 2px solid #5a4327;
-      box-shadow: inset 0 0 30px #000000, 0 8px 20px rgba(0,0,0,0.8);
+      box-shadow: inset 0 0 30px #000000, 0 8px 24px rgba(0,0,0,0.85);
     }
     .parchment-inner {
-      background: linear-gradient(135deg, #241d15 0%, #1a140e 100%);
+      background: linear-gradient(145deg, #221a12 0%, #17120c 100%);
       border: 1px solid #3d2d1a;
     }
     .btn-fantasy {
       background: linear-gradient(180deg, #4a341b 0%, #2a1c0d 100%);
       border: 1px solid #8c6733;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.5);
-      transition: all 0.2s ease;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+      transition: all 0.15s ease;
+      user-select: none;
     }
     .btn-fantasy:hover:not(:disabled) {
       background: linear-gradient(180deg, #664827 0%, #3d2812 100%);
       border-color: #cca352;
-      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(204,163,82,0.25);
     }
     .btn-fantasy:active:not(:disabled) {
-      transform: translateY(1px);
+      transform: scale(0.98);
+      background: linear-gradient(180deg, #2a1c0d 0%, #4a341b 100%);
     }
     .btn-fantasy:disabled {
       opacity: 0.5;
@@ -45,22 +58,30 @@
       filter: grayscale(80%);
     }
     .btn-loot {
-      background: linear-gradient(180deg, #1b4a22 0%, #0d2a13 100%);
-      border: 1px solid #338c43;
+      background: linear-gradient(180deg, #1e5628 0%, #0d2e14 100%);
+      border: 1px solid #3ca850;
+      box-shadow: 0 3px 8px rgba(16,74,27,0.4);
     }
     .btn-loot:hover:not(:disabled) {
-      background: linear-gradient(180deg, #276633 0%, #123d1c 100%);
-      border-color: #52cc6c;
+      background: linear-gradient(180deg, #2b7a3a 0%, #13421d 100%);
+      border-color: #61db7e;
+    }
+    .btn-loot:active:not(:disabled) {
+      transform: scale(0.98);
     }
     .btn-dice {
-      background: linear-gradient(180deg, #8b0000 0%, #4a0000 100%);
-      border: 1px solid #ff4500;
+      background: linear-gradient(180deg, #991b1b 0%, #580c0c 100%);
+      border: 1px solid #ef4444;
+      box-shadow: 0 4px 12px rgba(185,28,28,0.5);
     }
     .btn-dice:hover {
-      background: linear-gradient(180deg, #a50000 0%, #660000 100%);
+      background: linear-gradient(180deg, #b91c1c 0%, #7f1d1d 100%);
+    }
+    .btn-dice:active {
+      transform: scale(0.97);
     }
     .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
+      width: 5px;
     }
     .custom-scrollbar::-webkit-scrollbar-track {
       background: #120e0b;
@@ -69,38 +90,152 @@
       background: #3d2d1a;
       border-radius: 3px;
     }
+
+    /* Modal animation */
+    @keyframes modalPop {
+      0% { opacity: 0; transform: scale(0.92) translateY(10px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .animate-modal {
+      animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Drawer animation */
+    @keyframes drawerSlide {
+      0% { transform: translateY(100%); }
+      100% { transform: translateY(0); }
+    }
+    .animate-drawer {
+      animation: drawerSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Dice roll shake */
+    @keyframes diceRoll {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      20% { transform: rotate(-12deg) scale(1.1); }
+      40% { transform: rotate(14deg) scale(1.15); }
+      60% { transform: rotate(-8deg) scale(1.05); }
+      80% { transform: rotate(6deg) scale(1); }
+    }
+    .rolling {
+      display: inline-block;
+      animation: diceRoll 0.4s ease-in-out;
+    }
   </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between p-2 md:p-6 custom-scrollbar relative">
+<body class="min-h-screen flex flex-col justify-between p-2 sm:p-4 md:p-6 custom-scrollbar relative">
 
   <!-- FANTASY MODAL / POPUP OVERLAY -->
-  <div id="fantasy-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-    <div class="parchment p-6 rounded-lg max-w-md w-full border-2 border-amber-600 text-center space-y-4 shadow-2xl animate-fade-in">
-      <h3 id="modal-title" class="font-fantasy text-2xl text-amber-400">Notifica</h3>
-      <div id="modal-body" class="text-amber-100 text-base leading-relaxed"></div>
-      <button id="modal-btn" onclick="closeModal()" class="btn-fantasy py-2 px-6 rounded text-amber-200 font-bold border border-amber-600 hover:border-amber-400">
+  <div id="fantasy-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4">
+    <div class="parchment p-5 sm:p-6 rounded-xl max-w-md w-full border-2 border-amber-600 text-center space-y-4 shadow-2xl animate-modal">
+      <h3 id="modal-title" class="font-fantasy text-xl sm:text-2xl text-amber-400">Notifica</h3>
+      <div id="modal-body" class="text-amber-100 text-sm sm:text-base leading-relaxed max-h-[60vh] overflow-y-auto custom-scrollbar px-1"></div>
+      <button id="modal-btn" onclick="closeModal()" class="w-full sm:w-auto min-h-[46px] btn-fantasy py-2.5 px-8 rounded-lg text-amber-200 font-bold border border-amber-600 hover:border-amber-400 text-base">
         Prosegui
       </button>
     </div>
   </div>
 
+  <!-- MOBILE BACKPACK / HERO SHEET BOTTOM DRAWER -->
+  <div id="mobile-hero-drawer" class="hidden fixed inset-0 z-40 bg-black/80 backdrop-blur-sm md:hidden flex flex-col justify-end">
+    <div class="parchment rounded-t-2xl border-t-2 border-amber-500 p-5 max-h-[85vh] overflow-y-auto custom-scrollbar animate-drawer space-y-4">
+      <div class="flex items-center justify-between border-b border-amber-900/60 pb-3">
+        <h3 class="font-fantasy text-2xl text-amber-400 flex items-center gap-2">
+          <span>🛡️</span> Scheda Eroe & Zaino
+        </h3>
+        <button onclick="toggleMobileDrawer()" class="text-amber-400/80 hover:text-amber-200 p-1.5 rounded-lg border border-amber-900/50 bg-black/30">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- DRAWER STAMINA -->
+      <div class="bg-black/50 p-3.5 rounded-lg border border-amber-950">
+        <div class="flex justify-between items-center mb-1.5">
+          <span class="text-sm font-semibold text-amber-200">Resistenza (PF)</span>
+          <span id="drawer-stamina-text" class="text-lg font-bold text-red-400">12 / 12</span>
+        </div>
+        <div class="w-full bg-red-950/80 rounded-full h-3.5 border border-red-900 overflow-hidden">
+          <div id="drawer-stamina-bar" class="bg-gradient-to-r from-red-700 to-red-500 h-full rounded-full transition-all duration-300" style="width: 100%;"></div>
+        </div>
+      </div>
+
+      <!-- DRAWER GOLD -->
+      <div class="bg-black/50 p-3.5 rounded-lg border border-amber-950 flex justify-between items-center">
+        <span class="text-sm font-semibold text-amber-200 flex items-center gap-2">
+          <span class="text-lg">🪙</span> Pezzi d'Oro
+        </span>
+        <span id="drawer-gold-value" class="text-xl font-bold text-amber-400">0</span>
+      </div>
+
+      <!-- DRAWER INVENTORY -->
+      <div class="bg-black/50 p-3.5 rounded-lg border border-amber-950">
+        <h4 class="text-xs uppercase tracking-wider text-amber-500/90 mb-2 font-semibold border-b border-amber-900/40 pb-1.5 flex items-center justify-between">
+          <span>🎒 Oggetti Nello Zaino</span>
+          <span id="drawer-item-count" class="text-[11px] text-amber-400/70">0 oggetti</span>
+        </h4>
+        <ul id="drawer-inventory-list" class="space-y-2 text-sm text-amber-100 min-h-[60px]">
+          <li class="text-amber-600/60 italic text-xs py-2">Lo zaino è vuoto.</li>
+        </ul>
+      </div>
+
+      <!-- RESTART BUTTON IN DRAWER -->
+      <button onclick="toggleMobileDrawer(); resetGame();" class="w-full min-h-[44px] py-2.5 px-4 rounded-lg text-xs font-semibold text-red-400 hover:text-red-300 border border-red-900/50 bg-red-950/20 active:bg-red-950/40 transition">
+        ↺ Ricomincia da Capo
+      </button>
+    </div>
+  </div>
+
   <!-- HEADER -->
-  <header class="text-center my-4 parchment p-4 rounded-lg border-b-4 border-amber-900 max-w-5xl mx-auto w-full">
-    <h1 class="font-title text-2xl md:text-4xl text-amber-500 tracking-wider font-bold mb-1 drop-shadow-md">DIMENSIONE AVVENTURA</h1>
-    <h2 class="font-fantasy text-base md:text-xl text-amber-200/80">Fighting Fantasy - Supporto Scolastico</h2>
-    <p class="text-xs text-amber-500/60 mt-1 italic">di Steve Jackson e Ian Livingstone • Traduzione di Mauro Longo</p>
+  <header class="text-center my-2 sm:my-3 parchment p-3 sm:p-4 rounded-xl border-b-4 border-amber-900 max-w-5xl mx-auto w-full shadow-lg">
+    <h1 class="font-title text-xl sm:text-3xl md:text-4xl text-amber-500 tracking-wider font-bold drop-shadow-md">DIMENSIONE AVVENTURA</h1>
+    <h2 class="font-fantasy text-sm sm:text-lg md:text-xl text-amber-200/80">Fighting Fantasy - Supporto Scolastico</h2>
+    <p class="text-[11px] sm:text-xs text-amber-500/60 mt-0.5 sm:mt-1 italic">di Steve Jackson e Ian Livingstone • Traduzione di Mauro Longo</p>
   </header>
 
+  <!-- MOBILE STICKY STATUS HUD (VISIBLE ONLY ON MOBILE) -->
+  <div class="md:hidden sticky top-1 z-30 max-w-5xl mx-auto w-full mb-2">
+    <div class="parchment px-3 py-2 rounded-lg border border-amber-700/70 shadow-xl flex items-center justify-between gap-2 bg-[#181410]/95 backdrop-blur-md">
+      <!-- Quick Stamina -->
+      <div class="flex-1 min-w-0 pr-1">
+        <div class="flex justify-between items-center text-xs mb-1">
+          <span class="font-semibold text-amber-300 flex items-center gap-1">
+            <span>❤️</span>
+            <span class="text-[11px]">HP:</span>
+          </span>
+          <span id="mobile-stamina-text" class="font-bold text-red-400 text-xs">12/12</span>
+        </div>
+        <div class="w-full bg-red-950 rounded-full h-2 border border-red-900 overflow-hidden">
+          <div id="mobile-stamina-bar" class="bg-gradient-to-r from-red-600 to-red-400 h-full rounded-full transition-all duration-300" style="width: 100%;"></div>
+        </div>
+      </div>
+
+      <!-- Quick Gold -->
+      <div class="flex items-center gap-1 px-2.5 py-1 bg-black/50 rounded border border-amber-900/60 text-xs">
+        <span>🪙</span>
+        <span id="mobile-gold-value" class="font-bold text-amber-400">0</span>
+      </div>
+
+      <!-- Open Backpack Button -->
+      <button onclick="toggleMobileDrawer()" class="btn-fantasy px-2.5 py-1 rounded text-xs text-amber-200 flex items-center gap-1.5 border border-amber-600/70 min-h-[32px] shrink-0 active:scale-95">
+        <span>🎒</span>
+        <span class="font-semibold hidden sm:inline">Zaino</span>
+        <span id="mobile-backpack-badge" class="bg-amber-600 text-black font-extrabold text-[10px] px-1.5 py-0.2 rounded-full">0</span>
+      </button>
+    </div>
+  </div>
+
   <!-- MAIN CONTAINER -->
-  <main class="max-w-5xl mx-auto w-full flex-grow grid grid-cols-1 md:grid-cols-3 gap-6 my-2">
+  <main class="max-w-5xl mx-auto w-full flex-grow grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 my-1 sm:my-2">
     
-    <!-- LEFT PANEL: STATS & INVENTORY -->
-    <aside class="md:col-span-1 parchment p-4 rounded-lg flex flex-col justify-between h-fit">
+    <!-- LEFT PANEL: STATS & INVENTORY (DESKTOP) -->
+    <aside class="hidden md:flex md:col-span-1 parchment p-4 rounded-xl flex-col justify-between h-fit sticky top-4 shadow-xl">
       <div>
-        <h3 class="font-fantasy text-xl text-amber-400 border-b border-amber-900/60 pb-2 mb-4 text-center">Scheda Eroe</h3>
+        <h3 class="font-fantasy text-xl text-amber-400 border-b border-amber-900/60 pb-2 mb-4 text-center flex items-center justify-center gap-2">
+          <span>🛡️</span> Scheda Eroe
+        </h3>
         
         <!-- STAMINA -->
-        <div class="mb-5 bg-black/40 p-3 rounded border border-amber-950">
+        <div class="mb-5 bg-black/40 p-3 rounded-lg border border-amber-950">
           <div class="flex justify-between items-center mb-1">
             <span class="text-sm font-semibold text-amber-200">Resistenza</span>
             <span id="stamina-text" class="text-lg font-bold text-red-400">12 / 12</span>
@@ -111,79 +246,101 @@
         </div>
 
         <!-- GOLD -->
-        <div class="mb-5 bg-black/40 p-3 rounded border border-amber-950 flex justify-between items-center">
+        <div class="mb-5 bg-black/40 p-3 rounded-lg border border-amber-950 flex justify-between items-center">
           <span class="text-sm font-semibold text-amber-200 flex items-center gap-2">
-            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zM8 12a1 1 0 102 0 1 1 0 00-2 0zm1-8a1 1 0 00-1 1v3a1 1 0 102 0V5a1 1 0 00-1-1z"/></svg>
+            <span class="text-lg">🪙</span>
             Pezzi d'Oro
           </span>
           <span id="gold-value" class="text-xl font-bold text-amber-400">0</span>
         </div>
 
         <!-- INVENTORY -->
-        <div class="bg-black/40 p-3 rounded border border-amber-950">
-          <h4 class="text-xs uppercase tracking-wider text-amber-500/80 mb-2 font-semibold border-b border-amber-900/40 pb-1">Zaino & Oggetti</h4>
-          <ul id="inventory-list" class="space-y-1 text-sm text-amber-100 min-h-[80px]">
+        <div class="bg-black/40 p-3 rounded-lg border border-amber-950">
+          <h4 class="text-xs uppercase tracking-wider text-amber-500/80 mb-2 font-semibold border-b border-amber-900/40 pb-1 flex items-center justify-between">
+            <span>🎒 Zaino & Oggetti</span>
+            <span id="desktop-item-count" class="text-[11px] text-amber-400/60">0</span>
+          </h4>
+          <ul id="inventory-list" class="space-y-1.5 text-sm text-amber-100 min-h-[80px]">
             <li class="text-amber-600/60 italic text-xs">Lo zaino è vuoto.</li>
           </ul>
         </div>
       </div>
 
       <!-- RESTART BUTTON -->
-      <button onclick="resetGame()" class="w-full mt-6 py-2 px-4 rounded text-xs font-semibold text-amber-400/80 hover:text-amber-300 border border-amber-900/40 hover:bg-amber-950/40 transition">
+      <button onclick="resetGame()" class="w-full mt-6 py-2.5 px-4 rounded-lg text-xs font-semibold text-amber-400/80 hover:text-amber-300 border border-amber-900/50 hover:bg-amber-950/40 transition active:scale-95">
         ↺ Ricomincia da Capo
       </button>
     </aside>
 
     <!-- RIGHT PANEL: GAME TEXT & ACTIONS -->
-    <section class="md:col-span-2 parchment p-5 rounded-lg flex flex-col justify-between parchment-inner">
+    <section id="story-section" class="md:col-span-2 parchment p-4 sm:p-5 md:p-6 rounded-xl flex flex-col justify-between parchment-inner shadow-xl">
       <div>
-        <!-- PARAGRAPH TITLE -->
-        <div class="flex items-center justify-between border-b border-amber-900/60 pb-3 mb-4">
-          <h3 id="node-title" class="font-fantasy text-2xl text-amber-400">1. Ingresso</h3>
-          <span id="node-badge" class="text-xs px-2 py-1 rounded bg-amber-950 text-amber-300 border border-amber-800">Paragrafo</span>
+        <!-- PARAGRAPH TITLE & BADGE -->
+        <div class="flex items-center justify-between border-b border-amber-900/60 pb-3 mb-3 sm:mb-4 gap-2">
+          <h3 id="node-title" class="font-fantasy text-xl sm:text-2xl md:text-3xl text-amber-400 tracking-wide">1. Ingresso</h3>
+          <span id="node-badge" class="text-xs px-2.5 py-1 rounded-md bg-amber-950/90 text-amber-300 border border-amber-800 shrink-0 font-medium">Paragrafo</span>
         </div>
 
         <!-- MAIN TEXT CONTENT -->
-        <div id="node-text" class="text-amber-100/90 leading-relaxed space-y-3 mb-6 text-base md:text-lg">
+        <div id="node-text" class="text-amber-100/95 leading-relaxed sm:leading-loose space-y-3.5 mb-5 sm:mb-6 text-sm sm:text-base md:text-lg">
           <!-- Text dynamically loaded -->
         </div>
 
         <!-- LOOT CONTAINER -->
-        <div id="loot-box" class="hidden my-4 p-4 bg-emerald-950/30 border border-emerald-800/80 rounded-lg space-y-2">
-          <h4 class="font-fantasy text-lg text-emerald-400 border-b border-emerald-900/60 pb-1 mb-2">🎁 Oggetti da Raccogliere (Obbligatori):</h4>
+        <div id="loot-box" class="hidden my-4 p-3.5 sm:p-4 bg-emerald-950/40 border border-emerald-600/80 rounded-xl space-y-2.5 shadow-lg">
+          <div class="flex items-center gap-2 border-b border-emerald-900/60 pb-1.5 mb-2">
+            <span class="text-lg">🎁</span>
+            <h4 class="font-fantasy text-base sm:text-lg text-emerald-400 font-bold">Oggetti da Raccogliere (Obbligatori):</h4>
+          </div>
           <div id="loot-buttons" class="space-y-2"></div>
         </div>
 
         <!-- COMBAT SECTION -->
-        <div id="combat-box" class="hidden my-4 p-4 bg-red-950/30 border border-red-800/80 rounded-lg">
-          <h4 id="enemy-name" class="font-fantasy text-xl text-red-400 mb-2 border-b border-red-900/60 pb-1">Nemico</h4>
-          <div class="flex justify-between items-center mb-4 text-sm">
-            <span>Resistenza Mostro:</span>
-            <span id="enemy-stamina" class="text-xl font-bold text-red-400">0</span>
+        <div id="combat-box" class="hidden my-4 p-3.5 sm:p-4 bg-red-950/30 border border-red-700/80 rounded-xl shadow-lg">
+          <div class="flex items-center justify-between border-b border-red-900/60 pb-2 mb-3">
+            <h4 id="enemy-name" class="font-fantasy text-lg sm:text-xl text-red-400 flex items-center gap-1.5">
+              <span>⚔️</span> Nemico
+            </h4>
+            <div class="flex items-center gap-2 bg-black/40 px-3 py-1 rounded border border-red-900/50">
+              <span class="text-xs text-amber-200/80">Resistenza Mostro:</span>
+              <span id="enemy-stamina" class="text-lg sm:text-xl font-bold text-red-400">0</span>
+            </div>
           </div>
 
           <!-- COMBAT LOG -->
-          <div id="combat-log" class="bg-black/60 p-3 rounded text-xs font-mono text-amber-200/80 mb-4 border border-amber-900/40 text-center">
+          <div id="combat-log" class="bg-black/70 p-3 rounded-lg text-xs sm:text-sm font-mono text-amber-200/90 mb-3 border border-amber-900/40 text-center min-h-[42px] flex items-center justify-center">
             <p class="text-amber-500/60 italic">Inizia lo scontro! Tira i dadi per combattere.</p>
           </div>
 
-          <button id="btn-roll-dice" onclick="handleCombatRound()" class="w-full btn-fantasy btn-dice py-3 rounded text-white font-bold flex items-center justify-center gap-2 shadow-lg">
-            <span>🎲 Tira i Dadi</span>
+          <button id="btn-roll-dice" onclick="handleCombatRound()" class="w-full btn-fantasy btn-dice min-h-[48px] py-3 rounded-xl text-white font-bold text-base sm:text-lg flex items-center justify-center gap-2 shadow-lg active:scale-98">
+            <span id="dice-icon" class="text-xl">🎲</span>
+            <span>Tira i Dadi</span>
           </button>
         </div>
 
         <!-- RIDDLE INPUT SECTION -->
-        <div id="riddle-box" class="hidden my-4 p-4 bg-amber-950/30 border border-amber-800 rounded-lg">
-          <label id="riddle-label" for="riddle-input" class="block text-sm font-semibold text-amber-300 mb-2">Inserisci la tua risposta all'indovinello:</label>
-          <div class="flex gap-2">
-            <input type="text" id="riddle-input" class="flex-grow bg-black/60 border border-amber-700 rounded px-3 py-2 text-amber-100 focus:outline-none focus:border-amber-400" placeholder="Scrivi la risposta...">
-            <button onclick="submitRiddle()" class="btn-fantasy px-4 py-2 rounded text-amber-200 font-semibold">Conferma</button>
+        <div id="riddle-box" class="hidden my-4 p-3.5 sm:p-4 bg-amber-950/30 border border-amber-700/80 rounded-xl shadow-lg">
+          <label id="riddle-label" for="riddle-input" class="block text-xs sm:text-sm font-semibold text-amber-300 mb-2">Inserisci la tua risposta all'indovinello:</label>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <input 
+              type="text" 
+              id="riddle-input" 
+              class="flex-grow bg-black/70 border border-amber-700 rounded-lg px-3.5 py-2.5 text-base text-amber-100 placeholder-amber-600/50 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400" 
+              placeholder="Scrivi la risposta..."
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              onkeydown="if(event.key === 'Enter') submitRiddle()">
+            <button onclick="submitRiddle()" class="btn-fantasy min-h-[44px] px-5 py-2.5 rounded-lg text-amber-200 font-bold text-sm sm:text-base border border-amber-600 shrink-0">
+              Conferma
+            </button>
           </div>
         </div>
       </div>
 
       <!-- CHOICES & BUTTONS CONTAINER -->
-      <div id="choices-container" class="mt-6 pt-4 border-t border-amber-900/60 space-y-3">
+      <div id="choices-container" class="mt-5 sm:mt-6 pt-4 border-t border-amber-900/60 space-y-2.5 sm:space-y-3">
         <!-- Dynamic choice buttons inserted here -->
       </div>
     </section>
@@ -191,7 +348,7 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="text-center text-xs text-amber-600/60 my-2">
+  <footer class="text-center text-[11px] sm:text-xs text-amber-600/60 my-2 px-2">
     Fighting Fantasy™ © Steve Jackson & Ian Livingstone. Progetto di Supporto Scolastico.
   </footer>
 
@@ -530,11 +687,29 @@
       current_enemy_stamina: 0
     };
 
+    // Desktop UI Elements
     const staminaText = document.getElementById('stamina-text');
     const staminaBar = document.getElementById('stamina-bar');
     const goldValue = document.getElementById('gold-value');
     const inventoryList = document.getElementById('inventory-list');
+    const desktopItemCount = document.getElementById('desktop-item-count');
     
+    // Mobile HUD Elements
+    const mobileStaminaText = document.getElementById('mobile-stamina-text');
+    const mobileStaminaBar = document.getElementById('mobile-stamina-bar');
+    const mobileGoldValue = document.getElementById('mobile-gold-value');
+    const mobileBackpackBadge = document.getElementById('mobile-backpack-badge');
+
+    // Mobile Drawer Elements
+    const mobileHeroDrawer = document.getElementById('mobile-hero-drawer');
+    const drawerStaminaText = document.getElementById('drawer-stamina-text');
+    const drawerStaminaBar = document.getElementById('drawer-stamina-bar');
+    const drawerGoldValue = document.getElementById('drawer-gold-value');
+    const drawerInventoryList = document.getElementById('drawer-inventory-list');
+    const drawerItemCount = document.getElementById('drawer-item-count');
+    
+    // Story & Interaction Elements
+    const storySection = document.getElementById('story-section');
     const nodeTitle = document.getElementById('node-title');
     const nodeText = document.getElementById('node-text');
     const choicesContainer = document.getElementById('choices-container');
@@ -546,14 +721,20 @@
     const enemyName = document.getElementById('enemy-name');
     const enemyStamina = document.getElementById('enemy-stamina');
     const combatLog = document.getElementById('combat-log');
+    const diceIcon = document.getElementById('dice-icon');
     
     const riddleBox = document.getElementById('riddle-box');
     const riddleInput = document.getElementById('riddle-input');
 
+    // Modal Elements
     const fantasyModal = document.getElementById('fantasy-modal');
     const modalTitle = document.getElementById('modal-title');
     const modalBody = document.getElementById('modal-body');
     const modalBtn = document.getElementById('modal-btn');
+
+    function toggleMobileDrawer() {
+      mobileHeroDrawer.classList.toggle('hidden');
+    }
 
     function showModal(title, message, buttonText = "Prosegui") {
       modalTitle.textContent = title;
@@ -583,30 +764,50 @@
       goToNode(gameState.current_node);
     }
 
-    function updateUI() {
-      staminaText.textContent = `${gameState.stamina} / ${gameState.max_stamina}`;
-      const percentage = Math.max(0, Math.min(100, (gameState.stamina / gameState.max_stamina) * 100));
-      staminaBar.style.width = `${percentage}%`;
-      
-      goldValue.textContent = gameState.gold;
-
-      inventoryList.innerHTML = '';
+    function renderInventoryItems(listElement) {
+      listElement.innerHTML = '';
       if (gameState.inventory.length === 0) {
-        inventoryList.innerHTML = '<li class="text-amber-600/60 italic text-xs">Lo zaino è vuoto.</li>';
-      } else {
-        gameState.inventory.forEach(item => {
-          const li = document.createElement('li');
-          li.className = 'flex items-center justify-between text-amber-200 bg-black/30 px-2 py-1 rounded border border-amber-950';
-          
-          let actionBtn = '';
-          if (item === 'Pergamena E') {
-            actionBtn = `<button onclick="usePotion()" class="text-xs text-emerald-400 hover:underline">Usa (+4 HP)</button>`;
-          }
-          
-          li.innerHTML = `<span>📜 ${item}</span> ${actionBtn}`;
-          inventoryList.appendChild(li);
-        });
+        listElement.innerHTML = '<li class="text-amber-600/60 italic text-xs py-1">Lo zaino è vuoto.</li>';
+        return;
       }
+
+      gameState.inventory.forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'flex items-center justify-between text-amber-200 bg-black/40 px-2.5 py-1.5 rounded-lg border border-amber-950 text-xs sm:text-sm';
+        
+        let actionBtn = '';
+        if (item === 'Pergamena E') {
+          actionBtn = `<button onclick="usePotion()" class="text-xs bg-emerald-950/80 text-emerald-300 border border-emerald-700/80 hover:bg-emerald-900/90 px-2 py-0.5 rounded font-semibold transition active:scale-95">Usa (+4 HP)</button>`;
+        }
+        
+        li.innerHTML = `<span class="flex items-center gap-1.5"><span class="text-amber-400">📜</span> <span>${item}</span></span> ${actionBtn}`;
+        listElement.appendChild(li);
+      });
+    }
+
+    function updateUI() {
+      const percentage = Math.max(0, Math.min(100, (gameState.stamina / gameState.max_stamina) * 100));
+      const staminaString = `${gameState.stamina} / ${gameState.max_stamina}`;
+
+      // Desktop
+      staminaText.textContent = staminaString;
+      staminaBar.style.width = `${percentage}%`;
+      goldValue.textContent = gameState.gold;
+      desktopItemCount.textContent = `${gameState.inventory.length}`;
+      renderInventoryItems(inventoryList);
+
+      // Mobile HUD
+      mobileStaminaText.textContent = `${gameState.stamina}/${gameState.max_stamina}`;
+      mobileStaminaBar.style.width = `${percentage}%`;
+      mobileGoldValue.textContent = gameState.gold;
+      mobileBackpackBadge.textContent = gameState.inventory.length;
+
+      // Mobile Drawer
+      drawerStaminaText.textContent = staminaString;
+      drawerStaminaBar.style.width = `${percentage}%`;
+      drawerGoldValue.textContent = gameState.gold;
+      drawerItemCount.textContent = `${gameState.inventory.length} oggetti`;
+      renderInventoryItems(drawerInventoryList);
     }
 
     function usePotion() {
@@ -631,8 +832,8 @@
       if (lootData.gold && lootData.gold > 0) {
         hasLoot = true;
         const btn = document.createElement('button');
-        btn.className = 'w-full text-left btn-fantasy btn-loot p-2 rounded text-emerald-200 font-semibold text-sm flex items-center gap-2';
-        btn.innerHTML = `<span>💰 Raccogli ${lootData.gold} Pezzi d'Oro</span>`;
+        btn.className = 'w-full text-left btn-fantasy btn-loot p-3 rounded-lg text-emerald-100 font-semibold text-sm flex items-center justify-between shadow active:scale-98 min-h-[44px]';
+        btn.innerHTML = `<span class="flex items-center gap-2"><span class="text-lg">💰</span> Raccogli <strong>${lootData.gold} Pezzi d'Oro</strong></span> <span class="text-xs bg-emerald-900/60 px-2 py-0.5 rounded border border-emerald-700">Prendi</span>`;
         btn.onclick = () => {
           gameState.gold += lootData.gold;
           lootData.gold = 0;
@@ -648,8 +849,8 @@
           if (!gameState.inventory.includes(item)) {
             hasLoot = true;
             const btn = document.createElement('button');
-            btn.className = 'w-full text-left btn-fantasy btn-loot p-2 rounded text-emerald-200 font-semibold text-sm flex items-center gap-2';
-            btn.innerHTML = `<span>📜 Prendi ${item}</span>`;
+            btn.className = 'w-full text-left btn-fantasy btn-loot p-3 rounded-lg text-emerald-100 font-semibold text-sm flex items-center justify-between shadow active:scale-98 min-h-[44px]';
+            btn.innerHTML = `<span class="flex items-center gap-2"><span class="text-lg">📜</span> Prendi <strong>${item}</strong></span> <span class="text-xs bg-emerald-900/60 px-2 py-0.5 rounded border border-emerald-700">Raccogli</span>`;
             btn.onclick = () => {
               gameState.inventory.push(item);
               btn.remove();
@@ -744,14 +945,14 @@
       if (nodeId === "7") {
         if (gameState.inventory.includes("Pergamena B")) {
           const btn = document.createElement('button');
-          btn.className = 'w-full text-left btn-fantasy p-3 rounded-lg text-emerald-300 font-semibold text-sm md:text-base flex items-center justify-between border border-emerald-800';
-          btn.innerHTML = `<span>📜 Leggi la Pergamena B (Usa Magia)</span> <span class="text-emerald-400">➔</span>`;
+          btn.className = 'w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-emerald-200 font-semibold text-sm sm:text-base flex items-center justify-between border border-emerald-700/80 shadow-md active:scale-98 min-h-[48px]';
+          btn.innerHTML = `<span class="flex items-center gap-2"><span>📜</span> <span>Leggi la Pergamena B (Usa Magia)</span></span> <span class="text-emerald-400 text-lg">➔</span>`;
           btn.onclick = () => handleChoiceClick("7_riddle");
           choicesContainer.appendChild(btn);
         } else {
           const btn = document.createElement('button');
-          btn.className = 'w-full text-left btn-fantasy p-3 rounded-lg text-red-300 font-semibold text-sm md:text-base flex items-center justify-between border border-red-800';
-          btn.innerHTML = `<span>Non possiedi la Pergamena B (Bloccato)</span> <span class="text-red-500">➔</span>`;
+          btn.className = 'w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-red-300 font-semibold text-sm sm:text-base flex items-center justify-between border border-red-800 shadow-md active:scale-98 min-h-[48px]';
+          btn.innerHTML = `<span class="flex items-center gap-2"><span>🚫</span> <span>Non possiedi la Pergamena B (Bloccato)</span></span> <span class="text-red-500 text-lg">➔</span>`;
           btn.onclick = () => handleChoiceClick("7_deadend");
           choicesContainer.appendChild(btn);
         }
@@ -759,11 +960,14 @@
         setupCombat(node.combat);
       } else if (node.input_riddle) {
         riddleBox.classList.remove('hidden');
+        setTimeout(() => {
+          riddleInput.focus();
+        }, 300);
       } else if (node.choices) {
         node.choices.forEach(choice => {
           const btn = document.createElement('button');
-          btn.className = 'w-full text-left btn-fantasy p-3 rounded-lg text-amber-100 font-semibold text-sm md:text-base flex items-center justify-between border border-amber-800/80';
-          btn.innerHTML = `<span>${choice.text}</span> <span class="text-amber-500">➔</span>`;
+          btn.className = 'w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-amber-100 font-semibold text-sm sm:text-base flex items-center justify-between border border-amber-800/80 shadow-md active:scale-98 min-h-[48px]';
+          btn.innerHTML = `<span class="pr-2">${choice.text}</span> <span class="text-amber-400 text-lg shrink-0">➔</span>`;
           btn.onclick = () => handleChoiceClick(choice.target, choice.reset_game);
           choicesContainer.appendChild(btn);
         });
@@ -773,33 +977,51 @@
         nodeTitle.textContent = "Sei Stato Sconfitto!";
         nodeText.innerHTML = "<p class='text-red-400 font-bold'>La tua Resistenza è scesa a 0. Sei caduto nelle profondità di Monte Pauroso...</p>";
         choicesContainer.innerHTML = `
-          <button onclick="resetGame()" class="w-full btn-fantasy p-3 rounded text-amber-200 font-bold text-center">
+          <button onclick="resetGame()" class="w-full btn-fantasy min-h-[48px] p-3.5 rounded-xl text-amber-200 font-bold text-base text-center border border-amber-600 shadow-lg active:scale-98">
             🔄 Ricomincia l'Avventura
           </button>
         `;
+      }
+
+      // Smooth scroll back to top of story section on mobile so the player sees the newly loaded text
+      if (window.innerWidth < 768) {
+        window.scrollTo({
+          top: Math.max(0, storySection.offsetTop - 60),
+          behavior: 'smooth'
+        });
       }
     }
 
     function setupCombat(combatData) {
       combatBox.classList.remove('hidden');
-      enemyName.textContent = combatData.enemy_name;
+      enemyName.innerHTML = `<span>⚔️</span> <span>${combatData.enemy_name}</span>`;
       gameState.current_enemy_stamina = combatData.enemy_stamina;
       enemyStamina.textContent = gameState.current_enemy_stamina;
-      combatLog.innerHTML = '<p class="text-amber-500/60 italic">Inizia lo scontro! Tira i dadi per combattere.</p>';
+      combatLog.innerHTML = '<p class="text-amber-500/70 italic">Inizia lo scontro! Tira i dadi per combattere.</p>';
     }
 
     function handleCombatRound() {
+      if (diceIcon) {
+        diceIcon.classList.remove('rolling');
+        void diceIcon.offsetWidth; // Trigger reflow for animation restart
+        diceIcon.classList.add('rolling');
+      }
+
       const heroDice = Math.floor(Math.random() * 6) + 1;
       const enemyDice = Math.floor(Math.random() * 6) + 1;
 
-      let logMessage = `Tiro: Eroe = [${heroDice}] | Mostro = [${enemyDice}] -> `;
+      let logMessage = `Tiro: Tu [${heroDice}] vs Mostro [${enemyDice}] → `;
 
-      if (heroDice === 6) {
+      if (heroDice === 6 && enemyDice === 6) {
+        logMessage += `<span class="text-amber-300 font-semibold">Parità critica! Entrambi subite 1 danno.</span>`;
         gameState.current_enemy_stamina -= 1;
-        logMessage += `<span class="text-emerald-400">Colpo a segno! Il mostro perde 1 HP.</span>`;
+        gameState.stamina -= 1;
+      } else if (heroDice === 6) {
+        gameState.current_enemy_stamina -= 1;
+        logMessage += `<span class="text-emerald-400 font-semibold">Colpo a segno! Il mostro perde 1 HP.</span>`;
       } else if (enemyDice === 6) {
         gameState.stamina -= 1;
-        logMessage += `<span class="text-red-400">Sei stato colpito! Perdi 1 HP.</span>`;
+        logMessage += `<span class="text-red-400 font-semibold">Sei stato colpito! Perdi 1 HP.</span>`;
       } else {
         logMessage += `<span class="text-amber-400/80">Nessun colpo critico (serve un 6).</span>`;
       }
@@ -825,15 +1047,15 @@
           if (currentNode.on_victory.choices) {
             currentNode.on_victory.choices.forEach(choice => {
               const btn = document.createElement('button');
-              btn.className = 'w-full text-left btn-fantasy p-3 rounded-lg text-amber-100 font-semibold text-sm md:text-base flex items-center justify-between border border-amber-800/80';
-              btn.innerHTML = `<span>${choice.text}</span> <span class="text-amber-500">➔</span>`;
+              btn.className = 'w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-amber-100 font-semibold text-sm sm:text-base flex items-center justify-between border border-amber-800/80 shadow-md active:scale-98 min-h-[48px]';
+              btn.innerHTML = `<span class="pr-2">${choice.text}</span> <span class="text-amber-400 text-lg shrink-0">➔</span>`;
               btn.onclick = () => handleChoiceClick(choice.target);
               choicesContainer.appendChild(btn);
             });
           } else if (currentNode.on_victory.target) {
             const btn = document.createElement('button');
-            btn.className = 'w-full text-left btn-fantasy p-3 rounded-lg text-amber-100 font-semibold text-sm md:text-base flex items-center justify-between border border-amber-800/80';
-            btn.innerHTML = `<span>Prosegui l'Avventura</span> <span class="text-amber-500">➔</span>`;
+            btn.className = 'w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-amber-100 font-semibold text-sm sm:text-base flex items-center justify-between border border-amber-800/80 shadow-md active:scale-98 min-h-[48px]';
+            btn.innerHTML = `<span>Prosegui l'Avventura</span> <span class="text-amber-400 text-lg shrink-0">➔</span>`;
             btn.onclick = () => handleChoiceClick(currentNode.on_victory.target);
             choicesContainer.appendChild(btn);
           }
