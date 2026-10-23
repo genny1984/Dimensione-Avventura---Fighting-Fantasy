@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
-  <title>Dimensione Avventura - Fighting Fantasy</title>
+  <title>Le Cronache di Aethelgard - L'Erede delle Ombre</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@600;700&family=Metamorphous&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@600;700;800&family=Metamorphous&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
       --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -16,11 +16,11 @@
       -webkit-tap-highlight-color: transparent;
     }
     body {
-      font-family: 'Georgia', serif;
-      background-color: #0f0d0b;
-      background-image: radial-gradient(#1f1812 1px, transparent 0);
+      font-family: 'Cormorant Garamond', 'Georgia', serif;
+      background-color: #0b0908;
+      background-image: radial-gradient(#1b1510 1px, transparent 0);
       background-size: 20px 20px;
-      color: #e5d3b3;
+      color: #ede2cf;
       padding-bottom: calc(1rem + var(--safe-bottom));
       padding-top: var(--safe-top);
     }
@@ -30,10 +30,10 @@
     .parchment {
       background: #181410;
       border: 2px solid #5a4327;
-      box-shadow: inset 0 0 30px #000000, 0 8px 24px rgba(0,0,0,0.85);
+      box-shadow: inset 0 0 35px #000000, 0 10px 28px rgba(0,0,0,0.85);
     }
     .parchment-inner {
-      background: linear-gradient(145deg, #221a12 0%, #17120c 100%);
+      background: linear-gradient(145deg, #221a12 0%, #16110a 100%);
       border: 1px solid #3d2d1a;
     }
     .btn-fantasy {
@@ -46,16 +46,17 @@
     .btn-fantasy:hover:not(:disabled) {
       background: linear-gradient(180deg, #664827 0%, #3d2812 100%);
       border-color: #cca352;
-      box-shadow: 0 4px 10px rgba(204,163,82,0.25);
+      box-shadow: 0 4px 12px rgba(204,163,82,0.25);
     }
     .btn-fantasy:active:not(:disabled) {
       transform: scale(0.98);
       background: linear-gradient(180deg, #2a1c0d 0%, #4a341b 100%);
     }
     .btn-fantasy:disabled {
-      opacity: 0.5;
+      opacity: 0.45;
       cursor: not-allowed;
-      filter: grayscale(80%);
+      filter: grayscale(85%);
+      box-shadow: none;
     }
     .btn-loot {
       background: linear-gradient(180deg, #1e5628 0%, #0d2e14 100%);
@@ -66,9 +67,6 @@
       background: linear-gradient(180deg, #2b7a3a 0%, #13421d 100%);
       border-color: #61db7e;
     }
-    .btn-loot:active:not(:disabled) {
-      transform: scale(0.98);
-    }
     .btn-dice {
       background: linear-gradient(180deg, #991b1b 0%, #580c0c 100%);
       border: 1px solid #ef4444;
@@ -76,9 +74,6 @@
     }
     .btn-dice:hover {
       background: linear-gradient(180deg, #b91c1c 0%, #7f1d1d 100%);
-    }
-    .btn-dice:active {
-      transform: scale(0.97);
     }
     .custom-scrollbar::-webkit-scrollbar {
       width: 5px;
@@ -91,7 +86,22 @@
       border-radius: 3px;
     }
 
-    /* Modal animation */
+    /* Ink illustration card styling */
+    .ink-portrait {
+      background: #d8c8a8;
+      border: 2px solid #3c2a16;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.35);
+      position: relative;
+      overflow: hidden;
+    }
+    .ink-portrait::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, transparent 60%, rgba(50,30,10,0.3) 100%);
+      pointer-events: none;
+    }
+
     @keyframes modalPop {
       0% { opacity: 0; transform: scale(0.92) translateY(10px); }
       100% { opacity: 1; transform: scale(1) translateY(0); }
@@ -100,7 +110,6 @@
       animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    /* Drawer animation */
     @keyframes drawerSlide {
       0% { transform: translateY(100%); }
       100% { transform: translateY(0); }
@@ -109,7 +118,6 @@
       animation: drawerSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    /* Dice roll shake */
     @keyframes diceRoll {
       0%, 100% { transform: rotate(0deg) scale(1); }
       20% { transform: rotate(-12deg) scale(1.1); }
@@ -119,13 +127,13 @@
     }
     .rolling {
       display: inline-block;
-      animation: diceRoll 0.4s ease-in-out;
+      animation: diceRoll 0.35s ease-in-out;
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between p-2 sm:p-4 md:p-6 custom-scrollbar relative">
 
-  <!-- FANTASY MODAL / POPUP OVERLAY -->
+  <!-- GLOBAL FANTASY MODAL / POPUP OVERLAY -->
   <div id="fantasy-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4">
     <div class="parchment p-5 sm:p-6 rounded-xl max-w-md w-full border-2 border-amber-600 text-center space-y-4 shadow-2xl animate-modal">
       <h3 id="modal-title" class="font-fantasy text-xl sm:text-2xl text-amber-400">Notifica</h3>
@@ -136,630 +144,1045 @@
     </div>
   </div>
 
-  <!-- MOBILE BACKPACK / HERO SHEET BOTTOM DRAWER -->
-  <div id="mobile-hero-drawer" class="hidden fixed inset-0 z-40 bg-black/80 backdrop-blur-sm md:hidden flex flex-col justify-end">
-    <div class="parchment rounded-t-2xl border-t-2 border-amber-500 p-5 max-h-[85vh] overflow-y-auto custom-scrollbar animate-drawer space-y-4">
-      <div class="flex items-center justify-between border-b border-amber-900/60 pb-3">
-        <h3 class="font-fantasy text-2xl text-amber-400 flex items-center gap-2">
-          <span>🛡️</span> Scheda Eroe & Zaino
-        </h3>
-        <button onclick="toggleMobileDrawer()" class="text-amber-400/80 hover:text-amber-200 p-1.5 rounded-lg border border-amber-900/50 bg-black/30">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+  <!-- ========================================== -->
+  <!-- 1. MAIN MENU VIEW                          -->
+  <!-- ========================================== -->
+  <section id="view-main-menu" class="max-w-2xl mx-auto w-full flex-grow flex flex-col justify-center items-center my-auto py-6 sm:py-10">
+    <div class="parchment p-6 sm:p-8 rounded-2xl border-2 border-amber-600/90 text-center w-full shadow-2xl relative overflow-hidden">
+      <div class="absolute -top-12 -left-12 w-32 h-32 bg-amber-600/10 rounded-full blur-2xl pointer-events-none"></div>
+      <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-red-600/10 rounded-full blur-2xl pointer-events-none"></div>
+      
+      <!-- Crest / Emblem -->
+      <div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-4 ink-portrait rounded-full flex items-center justify-center p-2 border-4 border-amber-800/80 shadow-lg">
+        <svg viewBox="0 0 100 100" class="w-full h-full text-[#1b140e]" fill="currentColor">
+          <path d="M50 5 L60 35 L90 35 L65 55 L75 85 L50 68 L25 85 L35 55 L10 35 L40 35 Z" fill="none" stroke="#2a1a0c" stroke-width="4"/>
+          <circle cx="50" cy="50" r="18" fill="none" stroke="#2a1a0c" stroke-width="3" stroke-dasharray="2,3"/>
+          <path d="M50 15 L50 80 M20 48 L80 48" stroke="#2a1a0c" stroke-width="3"/>
+          <path d="M45 40 L50 32 L55 40 L50 48 Z" fill="#2a1a0c"/>
+        </svg>
+      </div>
+
+      <h1 class="font-title text-2xl sm:text-4xl text-amber-500 font-bold tracking-wider mb-1 drop-shadow-md">
+        LE CRONACHE DI AETHELGARD
+      </h1>
+      <h2 class="font-fantasy text-base sm:text-xl text-amber-200/90 mb-2">
+        L'Erede delle Ombre
+      </h2>
+      <p class="text-xs sm:text-sm text-amber-400/70 italic max-w-md mx-auto mb-6">
+        «Il trono d'Alba è caduto nelle tenebre. L'antico regno attende il ritorno del suo principe esule.»
+      </p>
+
+      <!-- Main Menu Buttons -->
+      <div class="space-y-3 max-w-sm mx-auto">
+        <button onclick="startNewGameFlow()" class="w-full btn-fantasy min-h-[48px] py-3 px-6 rounded-xl text-amber-100 font-bold text-base flex items-center justify-center gap-2 border border-amber-600 hover:border-amber-400 shadow-md">
+          <span>🗡️</span>
+          <span>Nuova Avventura</span>
+        </button>
+
+        <button id="btn-menu-continue" onclick="loadSavedGame()" class="w-full btn-fantasy min-h-[48px] py-3 px-6 rounded-xl text-amber-300 font-bold text-base flex items-center justify-center gap-2 border border-amber-700/80 hover:border-amber-400 shadow-md disabled:opacity-40" disabled>
+          <span>📖</span>
+          <span>Continua Partita</span>
+        </button>
+
+        <!-- Save Game Preview Pill if exists -->
+        <div id="menu-save-preview" class="hidden text-xs text-amber-400/80 bg-black/40 p-2 rounded border border-amber-950 font-mono">
+          Nessun salvataggio trovato
+        </div>
+
+        <button onclick="openRulesModal()" class="w-full py-2 px-4 rounded text-xs font-semibold text-amber-400/80 hover:text-amber-200 transition">
+          📜 Guida & Regolamento
         </button>
       </div>
 
-      <!-- DRAWER STAMINA -->
-      <div class="bg-black/50 p-3.5 rounded-lg border border-amber-950">
-        <div class="flex justify-between items-center mb-1.5">
-          <span class="text-sm font-semibold text-amber-200">Resistenza (PF)</span>
-          <span id="drawer-stamina-text" class="text-lg font-bold text-red-400">12 / 12</span>
-        </div>
-        <div class="w-full bg-red-950/80 rounded-full h-3.5 border border-red-900 overflow-hidden">
-          <div id="drawer-stamina-bar" class="bg-gradient-to-r from-red-700 to-red-500 h-full rounded-full transition-all duration-300" style="width: 100%;"></div>
-        </div>
+      <div class="mt-8 pt-4 border-t border-amber-900/50 text-[11px] text-amber-600/60">
+        Storia originale interattiva • Ispirata ai grandi classici del Fantasy
       </div>
-
-      <!-- DRAWER GOLD -->
-      <div class="bg-black/50 p-3.5 rounded-lg border border-amber-950 flex justify-between items-center">
-        <span class="text-sm font-semibold text-amber-200 flex items-center gap-2">
-          <span class="text-lg">🪙</span> Pezzi d'Oro
-        </span>
-        <span id="drawer-gold-value" class="text-xl font-bold text-amber-400">0</span>
-      </div>
-
-      <!-- DRAWER INVENTORY -->
-      <div class="bg-black/50 p-3.5 rounded-lg border border-amber-950">
-        <h4 class="text-xs uppercase tracking-wider text-amber-500/90 mb-2 font-semibold border-b border-amber-900/40 pb-1.5 flex items-center justify-between">
-          <span>🎒 Oggetti Nello Zaino</span>
-          <span id="drawer-item-count" class="text-[11px] text-amber-400/70">0 oggetti</span>
-        </h4>
-        <ul id="drawer-inventory-list" class="space-y-2 text-sm text-amber-100 min-h-[60px]">
-          <li class="text-amber-600/60 italic text-xs py-2">Lo zaino è vuoto.</li>
-        </ul>
-      </div>
-
-      <!-- RESTART BUTTON IN DRAWER -->
-      <button onclick="toggleMobileDrawer(); resetGame();" class="w-full min-h-[44px] py-2.5 px-4 rounded-lg text-xs font-semibold text-red-400 hover:text-red-300 border border-red-900/50 bg-red-950/20 active:bg-red-950/40 transition">
-        ↺ Ricomincia da Capo
-      </button>
     </div>
-  </div>
+  </section>
 
-  <!-- HEADER -->
-  <header class="text-center my-2 sm:my-3 parchment p-3 sm:p-4 rounded-xl border-b-4 border-amber-900 max-w-5xl mx-auto w-full shadow-lg">
-    <h1 class="font-title text-xl sm:text-3xl md:text-4xl text-amber-500 tracking-wider font-bold drop-shadow-md">DIMENSIONE AVVENTURA</h1>
-    <h2 class="font-fantasy text-sm sm:text-lg md:text-xl text-amber-200/80">Fighting Fantasy - Supporto Scolastico</h2>
-    <p class="text-[11px] sm:text-xs text-amber-500/60 mt-0.5 sm:mt-1 italic">di Steve Jackson e Ian Livingstone • Traduzione di Mauro Longo</p>
-  </header>
-
-  <!-- MOBILE STICKY STATUS HUD (VISIBLE ONLY ON MOBILE) -->
-  <div class="md:hidden sticky top-1 z-30 max-w-5xl mx-auto w-full mb-2">
-    <div class="parchment px-3 py-2 rounded-lg border border-amber-700/70 shadow-xl flex items-center justify-between gap-2 bg-[#181410]/95 backdrop-blur-md">
-      <!-- Quick Stamina -->
-      <div class="flex-1 min-w-0 pr-1">
-        <div class="flex justify-between items-center text-xs mb-1">
-          <span class="font-semibold text-amber-300 flex items-center gap-1">
-            <span>❤️</span>
-            <span class="text-[11px]">HP:</span>
-          </span>
-          <span id="mobile-stamina-text" class="font-bold text-red-400 text-xs">12/12</span>
-        </div>
-        <div class="w-full bg-red-950 rounded-full h-2 border border-red-900 overflow-hidden">
-          <div id="mobile-stamina-bar" class="bg-gradient-to-r from-red-600 to-red-400 h-full rounded-full transition-all duration-300" style="width: 100%;"></div>
-        </div>
+  <!-- ========================================== -->
+  <!-- 2. CHARACTER CREATION & AVATAR VIEW        -->
+  <!-- ========================================== -->
+  <section id="view-character-creation" class="hidden max-w-3xl mx-auto w-full flex-grow flex flex-col justify-center items-center my-2 sm:my-6 py-2">
+    <div class="parchment p-5 sm:p-7 rounded-2xl border-2 border-amber-600/90 w-full shadow-2xl space-y-6">
+      
+      <div class="text-center border-b border-amber-900/60 pb-3">
+        <span class="text-xs uppercase tracking-widest text-amber-500 font-semibold">Creazione Eroe</span>
+        <h2 class="font-title text-xl sm:text-3xl text-amber-400 font-bold mt-1">L'Ultima Speranza d'Aethelgard</h2>
+        <p class="text-xs sm:text-sm text-amber-200/80 italic mt-1">
+          Vent'anni di vita nei boschi di confine hanno temprato il tuo corpo e forgiato il tuo coraggio. Chi sei, esule delle terre selvagge?
+        </p>
       </div>
 
-      <!-- Quick Gold -->
-      <div class="flex items-center gap-1 px-2.5 py-1 bg-black/50 rounded border border-amber-900/60 text-xs">
-        <span>🪙</span>
-        <span id="mobile-gold-value" class="font-bold text-amber-400">0</span>
-      </div>
-
-      <!-- Open Backpack Button -->
-      <button onclick="toggleMobileDrawer()" class="btn-fantasy px-2.5 py-1 rounded text-xs text-amber-200 flex items-center gap-1.5 border border-amber-600/70 min-h-[32px] shrink-0 active:scale-95">
-        <span>🎒</span>
-        <span class="font-semibold hidden sm:inline">Zaino</span>
-        <span id="mobile-backpack-badge" class="bg-amber-600 text-black font-extrabold text-[10px] px-1.5 py-0.2 rounded-full">0</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- MAIN CONTAINER -->
-  <main class="max-w-5xl mx-auto w-full flex-grow grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 my-1 sm:my-2">
-    
-    <!-- LEFT PANEL: STATS & INVENTORY (DESKTOP) -->
-    <aside class="hidden md:flex md:col-span-1 parchment p-4 rounded-xl flex-col justify-between h-fit sticky top-4 shadow-xl">
+      <!-- Gender / Archetype Selector -->
       <div>
-        <h3 class="font-fantasy text-xl text-amber-400 border-b border-amber-900/60 pb-2 mb-4 text-center flex items-center justify-center gap-2">
-          <span>🛡️</span> Scheda Eroe
-        </h3>
+        <label class="block text-xs uppercase tracking-wider text-amber-400/90 font-bold mb-2">Scegli Titolo & Portamento:</label>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          
+          <button type="button" onclick="selectGender('M')" id="gender-btn-M" class="gender-card p-3 rounded-xl border border-amber-800 bg-black/40 text-left transition active:scale-98 flex items-center sm:flex-col gap-3 hover:border-amber-500">
+            <span class="text-2xl">🤴</span>
+            <div>
+              <div class="font-fantasy text-amber-200 font-bold text-sm sm:text-base">Principe Elyan</div>
+              <div class="text-[11px] text-amber-500/80">Erede legittimo al Trono (Maschile)</div>
+            </div>
+          </button>
+
+          <button type="button" onclick="selectGender('F')" id="gender-btn-F" class="gender-card p-3 rounded-xl border border-amber-800 bg-black/40 text-left transition active:scale-98 flex items-center sm:flex-col gap-3 hover:border-amber-500">
+            <span class="text-2xl">👸</span>
+            <div>
+              <div class="font-fantasy text-amber-200 font-bold text-sm sm:text-base">Principessa Elysia</div>
+              <div class="text-[11px] text-amber-500/80">Erede legittima al Trono (Femminile)</div>
+            </div>
+          </button>
+
+          <button type="button" onclick="selectGender('NB')" id="gender-btn-NB" class="gender-card p-3 rounded-xl border border-amber-800 bg-black/40 text-left transition active:scale-98 flex items-center sm:flex-col gap-3 hover:border-amber-500">
+            <span class="text-2xl">🛡️</span>
+            <div>
+              <div class="font-fantasy text-amber-200 font-bold text-sm sm:text-base">Erede Elen</div>
+              <div class="text-[11px] text-amber-500/80">Guardiano dell'Alba (Neutro/Inclusivo)</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Character Name Input -->
+      <div>
+        <label for="char-name-input" class="block text-xs uppercase tracking-wider text-amber-400/90 font-bold mb-1.5">Nome del Personaggio:</label>
+        <input 
+          type="text" 
+          id="char-name-input" 
+          maxlength="24"
+          class="w-full bg-black/70 border border-amber-700/80 rounded-xl px-4 py-2.5 text-base sm:text-lg text-amber-100 placeholder-amber-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400" 
+          placeholder="Inserisci il tuo nome..."
+          value="Elyan">
+      </div>
+
+      <!-- Hand-Drawn Book-Illustration Avatars -->
+      <div>
+        <label class="block text-xs uppercase tracking-wider text-amber-400/90 font-bold mb-2">
+          Avatar:
+        </label>
         
-        <!-- STAMINA -->
-        <div class="mb-5 bg-black/40 p-3 rounded-lg border border-amber-950">
+        <div class="grid grid-cols-3 gap-3">
+          
+          <!-- Avatar 1 (Male Ranger Prince) -->
+          <div onclick="selectAvatar('elyan')" id="avatar-card-elyan" class="avatar-card cursor-pointer p-2 rounded-xl border-2 border-amber-700 bg-black/30 text-center transition hover:border-amber-400">
+            <div class="ink-portrait rounded-lg w-full aspect-square flex items-center justify-center mb-2 overflow-hidden border border-[#3c2a16]">
+              <img src="assets/avatar_elyan.jpg" alt="Principe Ramingo" class="w-full h-full object-cover">
+            </div>
+            <span class="text-xs font-fantasy text-amber-200 block">Ramingo</span>
+          </div>
+
+          <!-- Avatar 2 (Female Ranger Princess) -->
+          <div onclick="selectAvatar('elysia')" id="avatar-card-elysia" class="avatar-card cursor-pointer p-2 rounded-xl border-2 border-transparent bg-black/30 text-center transition hover:border-amber-400">
+            <div class="ink-portrait rounded-lg w-full aspect-square flex items-center justify-center mb-2 overflow-hidden border border-[#3c2a16]">
+              <img src="assets/avatar_elysia.jpg" alt="Principessa Esule" class="w-full h-full object-cover">
+            </div>
+            <span class="text-xs font-fantasy text-amber-200 block">Esule</span>
+          </div>
+
+          <!-- Avatar 3 (Mysterious Cloaked Heir) -->
+          <div onclick="selectAvatar('elen')" id="avatar-card-elen" class="avatar-card cursor-pointer p-2 rounded-xl border-2 border-transparent bg-black/30 text-center transition hover:border-amber-400">
+            <div class="ink-portrait rounded-lg w-full aspect-square flex items-center justify-center mb-2 overflow-hidden border border-[#3c2a16]">
+              <img src="assets/avatar_elen.jpg" alt="Erede Guardiano" class="w-full h-full object-cover">
+            </div>
+            <span class="text-xs font-fantasy text-amber-200 block">Guardiano</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex gap-3 pt-3 border-t border-amber-900/60">
+        <button onclick="backToMainMenu()" class="py-2.5 px-4 rounded-xl text-xs font-semibold text-amber-400/80 hover:text-amber-200 border border-amber-900/60 bg-black/30">
+          ◀ Menu Principale
+        </button>
+        <button onclick="confirmCharacterAndStart()" class="flex-1 btn-fantasy min-h-[46px] py-2.5 px-6 rounded-xl text-amber-200 font-bold text-base border border-amber-600 hover:border-amber-400 shadow-lg">
+          Inizia l'Impresa ➔
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- 3. MAIN GAMEPLAY VIEW                      -->
+  <!-- ========================================== -->
+  <div id="view-gameplay" class="hidden flex flex-col justify-between flex-grow">
+
+    <!-- MOBILE HERO DRAWER -->
+    <div id="mobile-hero-drawer" class="hidden fixed inset-0 z-40 bg-black/85 backdrop-blur-sm md:hidden flex flex-col justify-end">
+      <div class="parchment rounded-t-2xl border-t-2 border-amber-500 p-5 max-h-[85vh] overflow-y-auto custom-scrollbar animate-drawer space-y-4">
+        
+        <div class="flex items-center justify-between border-b border-amber-900/60 pb-3">
+          <div class="flex items-center gap-3">
+            <div id="drawer-avatar-slot" class="w-12 h-12 rounded-lg ink-portrait shrink-0 border border-amber-800"></div>
+            <div>
+              <h3 id="drawer-hero-name" class="font-fantasy text-lg text-amber-300 font-bold leading-tight">Elyan</h3>
+              <span id="drawer-hero-title" class="text-xs text-amber-500/80">Principe d'Aethelgard</span>
+            </div>
+          </div>
+          <button onclick="toggleMobileDrawer()" class="text-amber-400/80 hover:text-amber-200 p-1.5 rounded-lg border border-amber-900/50 bg-black/30">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <!-- Stamina in Drawer -->
+        <div class="bg-black/50 p-3 rounded-lg border border-amber-950">
           <div class="flex justify-between items-center mb-1">
-            <span class="text-sm font-semibold text-amber-200">Resistenza</span>
-            <span id="stamina-text" class="text-lg font-bold text-red-400">12 / 12</span>
+            <span class="text-xs font-semibold text-amber-200">Resistenza (PF)</span>
+            <span id="drawer-stamina-text" class="text-base font-bold text-red-400">12 / 12</span>
           </div>
-          <div class="w-full bg-red-950 rounded-full h-3 border border-red-900 overflow-hidden">
-            <div id="stamina-bar" class="bg-gradient-to-r from-red-700 to-red-500 h-full rounded-full transition-all duration-300" style="width: 100%;"></div>
+          <div class="w-full bg-red-950/80 rounded-full h-3 border border-red-900 overflow-hidden">
+            <div id="drawer-stamina-bar" class="bg-gradient-to-r from-red-700 to-red-500 h-full rounded-full transition-all duration-300" style="width: 100%;"></div>
           </div>
         </div>
 
-        <!-- GOLD -->
-        <div class="mb-5 bg-black/40 p-3 rounded-lg border border-amber-950 flex justify-between items-center">
+        <!-- Weapon in Drawer -->
+        <div class="bg-black/50 p-3 rounded-lg border border-amber-950">
+          <span class="text-[11px] uppercase tracking-wider text-amber-500 font-bold block mb-1">Arma Impugnata</span>
+          <div class="flex items-center justify-between text-sm">
+            <span id="drawer-weapon-name" class="font-bold text-amber-200 flex items-center gap-1.5">
+              <span>🗡️</span> Lama da Ramingo
+            </span>
+            <span id="drawer-weapon-trait" class="text-[11px] px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-900">Bilanciata</span>
+          </div>
+        </div>
+
+        <!-- Gold in Drawer -->
+        <div class="bg-black/50 p-3 rounded-lg border border-amber-950 flex justify-between items-center">
           <span class="text-sm font-semibold text-amber-200 flex items-center gap-2">
-            <span class="text-lg">🪙</span>
-            Pezzi d'Oro
+            <span>🪙</span> Monete d'Oro
           </span>
-          <span id="gold-value" class="text-xl font-bold text-amber-400">0</span>
+          <span id="drawer-gold-value" class="text-lg font-bold text-amber-400">0</span>
         </div>
 
-        <!-- INVENTORY -->
-        <div class="bg-black/40 p-3 rounded-lg border border-amber-950">
-          <h4 class="text-xs uppercase tracking-wider text-amber-500/80 mb-2 font-semibold border-b border-amber-900/40 pb-1 flex items-center justify-between">
-            <span>🎒 Zaino & Oggetti</span>
-            <span id="desktop-item-count" class="text-[11px] text-amber-400/60">0</span>
+        <!-- Relics / Collectibles in Drawer -->
+        <div class="bg-black/50 p-3 rounded-lg border border-amber-950">
+          <span class="text-[11px] uppercase tracking-wider text-amber-500 font-bold block mb-2">Reliquie dell'Alba (Collezionabili):</span>
+          <div id="drawer-relics-list" class="grid grid-cols-3 gap-2 text-center text-xs">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Inventory List in Drawer -->
+        <div class="bg-black/50 p-3 rounded-lg border border-amber-950">
+          <h4 class="text-xs uppercase tracking-wider text-amber-500/90 mb-2 font-semibold border-b border-amber-900/40 pb-1 flex items-center justify-between">
+            <span>🎒 Zaino da Viaggio</span>
+            <span id="drawer-item-count" class="text-[11px] text-amber-400/70">0 oggetti</span>
           </h4>
-          <ul id="inventory-list" class="space-y-1.5 text-sm text-amber-100 min-h-[80px]">
-            <li class="text-amber-600/60 italic text-xs">Lo zaino è vuoto.</li>
-          </ul>
+          <ul id="drawer-inventory-list" class="space-y-1.5 text-xs text-amber-100 max-h-36 overflow-y-auto custom-scrollbar"></ul>
+        </div>
+
+        <!-- Drawer Actions -->
+        <div class="grid grid-cols-2 gap-2 pt-2">
+          <button onclick="manualSaveGame()" class="py-2.5 px-3 rounded-lg text-xs font-semibold text-amber-300 border border-amber-800 bg-amber-950/40 active:scale-95">
+            💾 Salva Partita
+          </button>
+          <button onclick="returnToMainMenuFromGame()" class="py-2.5 px-3 rounded-lg text-xs font-semibold text-red-400 border border-red-900/60 bg-red-950/20 active:scale-95">
+            🚪 Esci al Menu
+          </button>
         </div>
       </div>
+    </div>
 
-      <!-- RESTART BUTTON -->
-      <button onclick="resetGame()" class="w-full mt-6 py-2.5 px-4 rounded-lg text-xs font-semibold text-amber-400/80 hover:text-amber-300 border border-amber-900/50 hover:bg-amber-950/40 transition active:scale-95">
-        ↺ Ricomincia da Capo
+    <!-- HEADER IN-GAME -->
+    <header class="text-center my-1 sm:my-2 parchment p-3 rounded-xl border-b-2 border-amber-800 max-w-5xl mx-auto w-full shadow-lg flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <button onclick="returnToMainMenuFromGame()" title="Torna al Menu" class="btn-fantasy p-1.5 sm:px-2.5 sm:py-1 rounded-lg text-xs text-amber-300 border border-amber-700/70 flex items-center gap-1">
+          <span>◀</span>
+          <span class="hidden sm:inline">Menu</span>
+        </button>
+      </div>
+
+      <div class="min-w-0">
+        <h1 class="font-title text-base sm:text-xl md:text-2xl text-amber-400 font-bold truncate">AETHELGARD</h1>
+        <p class="text-[10px] sm:text-xs text-amber-500/70 italic truncate">Le Cronache dell'Erede delle Ombre</p>
+      </div>
+
+      <button onclick="manualSaveGame()" class="btn-fantasy p-1.5 sm:px-2.5 sm:py-1 rounded-lg text-xs text-amber-300 border border-amber-700/70 flex items-center gap-1">
+        <span>💾</span>
+        <span class="hidden sm:inline">Salva</span>
       </button>
-    </aside>
+    </header>
 
-    <!-- RIGHT PANEL: GAME TEXT & ACTIONS -->
-    <section id="story-section" class="md:col-span-2 parchment p-4 sm:p-5 md:p-6 rounded-xl flex flex-col justify-between parchment-inner shadow-xl">
-      <div>
-        <!-- PARAGRAPH TITLE & BADGE -->
-        <div class="flex items-center justify-between border-b border-amber-900/60 pb-3 mb-3 sm:mb-4 gap-2">
-          <h3 id="node-title" class="font-fantasy text-xl sm:text-2xl md:text-3xl text-amber-400 tracking-wide">1. Ingresso</h3>
-          <span id="node-badge" class="text-xs px-2.5 py-1 rounded-md bg-amber-950/90 text-amber-300 border border-amber-800 shrink-0 font-medium">Paragrafo</span>
-        </div>
-
-        <!-- MAIN TEXT CONTENT -->
-        <div id="node-text" class="text-amber-100/95 leading-relaxed sm:leading-loose space-y-3.5 mb-5 sm:mb-6 text-sm sm:text-base md:text-lg">
-          <!-- Text dynamically loaded -->
-        </div>
-
-        <!-- LOOT CONTAINER -->
-        <div id="loot-box" class="hidden my-4 p-3.5 sm:p-4 bg-emerald-950/40 border border-emerald-600/80 rounded-xl space-y-2.5 shadow-lg">
-          <div class="flex items-center gap-2 border-b border-emerald-900/60 pb-1.5 mb-2">
-            <span class="text-lg">🎁</span>
-            <h4 class="font-fantasy text-base sm:text-lg text-emerald-400 font-bold">Oggetti da Raccogliere (Obbligatori):</h4>
+    <!-- MOBILE STICKY STATUS HUD -->
+    <div class="md:hidden sticky top-1 z-30 max-w-5xl mx-auto w-full mb-2">
+      <div class="parchment px-3 py-2 rounded-lg border border-amber-700/70 shadow-xl flex items-center justify-between gap-2 bg-[#181410]/95 backdrop-blur-md">
+        <!-- Quick Stamina -->
+        <div class="flex-1 min-w-0 pr-1">
+          <div class="flex justify-between items-center text-xs mb-1">
+            <span class="font-semibold text-amber-300 flex items-center gap-1">
+              <span>❤️</span>
+              <span class="text-[11px]">HP:</span>
+            </span>
+            <span id="mobile-stamina-text" class="font-bold text-red-400 text-xs">12/12</span>
           </div>
-          <div id="loot-buttons" class="space-y-2"></div>
+          <div class="w-full bg-red-950 rounded-full h-2 border border-red-900 overflow-hidden">
+            <div id="mobile-stamina-bar" class="bg-gradient-to-r from-red-600 to-red-400 h-full rounded-full transition-all duration-300" style="width: 100%;"></div>
+          </div>
         </div>
 
-        <!-- COMBAT SECTION -->
-        <div id="combat-box" class="hidden my-4 p-3.5 sm:p-4 bg-red-950/30 border border-red-700/80 rounded-xl shadow-lg">
-          <div class="flex items-center justify-between border-b border-red-900/60 pb-2 mb-3">
-            <h4 id="enemy-name" class="font-fantasy text-lg sm:text-xl text-red-400 flex items-center gap-1.5">
-              <span>⚔️</span> Nemico
+        <!-- Quick Gold -->
+        <div class="flex items-center gap-1 px-2.5 py-1 bg-black/50 rounded border border-amber-900/60 text-xs">
+          <span>🪙</span>
+          <span id="mobile-gold-value" class="font-bold text-amber-400">0</span>
+        </div>
+
+        <!-- Open Backpack Button -->
+        <button onclick="toggleMobileDrawer()" class="btn-fantasy px-2.5 py-1 rounded text-xs text-amber-200 flex items-center gap-1.5 border border-amber-600/70 min-h-[32px] shrink-0 active:scale-95">
+          <span>🎒</span>
+          <span class="font-semibold hidden sm:inline">Zaino</span>
+          <span id="mobile-backpack-badge" class="bg-amber-600 text-black font-extrabold text-[10px] px-1.5 py-0.2 rounded-full">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- MAIN GAME LAYOUT -->
+    <main class="max-w-5xl mx-auto w-full flex-grow grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 my-1 sm:my-2">
+      
+      <!-- DESKTOP LEFT PANEL: CHARACTER SHEET & INVENTORY -->
+      <aside class="hidden md:flex md:col-span-1 parchment p-4 rounded-xl flex-col justify-between h-fit sticky top-4 shadow-xl space-y-4">
+        <div>
+          <!-- Character Card -->
+          <div class="flex items-center gap-3 border-b border-amber-900/60 pb-3 mb-4">
+            <div id="desktop-avatar-slot" class="w-14 h-14 rounded-xl ink-portrait shrink-0 border-2 border-amber-700/80 shadow"></div>
+            <div class="min-w-0">
+              <h3 id="desktop-hero-name" class="font-title text-base lg:text-lg text-amber-300 font-bold truncate">Elyan</h3>
+              <p id="desktop-hero-title" class="text-xs text-amber-500/80 truncate font-fantasy">Principe d'Aethelgard</p>
+            </div>
+          </div>
+
+          <!-- Stamina -->
+          <div class="mb-4 bg-black/40 p-3 rounded-lg border border-amber-950">
+            <div class="flex justify-between items-center mb-1">
+              <span class="text-xs font-semibold text-amber-200">Punti Resistenza (PF)</span>
+              <span id="stamina-text" class="text-base font-bold text-red-400">12 / 12</span>
+            </div>
+            <div class="w-full bg-red-950 rounded-full h-3 border border-red-900 overflow-hidden">
+              <div id="stamina-bar" class="bg-gradient-to-r from-red-700 to-red-500 h-full rounded-full transition-all duration-300" style="width: 100%;"></div>
+            </div>
+          </div>
+
+          <!-- Weapon Slot -->
+          <div class="mb-4 bg-black/40 p-3 rounded-lg border border-amber-950">
+            <span class="text-[10px] uppercase tracking-wider text-amber-500/90 font-bold block mb-1">Arma Impugnata:</span>
+            <div class="flex items-center justify-between text-sm">
+              <span id="desktop-weapon-name" class="font-bold text-amber-200 flex items-center gap-1.5">
+                <span>🗡️</span> Lama da Ramingo
+              </span>
+              <span id="desktop-weapon-trait" class="text-[10px] px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">Bilanciata</span>
+            </div>
+            <p id="desktop-weapon-desc" class="text-[11px] text-amber-400/60 italic mt-1 leading-snug">Spada leggera, ideale per ogni manovra.</p>
+          </div>
+
+          <!-- Gold -->
+          <div class="mb-4 bg-black/40 p-2.5 rounded-lg border border-amber-950 flex justify-between items-center">
+            <span class="text-xs font-semibold text-amber-200 flex items-center gap-1.5">
+              <span>🪙</span> Pezzi d'Oro
+            </span>
+            <span id="gold-value" class="text-lg font-bold text-amber-400">0</span>
+          </div>
+
+          <!-- Collectibles: Relics of the Dawn -->
+          <div class="mb-4 bg-black/40 p-3 rounded-lg border border-amber-950">
+            <span class="text-[10px] uppercase tracking-wider text-amber-500/90 font-bold block mb-2">Reliquie dell'Alba (0/3):</span>
+            <div id="desktop-relics-list" class="grid grid-cols-3 gap-1.5 text-center text-[11px]">
+              <!-- Dynamically rendered -->
+            </div>
+          </div>
+
+          <!-- Backpack Items -->
+          <div class="bg-black/40 p-3 rounded-lg border border-amber-950">
+            <h4 class="text-[10px] uppercase tracking-wider text-amber-500/80 mb-2 font-semibold border-b border-amber-900/40 pb-1 flex items-center justify-between">
+              <span>🎒 Zaino & Oggetti</span>
+              <span id="desktop-item-count" class="text-[10px] text-amber-400/60">0</span>
             </h4>
-            <div class="flex items-center gap-2 bg-black/40 px-3 py-1 rounded border border-red-900/50">
-              <span class="text-xs text-amber-200/80">Resistenza Mostro:</span>
-              <span id="enemy-stamina" class="text-lg sm:text-xl font-bold text-red-400">0</span>
-            </div>
-          </div>
-
-          <!-- ACTIVE DICE DISPLAY (2 DADI EROE vs 2 DADI MOSTRO - REGOLA UFFICIALE PAG. 10) -->
-          <div id="dice-display-area" class="grid grid-cols-2 gap-2 mb-3 text-xs sm:text-sm">
-            <div class="bg-black/50 p-2 rounded-lg border border-amber-900/40 text-center">
-              <span class="text-amber-300 font-semibold block text-[11px] mb-1">Dadi Eroe (Tu)</span>
-              <div id="hero-dice-visual" class="flex justify-center items-center gap-2 text-sm sm:text-base font-mono">
-                <span class="px-2.5 py-0.5 rounded bg-black/60 border border-amber-800/60 text-amber-200">🎲 -</span>
-                <span class="px-2.5 py-0.5 rounded bg-black/60 border border-amber-800/60 text-amber-200">🎲 -</span>
-              </div>
-            </div>
-            <div class="bg-black/50 p-2 rounded-lg border border-red-900/40 text-center">
-              <span class="text-red-300 font-semibold block text-[11px] mb-1">Dadi Mostro</span>
-              <div id="enemy-dice-visual" class="flex justify-center items-center gap-2 text-sm sm:text-base font-mono">
-                <span class="px-2.5 py-0.5 rounded bg-black/60 border border-red-900/60 text-red-300">🎲 -</span>
-                <span class="px-2.5 py-0.5 rounded bg-black/60 border border-red-900/60 text-red-300">🎲 -</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- COMBAT LOG -->
-          <div id="combat-log" class="bg-black/70 p-3 rounded-lg text-xs sm:text-sm font-mono text-amber-200/90 mb-3 border border-amber-900/40 text-center min-h-[44px] flex items-center justify-center">
-            <p class="text-amber-500/70 italic">Inizia lo scontro! 2 dadi per parte: ogni 6 toglie 1 HP.</p>
-          </div>
-
-          <!-- ACTION BUTTONS -->
-          <div class="flex flex-col sm:flex-row gap-2">
-            <button id="btn-roll-dice" onclick="handleCombatRound()" class="flex-1 btn-fantasy btn-dice min-h-[48px] py-2.5 px-4 rounded-xl text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-lg active:scale-98">
-              <span id="dice-icon" class="text-xl">🎲</span>
-              <span>Tira i Dadi (1 Round)</span>
-            </button>
-            <button id="btn-auto-combat" onclick="toggleAutoCombat()" class="btn-fantasy min-h-[48px] py-2.5 px-4 rounded-xl text-amber-200 font-bold text-xs sm:text-sm border border-amber-600/80 hover:border-amber-400 bg-amber-950/40 flex items-center justify-center gap-1.5 active:scale-98 shrink-0">
-              <span id="auto-combat-icon">⚡</span>
-              <span id="auto-combat-label">Combatti a Raffica</span>
-            </button>
+            <ul id="inventory-list" class="space-y-1.5 text-xs text-amber-100 min-h-[70px] max-h-36 overflow-y-auto custom-scrollbar"></ul>
           </div>
         </div>
 
-        <!-- RIDDLE INPUT SECTION -->
-        <div id="riddle-box" class="hidden my-4 p-3.5 sm:p-4 bg-amber-950/30 border border-amber-700/80 rounded-xl shadow-lg">
-          <label id="riddle-label" for="riddle-input" class="block text-xs sm:text-sm font-semibold text-amber-300 mb-2">Inserisci la tua risposta all'indovinello:</label>
-          <div class="flex flex-col sm:flex-row gap-2">
-            <input 
-              type="text" 
-              id="riddle-input" 
-              class="flex-grow bg-black/70 border border-amber-700 rounded-lg px-3.5 py-2.5 text-base text-amber-100 placeholder-amber-600/50 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400" 
-              placeholder="Scrivi la risposta..."
-              autocomplete="off"
-              autocorrect="off"
-              autocapitalize="off"
-              spellcheck="false"
-              onkeydown="if(event.key === 'Enter') submitRiddle()">
-            <button onclick="submitRiddle()" class="btn-fantasy min-h-[44px] px-5 py-2.5 rounded-lg text-amber-200 font-bold text-sm sm:text-base border border-amber-600 shrink-0">
-              Conferma
-            </button>
+        <!-- Quick Save / Load in Sidebar -->
+        <div class="pt-2 border-t border-amber-900/40 space-y-2">
+          <button onclick="manualSaveGame()" class="w-full py-2 px-3 rounded-lg text-xs font-semibold text-amber-300/90 hover:text-amber-100 border border-amber-800/60 bg-amber-950/30 active:scale-95 transition">
+            💾 Salva Partita
+          </button>
+        </div>
+      </aside>
+
+      <!-- RIGHT PANEL: GAME STORY & INTERACTIVE CHOICES -->
+      <section id="story-section" class="md:col-span-2 parchment p-4 sm:p-5 md:p-6 rounded-xl flex flex-col justify-between parchment-inner shadow-xl">
+        <div>
+          <!-- Paragraph Title & Chapter Badge -->
+          <div class="flex items-center justify-between border-b border-amber-900/60 pb-3 mb-3 sm:mb-4 gap-2">
+            <h3 id="node-title" class="font-title text-xl sm:text-2xl md:text-3xl text-amber-400 tracking-wide">
+              1. Ai Confini del Bosco d'Argento
+            </h3>
+            <span id="node-badge" class="text-xs px-2.5 py-1 rounded-md bg-amber-950/90 text-amber-300 border border-amber-800 shrink-0 font-medium">
+              Capitolo
+            </span>
+          </div>
+
+          <!-- MAIN STORY TEXT -->
+          <div id="node-text" class="text-amber-100/95 leading-relaxed sm:leading-loose space-y-3.5 mb-5 sm:mb-6 text-sm sm:text-base md:text-lg">
+            <!-- Dynamic narrative -->
+          </div>
+
+          <!-- LOOT & DISCOVERIES CONTAINER -->
+          <div id="loot-box" class="hidden my-4 p-3.5 sm:p-4 bg-emerald-950/40 border border-emerald-600/80 rounded-xl space-y-2.5 shadow-lg">
+            <div class="flex items-center gap-2 border-b border-emerald-900/60 pb-1.5 mb-2">
+              <span class="text-lg">🎁</span>
+              <h4 class="font-fantasy text-base sm:text-lg text-emerald-400 font-bold">Bottino & Scoperte:</h4>
+            </div>
+            <div id="loot-buttons" class="space-y-2"></div>
+          </div>
+
+          <!-- COMBAT SECTION (2 DICE HERO vs 2 DICE MONSTER) -->
+          <div id="combat-box" class="hidden my-4 p-3.5 sm:p-4 bg-red-950/30 border border-red-700/80 rounded-xl shadow-lg">
+            <div class="flex items-center justify-between border-b border-red-900/60 pb-2 mb-3">
+              <h4 id="enemy-name" class="font-fantasy text-lg sm:text-xl text-red-400 flex items-center gap-1.5">
+                <span>⚔️</span> Nemico
+              </h4>
+              <div class="flex items-center gap-2 bg-black/40 px-3 py-1 rounded border border-red-900/50">
+                <span class="text-xs text-amber-200/80">Resistenza Nemico:</span>
+                <span id="enemy-stamina" class="text-lg sm:text-xl font-bold text-red-400">0</span>
+              </div>
+            </div>
+
+            <!-- Active Dice Visual Display (2 vs 2) -->
+            <div id="dice-display-area" class="grid grid-cols-2 gap-2 mb-3 text-xs sm:text-sm">
+              <div class="bg-black/50 p-2 rounded-lg border border-amber-900/40 text-center">
+                <span class="text-amber-300 font-semibold block text-[11px] mb-1">Dadi Eroe (Tu)</span>
+                <div id="hero-dice-visual" class="flex justify-center items-center gap-2 text-sm sm:text-base font-mono">
+                  <span class="px-2.5 py-0.5 rounded bg-black/60 border border-amber-800/60 text-amber-200">🎲 -</span>
+                  <span class="px-2.5 py-0.5 rounded bg-black/60 border border-amber-800/60 text-amber-200">🎲 -</span>
+                </div>
+              </div>
+              <div class="bg-black/50 p-2 rounded-lg border border-red-900/40 text-center">
+                <span class="text-red-300 font-semibold block text-[11px] mb-1">Dadi Nemico</span>
+                <div id="enemy-dice-visual" class="flex justify-center items-center gap-2 text-sm sm:text-base font-mono">
+                  <span class="px-2.5 py-0.5 rounded bg-black/60 border border-red-900/60 text-red-300">🎲 -</span>
+                  <span class="px-2.5 py-0.5 rounded bg-black/60 border border-red-900/60 text-red-300">🎲 -</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Combat Log -->
+            <div id="combat-log" class="bg-black/70 p-3 rounded-lg text-xs sm:text-sm font-mono text-amber-200/90 mb-3 border border-amber-900/40 text-center min-h-[44px] flex items-center justify-center">
+              <p class="text-amber-500/70 italic">Inizia lo scontro! 2 dadi per parte: ogni 6 infligge 1 PF.</p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-2">
+              <button id="btn-roll-dice" onclick="handleCombatRound()" class="flex-1 btn-fantasy btn-dice min-h-[48px] py-2.5 px-4 rounded-xl text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-lg active:scale-98">
+                <span id="dice-icon" class="text-xl">🎲</span>
+                <span>Tira i Dadi (1 Round)</span>
+              </button>
+              <button id="btn-auto-combat" onclick="toggleAutoCombat()" class="btn-fantasy min-h-[48px] py-2.5 px-4 rounded-xl text-amber-200 font-bold text-xs sm:text-sm border border-amber-600/80 hover:border-amber-400 bg-amber-950/40 flex items-center justify-center gap-1.5 active:scale-98 shrink-0">
+                <span id="auto-combat-icon">⚡</span>
+                <span id="auto-combat-label">Combatti a Raffica</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- RIDDLE INPUT SECTION (NON-BLOCKING) -->
+          <div id="riddle-box" class="hidden my-4 p-3.5 sm:p-4 bg-amber-950/30 border border-amber-700/80 rounded-xl shadow-lg">
+            <label id="riddle-label" for="riddle-input" class="block text-xs sm:text-sm font-semibold text-amber-300 mb-2">Inserisci la tua risposta:</label>
+            <div class="flex flex-col sm:flex-row gap-2">
+              <input 
+                type="text" 
+                id="riddle-input" 
+                class="flex-grow bg-black/70 border border-amber-700 rounded-lg px-3.5 py-2.5 text-base text-amber-100 placeholder-amber-600/50 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400" 
+                placeholder="Scrivi la risposta..."
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                onkeydown="if(event.key === 'Enter') submitRiddle()">
+              <button onclick="submitRiddle()" class="btn-fantasy min-h-[44px] px-5 py-2.5 rounded-lg text-amber-200 font-bold text-sm sm:text-base border border-amber-600 shrink-0">
+                Conferma
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- CHOICES & BUTTONS CONTAINER -->
-      <div id="choices-container" class="mt-5 sm:mt-6 pt-4 border-t border-amber-900/60 space-y-2.5 sm:space-y-3">
-        <!-- Dynamic choice buttons inserted here -->
-      </div>
-    </section>
+        <!-- CHOICES CONTAINER -->
+        <div id="choices-container" class="mt-5 sm:mt-6 pt-4 border-t border-amber-900/60 space-y-2.5 sm:space-y-3">
+          <!-- Dynamic choice buttons inserted here -->
+        </div>
+      </section>
 
-  </main>
+    </main>
 
-  <!-- FOOTER -->
-  <footer class="text-center text-[11px] sm:text-xs text-amber-600/60 my-2 px-2">
-    Fighting Fantasy™ © Steve Jackson & Ian Livingstone. Progetto di Supporto Scolastico.
-  </footer>
+    <!-- FOOTER IN-GAME -->
+    <footer class="text-center text-[11px] sm:text-xs text-amber-600/60 my-2 px-2">
+      Le Cronache di Aethelgard • Storia originale protetta da licenza aperta • Tutti i diritti riservati
+    </footer>
+  </div>
 
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT ENGINE & NARRATIVE ARCHITECTURE -->
+  <!-- ========================================== -->
   <script>
-    const gamebook = {
-      title: "Dimensione Avventura - Fighting Fantasy: Supporto Scolastico",
-      initial_state: {
-        stamina: 12,
-        max_stamina: 12,
-        gold: 0,
-        inventory: [],
-        current_node: "1"
+    // Authentic 1980s Book-Illustration Portraits
+    const AVATARS = {
+      elyan: `<img src="assets/avatar_elyan.jpg" alt="Principe Elyan" class="w-full h-full object-cover rounded-lg">`,
+      elysia: `<img src="assets/avatar_elysia.jpg" alt="Principessa Elysia" class="w-full h-full object-cover rounded-lg">`,
+      elen: `<img src="assets/avatar_elen.jpg" alt="Erede Elen" class="w-full h-full object-cover rounded-lg">`
+    };
+
+    // WEAPONS DATABASE
+    const WEAPONS = {
+      ranger_blade: {
+        id: "ranger_blade",
+        name: "Lama da Ramingo",
+        trait: "Bilanciata",
+        encumbrance: "media",
+        damage_bonus: 0,
+        desc: "Lama d'acciaio brunito dei guardiani di frontiera. Perfetta per ogni manovra."
       },
-      nodes: {
-        "1": {
-          title: "1. Ingresso",
-          text: `Alto tra i Colli Esterni, vicino alla città di Sonoria si trova Monte Pauroso. Il monte è chiamato così per le creature che vivono lì attorno. C'è un vero e proprio tesoro da trovare qui, frutto delle venature d'oro estratte in passato, sorvegliato però da feroci mostri.<br><br>
-                 Dopo una dura marcia di alcuni giorni attraverso i Colli esterni, il nostro Eroe è finalmente giunto di fronte l'ingresso del vecchio Pandoro. Di fronte a lui c'è un'oscura caverna. Le stalattiti pendono dal soffitto della grotta. Brrrr. Entrare in questo luogo sembra come camminare tra le zanne di un'immensa bestia. La prima cosa che si nota è una scritta incisa sulla roccia. Ecco cosa dice:<br><br>
-                 <div class="text-center font-bold tracking-widest text-amber-400 my-2 text-base sm:text-lg">REЖTA A DEЖTRA</div>
-                 E un'altra scritta dice:<br>
-                 <div class="text-center font-bold tracking-widest text-emerald-400 my-2 text-base sm:text-lg">VERDE = VAI</div>
-                 Forse si tratta di una specie di antichi graffiti..<br><br>
-                 Entrando nella caverna, il nostro Eroe segue la parete alla sua destra, quando sente il rumore di un grande crollo!<br>
-                 Alla sua sinistra, un'immensa stalattite è caduta a terra e si è infranta in mille pezzi. Accende la sua torcia e avanza nella grotta.<br>
-                 Ad un tratto si sente di nuovo qualcosa. Presto! Un enorme macigno sta rotolando verso di lui. Cosa deve fare il nostro eroe? Lanciarsi sulla sinistra e cercare di evitarlo? O schiacciarsi contro la parete a destra?`,
-          choices: [
-            { text: "Lanciarsi sulla Sinistra per evitarlo", target: "2" },
-            { text: "Schiacciarsi contro la parete a Destra", target: "3" }
-          ]
-        },
-        "2": {
-          title: "2. Lanciarsi a Sinistra",
-          text: `Il nostro Eroe si lancia a sinistra.. dritto in direzione del macigno rotolante. <strong>Splat!</strong>`,
-          is_game_over: true,
-          choices: [
-            { text: "Ricomincia l'Avventura", target: "1", reset_game: true }
-          ]
-        },
-        "3": {
-          title: "3. Rimanere a Destra",
-          text: `Il macigno rotola con fragore alle sue spalle.<br><br>
-                 Il nostro Eroe procede lungo un passaggio nell'oscurità. L'aria è fredda e umida. La tremolante luce della sua torcia danza sulle viscide pareti di roccia, attraverso le inquietanti ombre che lo circondano. Un brivido corre lungo la sua schiena. Quali pericoli potrebbero nascondersi dinnanzi a lui?<br><br>
-                 Presto egli arriva ad una biforcazione e può dirigersi a destra o a sinistra. Dove si dirigerà?`,
-          choices: [
-            { text: "Svolta a Destra", target: "4" },
-            { text: "Svolta a Sinistra", target: "4" }
-          ]
-        },
-        "4": {
-          title: "4. Lupi di Montagna",
-          text: `Il nostro Eroe prende la direzione di destra/sinistra.<br><br>
-                 Immediatamente si sente ringhiare.<br>
-                 È entrato nella tana di un branco di Lupi di Montagna affamati!<br>
-                 Che gli saltano addosso! Aaargh! Mordono!<br><br>
-                 Inizia il combattimento!`,
-          combat: {
-            enemy_name: "Lupi di Montagna",
-            enemy_stamina: 2
-          },
-          on_victory: {
-            text: `Bene! Un rapido colpo della spada ricaccia indietro le creature. I Lupi sono sconfitti e ritornano nelle buie profondità della caverna a leccarsi le ferite.<br><br>
-                   Non appena il nostro Eroe muove qualche passo per riprendere il cammino, inciampa in qualcosa di morbido. É un cadavere!<br>
-                   Deve essere stato qualcuno ucciso dai Lupi.<br>
-                   Mmmhhh.. Non ha un buon odore. Vediamo se possiede dell'oro..<br>
-                   Aha! Si. Ha 5 Pezzi d'Oro in tasca. E c'è anche qualcos'altro.. Un foglio di pergamena! C'è sopra un numero, il Numero 1 (Pergamena “B”).<br><br>
-                   Lasciando perdere il cadavere, poco più avanti si trova un altro incrocio, nel quale è possibile dirigersi a destra o a sinistra. Che direzione prendere?`,
-            loot: {
-              gold: 5,
-              items: ["Pergamena B"]
-            },
-            choices: [
-              { text: "Prendi il cunicolo di Destra", target: "5" },
-              { text: "Prendi il cunicolo di Sinistra", target: "5" }
-            ]
-          }
-        },
-        "5": {
-          title: "5. Il Troll delle Caverne",
-          text: `Il nostro Eroe svolge il passaggio con cautela, finché non giunge ad una vasta caverna scavata nella roccia. Ad un tratto si sente un rumore di passi strascicati provenire da dietro. Prima che se ne renda conto, un pesante colpo lo fa rotolare per terra. La sua testa sembra quasi esplodere.<br><br>
-                 Il nostro Eroe si lancia istintivamente da un lato, appena in tempo per evitare una clava di legno che si abbatte a terra accanto a lui. Apre gli occhi e sobbalza di paura, nel vedere le dimensioni della creatura che incombe su di lui. È finito nella tana di un Troll delle Caverne!<br><br>
-                 Di nuovo il Mostro fende l'aria con la sua clava e di nuovo il nostro Eroe riesce a scansarla, ma questa volta è pronto a reagire.<br><br>
-                 La battaglia cominci! Il Troll ha 3 punti di Resistenza.`,
-          trap_damage: true,
-          combat: {
-            enemy_name: "Troll delle Caverne",
-            enemy_stamina: 3
-          },
-          on_victory: {
-            text: `Bene! La spada si infila in profondità nel suo ventre. La creatura ruggisce di dolore e cade in ginocchio. É finita.<br><br>
-                   Attaccato alla cintura del Troll c'è un borsello. Dentro ci sono 3 Pezzi d'Oro e una Chiave di Rame. C'è anche un foglio di pergamena (Pergamena “E”).<br><br>
-                   Proseguendo dalla caverna del Troll, il nostro Eroe scopre una porta sul muro a destra. È difficile da distinguere bene, ma sembra dipinta di verde. O forse è semplicemente ammuffita. Che fare? Aprire la porta ed entrare? Oppure proseguire dritto?`,
-            loot: {
-              gold: 3,
-              items: ["Chiave di Rame", "Pergamena E"]
-            },
-            choices: [
-              { text: "Apri la Porta Verde ed entra", target: "6" },
-              { text: "Prosegui dritto per il corridoio", target: "7" }
-            ]
-          }
-        },
-        "6": {
-          title: "6. La Porta",
-          text: `La porta è vecchia e arrugginita, con cardini induriti. Scricchiola rumorosamente quando viene aperta. Dietro la porta c'è una piccola stanza e nel centro della stanza c'è un tavolo con una campanella sopra. Una scritta davanti al campanello dice <strong class="text-amber-300">“Suonare Per Chiamare Aiuto”</strong>. Che fare?`,
-          choices: [
-            { text: "Suonare la campanella", target: "6_genie" },
-            { text: "Uscire e percorrere il passaggio", target: "7" }
-          ]
-        },
-        "6_genie": {
-          title: "Incontro con il Genio",
-          text: `Un Genio appare magicamente nella stanza. “Salve,” dice, “perché mi hai convocato? Io non ti ho mai visto prima. Posso servire solamente chi conosce il mio nome. Tu conosci il mio nome?”`,
-          input_riddle: {
-            correct_answer: "aiuto",
-            success: {
-              text: `Il Genio sorride! Riconoscendo che lo hai chiamato correttamente per nome (“Aiuto”), prima di svanire regala all'Eroe una scatola con dentro <strong>10 Pezzi d'Oro</strong>!<br><br>L'unico modo per continuare è uscire e percorrere il passaggio. Raccogli la ricompensa prima di proseguire:`,
-              loot: { gold: 10, items: [] },
-              target: "7"
-            },
-            failure: {
-              text: `Il Genio scuote la testa: “Non è questo il mio nome!” e svanisce nel nulla.<br><br>L'unico modo per continuare è uscire e percorrere il passaggio.`,
-              target: "7"
-            }
-          }
-        },
-        "7": {
-          title: "7. Proseguire",
-          text: `Il passaggio prosegue finché non giunge ad un vicolo cieco.`
-        },
-        "7_deadend": {
-          title: "Vicolo Cieco Senza Uscita",
-          text: `Sei giunto di fronte a un vicolo cieco! Non possiedi la Pergamena B e non conosci l'incantesimo per superare il blocco. Sei intrappolato nel cunicolo.`,
-          is_game_over: true,
-          choices: [
-            { text: "Ricomincia l'Avventura", target: "1", reset_game: true }
-          ]
-        },
-        "7_riddle": {
-          title: "7. Lettura della Pergamena B",
-          text: `Osservi attentamente il foglio della Pergamena B. Sopra vi è inciso il seguente enigma:<br><br>
-                 <div class="p-4 bg-black/60 border border-amber-600/60 rounded-xl italic text-amber-200 text-center leading-relaxed">
-                 “Se Grand Alf, nonostante<br>
-                 sembri un tipo assai paziente,<br>
-                 è potente più di un drago<br>
-                 di sicuro è un grande _ _ _ _ ?”
-                 </div><br>
-                 Inserisci la parola corretta per completare la formula magica e sbloccare la via:`,
-          input_riddle: {
-            correct_answer: "mago",
-            success: {
-              text: `Hai pronunciato la parola magica corretta!<br><br>
-                     Ehi! Accade qualcosa! Il cunicolo sta diventando più scuro. Ci sono strani suoni stridenti di rocce che si spostano! Il terreno sotto i tuoi piedi diventa rapidamente scintillante. Ben presto l'oscurità si schiarisce e i rumori si fermano.<br><br>
-                     Il nostro Eroe si trova ora all'interno di un passaggio che sembra leggermente differente. Dopo averlo percorso, giunge ad un'altra intersezione, nella quale è possibile continuare dritto o girare a sinistra. Quale via scegliere?`,
-              target: "7_unlocked_choices"
-            },
-            failure: {
-              text: `La parola inserita non è corretta. Le incisioni magiche non reagiscono. Riprova a leggere la pergamena.`,
-              target: "7_riddle"
-            }
-          }
-        },
-        "7_unlocked_choices": {
-          title: "7. Proseguire",
-          text: `Il nostro Eroe si trova ora all'interno di un passaggio che sembra leggermente differente. Dopo averlo percorso, giunge ad un'altra intersezione, nella quale è possibile continuare dritto o girare a sinistra. Quale via scegliere?`,
-          choices: [
-            { text: "Continua Dritto", target: "8" },
-            { text: "Gira a Sinistra", target: "8" }
-          ]
-        },
-        "8": {
-          title: "8. L'Eremita",
-          text: `Il passaggio termina ben presto contro una porta di legno. Il nostro Eroe si appoggia silenziosamente e la apre con cautela. All'interno di una stanza c'è un uomo anziano, vestito di stracci, con una lunga barba grigia e troppo pacioccone per sembrare pericoloso. Molto più preoccupante è quello che sembra il suo animale da compagnia, una Pantera delle Montagne dal pelo nero e dall'aspetto feroce, che ringhia e si stiracchia attaccata ad un guinzaglio. La camera sembra essere la dimora di un Eremita, con un giaciglio di paglia in un angolo e una piccola dispensa nell'altro. Un vecchio forziere di legno costituisce il suo comodino. Una porta dall'altro lato della stanza potrebbe permettere di proseguire. Cosa fare? Salutare con un cortese “Buon Giorno” e uscire dall'altra porta? Oppure spingere via il vecchio eremita e frugare nel suo forziere?`,
-          choices: [
-            { text: "Spingere via il vecchio eremita e frugare nel suo forziere", target: "9" },
-            { text: "Salutare con un cortese “Buon Giorno” e uscire dall'altra porta", target: "10" }
-          ]
-        },
-        "9": {
-          title: "9. Il Forziere",
-          text: `L'anziano individuo sguinzaglia la sua Pantera, che ruggisce e parte all'attacco, sfregiando al petto il nostro Eroe con i suoi artigli! Perde 1 punto Resistenza!<br><br>
-                 Cominci la battaglia! La Pantera ha 2 punti Resistenza!`,
-          stamina_change: -1,
-          combat: {
-            enemy_name: "Pantera delle Montagne",
-            enemy_stamina: 2
-          },
-          on_victory: {
-            text: `La creatura salta di nuovo! Ma stavolta il nostro Eroe è pronto con la sua spada. Il suo colpo si abbatte sul collo della bestia mentre è a mezz'aria. Il rumore della spada che squarcia la sua gola è terribile. Sgozz! La belva è morta.<br><br>
-                   Adesso il forziere può essere aperto. Dentro ci sono 6 Pezzi d'Oro, un paio di fetide mutande e un foglio di Pergamena con su scritto “3” (Pergamena “H”).<br><br>
-                   Il nostro Eroe prende i Pezzi d'Oro e il foglio (lasciando perdere le mutande) ed esce dalla porta dall'altro lato della stanza, lasciando il vecchio a lamentarsi per la morte del suo animaletto.`,
-            loot: {
-              gold: 6,
-              items: ["Pergamena H"]
-            },
-            choices: [
-              { text: "Esci dalla porta e continua", target: "10" }
-            ]
-          }
-        },
-        "10": {
-          title: "10. Uscire",
-          text: `Il passaggio dall'altro lato prosegue lungo un corridoio scavato nella roccia. Lungo il percorso ci sono due Porte. Una ha una Serratura di Rame e l'altra una Serratura d'Argento. Che fare?<br><br>
-                 Provare ad aprire le Porte? O proseguire?`,
-          choices: [
-            { text: "Prova ad aprire le Porte", target: "11" },
-            { text: "Ignora le porte e continua dritto", target: "12" }
-          ]
-        },
-        "11": {
-          title: "11. Le Porte",
-          text: `Meglio provare con la Porta dalla Serratura di Rame? O con la Porta dalla Serratura d'Argento?`,
-          choices: [
-            { text: "Sblocca la Porta con Serratura d'Argento", target: "13" },
-            { text: "Sblocca la Porta con Serratura di Rame", target: "14" }
-          ]
-        },
-        "12": {
-          title: "12. Continuare",
-          text: `Finalmente raggiungi un incrocio a T. Ci sono dei segni scolpiti nella roccia. Una freccia punta a sinistra e dice <strong class="text-amber-400">“MORTI”</strong>. Un'altra indica la destra e dice <strong class="text-purple-400">“NONMORTI”</strong>. Che fare?`,
-          choices: [
-            { text: "Svolta a Sinistra (MORTI)", target: "16" },
-            { text: "Svolta a Destra (NONMORTI)", target: "16" }
-          ]
-        },
-        "13": {
-          title: "13. Argento",
-          text: `La Porta è chiusa a chiave. Devi continuare lungo il passaggio finché non trovi la Chiave d'Argento.`,
-          choices: [
-            { text: "Continua lungo il passaggio", target: "12" }
-          ]
-        },
-        "14": {
-          title: "14. Rame",
-          text: `Inserisci la Chiave di Rame nella serratura della porta di rame e prova ad aprirla...`
-        },
-        "14_unlocked": {
-          title: "14. Rame",
-          text: `La chiave entra nella serratura e funziona perfettamente. La porta si apre lentamente su una piccola stanza buia, vuota, eccetto che per un grande forziere. Quando il forziere viene aperto, rivela al proprio interno 8 Pezzi d'Oro e una bottiglia di Pozione. La bottiglia ha una grande croce rossa sopra. Che fare?<br><br>
-                 Prendere solo l'Oro e continuare lungo il corridoio? O bere anche la Pozione?`,
-          loot: {
-            gold: 8,
-            items: []
-          },
-          choices: [
-            { text: "Stappa la bottiglia di Pozione", target: "15" },
-            { text: "Prendi l'oro e continua lungo il corridoio", target: "12" }
-          ]
-        },
-        "15": {
-          title: "15. Pozione",
-          text: `Non appena la bottiglia viene stappata, un Genio appare (nuovamente). “Oh, perdonami”, dice. “Errore mio. Mi era sembrato di sentire qualcuno Chiamare Aiuto”.<br><br>
-                 Il nostro Eroe chiede al Genio se la Pozione è velenosa.<br>
-                 “Questo ti costerà”, risponde il Genio. “Dammi 8 Pezzi d'Oro e io ti dirò di cosa si tratta. OPPURE te lo dirò se riesci a indovinare il mio nome. Nessuna idea?<br><br>
-                 No? Allora me ne vado. Tornerò di nuovo se dovessi trovare un'altra campanella. Una con la scritta ‘Suonare Per Chiamare Aiuto’. Non toccare nessun altra campanella, mi raccomando. A presto.”<br><br>
-                 Che fare? Indovinare il nome del Genio, bere la Pozione o continuare lungo il corridoio?`,
-          input_riddle: {
-            correct_answer: "aiuto",
-            success: {
-              text: `Il Genio sorride! Riconoscendo che hai indovinato il suo nome (“Aiuto”), ti rivela il segreto: <em>si tratta di una Pozione dell'Incubo!</em> Prima di svanire, ti mette in guardia dal berla.`,
-              target: "15_choice_after_riddle"
-            },
-            failure: {
-              text: `Il Genio scuote la testa: “Non è questo il mio nome!” e svanisce nel nulla, lasciandoti con i tuoi dubbi.`,
-              target: "15_choice_after_riddle"
-            }
-          }
-        },
-        "15_choice_after_riddle": {
-          title: "15. Pozione (Decisione)",
-          text: `Il Genio è svanito. Ti trovi nella stanza con la bottiglia di Pozione aperta tra le mani. Che cosa decidi di fare?`,
-          choices: [
-            { text: "Non bere la Pozione e continua il cammino", target: "12" },
-            { text: "Bevi la Pozione", target: "15_drink" }
-          ]
-        },
-        "15_drink": {
-          title: "15. Bevi la Pozione",
-          text: `Il nostro Eroe comincia ad addormentarsi. Si sdraia a terra e si lascia cadere in un pesante sonno.<br><br>
-                 Presto inizia a sognare del suo grande amore, la bellissima principessa Arabella. Il nostro Eroe è andato all'Antica Videoteca e ha noleggiato una sfera di cristallo, per trascorrere la serata in casa assieme alla sua bella a guardare insieme uno dei loro programmi preferiti. Si tratta della storia di questi supereroi che sono sempre splendidi e mettono a posto i giardini più disordinati, i <em>Mighty Morphin’ Flower Arrangers</em>.<br><br>
-                 Comunque sia, qualcuno suona alla porta. Sarà di certo la bella Principessa, pensa il nostro Eroe, mentre si lancia verso la porta e la spalanca, con le braccia aperte per stringere a sé il suo unico amore. Aaargh! No! Non è la Principessa, ma un disgustoso Hobgoblin. Lo spavento fa svegliare di colpo il nostro eroe.. ed è allora che scopre che l'Hobgoblin non è un sogno!<br><br>
-                 La battaglia cominci! L'Hobgoblin ha 4 punti di Resistenza.`,
-          combat: {
-            enemy_name: "Hobgoblin",
-            enemy_stamina: 4
-          },
-          on_victory: {
-            text: `È meglio continuare lungo il passaggio.`,
-            choices: [
-              { text: "Prosegui lungo il corridoio", target: "12" }
-            ]
-          }
-        },
-        "16": {
-          title: "16. Zombi",
-          text: `Il passaggio conduce in un'ampia caverna, al centro della quale si trova un forziere di legno. Ci sono tre larghe pietre piatte che sporgono dal terreno oltre il forziere. Che fare?`,
-          choices: [
-            { text: "Fermarsi ad aprire il forziere", target: "17" },
-            { text: "Ignorare il forziere e proseguire", target: "18" }
-          ]
-        },
-        "17": {
-          title: "17. Aprire il Forziere",
-          text: `Dentro il forziere ci sono 7 Pezzi d'Oro, ma non appena il coperchio viene sollevato, il terreno inizia a tremare e franare tutto attorno. Di fronte alle pietre piatte, il suolo fangoso si sta muovendo. Sembra quasi come se una talpa stesse scavando un passaggio verso la superficie, finché questa si spacca e si apre. Ma non è una talpa quella che appare.. è una mano scheletrica!<br><br>
-                 Sotto gli occhi del nostro Eroe, tre Zombi in avanzato stato di decomposizione escono dalle proprie tombe e lo affrontano.<br><br>
-                 Bisogna combattere gli Zombi uno alla volta. Ciascuno di essi possiede 2 punti di Resistenza e un potere speciale detto Putrefazione. Se uno di loro colpisce tre volte il nostro Eroe prima di essere sconfitto, la sua carne inizierà a marcire ed egli si trasformerà a sua volta in uno Zombi privo di intelletto.<br><br>
-                 La battaglia cominci!`,
-          combat: {
-            enemy_name: "3 Zombi (uno alla volta)",
-            enemy_stamina: 2
-          },
-          on_victory: {
-            text: `Sconfitti i tre non-morti, la battaglia si conclude. Raccogli i 7 Pezzi d'Oro e prosegui verso l'uscita!`,
-            loot: {
-              gold: 7,
-              items: []
-            },
-            choices: [
-              { text: "Prosegui verso l'uscita", target: "18" }
-            ]
-          }
-        },
-        "18": {
-          title: "18. Vittoria!",
-          text: `Un passaggio ventoso lascia la caverna, lungo un percorso che normalmente condurrebbe il nostro Eroe ancora più addentro nella montagna. Ma i Nani che hanno scavato il passaggio hanno sentito che a noi rimane poco tempo per quest'avventura e, per tirarci fuori, hanno preparato una deviazione che conduce a una porta di legno. Accanto alla porta c'è un vecchio con una lunga barba, che intima al nostro Eroe di fermarsi.<br><br>
-                 “E così, vorresti abbandonare Pauroso?” ridacchia. “Lascia che mi presenti. Il mio nome è Alf. Sebbene non sia molto grande di taglia mi chiamano Grand Alf. Se vuoi passare attraverso questa porta dovrai prima darmi 6 Pezzi d'Oro. Altrimenti ho paura che non lascerai mai più il Monte Pauroso.”<br><br>
-                 Che fare? Pagarlo? Affrontarlo? Il vecchio non sembra molto forte, ma d'altra parte forse il nostro Eroe si sente generoso..`,
-          choices: [
-            { text: "Affronta e combatti Grand Alf", target: "19" },
-            { text: "Paga i 6 Pezzi d'Oro pretesi", target: "20" }
-          ]
-        },
-        "19": {
-          title: "19. Combattere",
-          text: `Grand Alf ha 18 punti di Resistenza e non c'è modo di sconfiggerlo. Egli è, in realtà, il Signore di Monte Pauroso. Il nostro Eroe è prigioniero per sempre nel suo dominio. Non fuggirà mai più..<br><br>
-                 <strong class="text-red-500 font-fantasy text-xl">Fine dell'Avventura (Sconfitta)</strong>`,
-          is_game_over: true,
-          choices: [
-            { text: "Ricomincia l'Avventura", target: "1", reset_game: true }
-          ]
-        },
-        "20": {
-          title: "20. Pagare",
-          text: `“Molte grazie, ragazzi!” Il vecchio apre la porta e il nostro Eroe può finalmente uscire. Ma prima che se ne vada, il mago parla un'ultima volta. “Puoi chiedermi ancora una cosa sull'avventura, se lo desideri. Come posso essere d'aiuto? Altrimenti, addio. Possa la tua Resistenza non scemare mai...”<br><br>
-                 <strong class="text-emerald-400 font-fantasy text-2xl">FINE DELL'AVVENTURA - VITTORIA!</strong>`,
-          gold_change: -6,
-          is_victory: true
-        }
+      greatsword: {
+        id: "greatsword",
+        name: "Spadone del Crociato",
+        trait: "Pesante (+1 Danno)",
+        encumbrance: "pesante",
+        damage_bonus: 1,
+        desc: "Spadone possente a due mani. Devastante nei fendenti, ma impedisce di nuotare o passare strettoie."
+      },
+      elven_rapier: {
+        id: "elven_rapier",
+        name: "Stocco Elfico delle Foglie",
+        trait: "Agile (Leggera)",
+        encumbrance: "leggera",
+        damage_bonus: 0,
+        desc: "Lama affilata ed elastica. Consente manovre acrobatiche e colpi di precisione."
+      },
+      dwarven_axe: {
+        id: "dwarven_axe",
+        name: "Ascia da Guerra dei Nani",
+        trait: "Brutale (+2 al Critico)",
+        encumbrance: "pesante",
+        damage_bonus: 0, // gestito con +2 su doppio 6
+        is_axe: true,
+        encumbrance: "pesante",
+        desc: "Una pesante scure in ferro di forgia profonda. Letale, ma ingombrante per il nuoto."
       }
     };
 
+    // GAME STATE
+    let characterCreation = {
+      gender: "M",
+      name: "Elyan",
+      avatar: "elyan"
+    };
+
     let gameState = {
+      hero_name: "Elyan",
+      gender: "M",
+      avatar: "elyan",
       stamina: 12,
       max_stamina: 12,
-      gold: 0,
+      gold: 5,
+      weapon: { ...WEAPONS.ranger_blade },
+      relics: [], // Reliquia I (Sigillo), Reliquia II (Prisma), Reliquia III (Egida)
+      has_elisir: false,
+      roland_saved: false,
       inventory: [],
       current_node: "1",
       current_enemy_stamina: 0
     };
 
-    // Desktop UI Elements
+    // Dice & Animation Globals
+    const diceIcons = ['', '⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+    let autoCombatTimer = null;
+
+    // ==========================================
+    // 34 STORY NODES - LE CRONACHE DI AETHELGARD
+    // ==========================================
+    const storyNodes = {
+      "1": {
+        title: "1. Ai Confini del Bosco d'Argento",
+        text: (p) => `Una pioggia sottile picchietta sulle foglie dorate del Bosco d'Argento. Sotto il mantello bruno da ramingo, ${p.name} osserva la sagoma tetra della <em>Rocca del Crepuscolo</em> ergersi contro i lampi dell'orizzonte.<br><br>
+                     Sono trascorsi cinque lunghi anni da quando il tiranno <strong>Malakor l'Ombromante</strong> assassinò il Re tuo padre, costringendoti all'esilio tra i boschi di frontiera. Ora, ventenne e temprat${p.o_a} dalle intemperie, sei tornat${p.o_a} per liberare Aethelgard.<br><br>
+                     Due vie si aprono davanti a te per raggiungere la cittadella: l'oscuro <strong>Sentiero dei Contrabbandieri</strong> celato tra rovi e nebbie d'acquitrino, oppure la <strong>Vecchia Strada Reale</strong> solcata dal fango e dalle torce delle ronde nemiche.`,
+        choices: [
+          { text: "Infiltrati nel Sentiero dei Contrabbandieri (Furtivo)", target: "2" },
+          { text: "Avanza lungo la Vecchia Strada Reale (Pattugliata)", target: "3" }
+        ]
+      },
+      "2": {
+        title: "2. Il Sentiero dei Contrabbandieri",
+        text: (p) => `Avanzi nell'ombra della boscaglia evitando con maestria rami spezzati e acquitrini. Il sentiero serpeggia fino a una scogliera calcarea alla base della rocca.<br><br>
+                     Il cammino si divide ai piedi del contrafforte: a sinistra, una fenditura nella roccia si spalanca verso le <strong>Grotte dei Sussurri</strong>, da cui spira un'aria gelida e salmastra; a destra, una vertiginosa gola è scavalcata da un cigolante <strong>Ponte Sospeso di Corda</strong> che punta dritto alle alture del borgo.`,
+        choices: [
+          { text: "Scendi nell'oscurità delle Grotte dei Sussurri", target: "4" },
+          { text: "Attraversa il Ponte Sospeso del Crepaccio", target: "5" }
+        ]
+      },
+      "3": {
+        title: "3. La Vecchia Strada Reale",
+        text: (p) => `Cammini calando il cappuccio sul volto, muovendoti tra le ombre dei pioppi che costeggiano l'antico lastricato imperiale. In lontananza brillano le torce di una pattuglia di mercenari al servizio di Malakor.<br><br>
+                     Proseguire lungo il lastricato significa marciare dritto contro il picchetto armato dei <strong>Guardiani Neri</strong>; al margine della carreggiata, l'insegna cigolante della <strong>Locanda del Cinghiale Cieco</strong> offre invece un riparo fumoso tra reietti e cospiratori.`,
+        choices: [
+          { text: "Affronta a viso aperto la pattuglia nemica", target: "6" },
+          { text: "Trova riparo nella Locanda del Cinghiale Cieco", target: "7" }
+        ]
+      },
+      "4": {
+        title: "4. Le Grotte dei Sussurri",
+        text: (p) => `L'aria sotterranea è intrisa di gocce d'acqua e riecheggia di strani sussurri magici. Avanzando con la torcia, scorgi un arco di pietra intagliato con l'emblema solare della tua stirpe: l'ingresso alla <strong>Cripta degli Antichi Sovrani</strong>.<br><br>
+                     Dall'altro lato della caverna, le acque nere di un torrente sotterraneo si inabissano in un <strong>Sifone Sommerso</strong>, le cui correnti sembrano condurre direttamente alla darsena inferiore della fortezza.`,
+        choices: [
+          { text: "Varca l'arco della Cripta degli Antichi Sovrani", target: "8" },
+          { 
+            text: "Nuota attraverso il Sifone Sommerso sotterraneo", 
+            target: "9",
+            require_light_weapon: true
+          }
+        ]
+      },
+      "5": {
+        title: "5. Il Ponte Sospeso del Crepaccio",
+        text: (p) => `Le assi di legno del ponte scricchiolano lugubremente sopra un precipizio senza fondo. Il vento montano sibila tra le corde consunte.<br><br>
+                     I canapi logori oscillano minacciosamente nel vuoto. Più in basso, una cengia rocciosa sembra aggirare il baratro discendendo verso un piccolo <strong>Rifugio scavato nella pietra</strong>, avvolto da cespugli di erbe medicinali.`,
+        choices: [
+          { text: "Attraversa di corsa il ponte oscillante", target: "10" },
+          { text: "Scendi lungo la cengia verso il Rifugio tra le rocce", target: "11" }
+        ]
+      },
+      "6": {
+        title: "6. Agguato dei Guardiani Neri",
+        text: (p) => `«Chi va là? Fermati e deponi le armi nel nome dell'Ombromante!»<br><br>
+                     Due soldati in armatura scura sguainano le spade corte e ti sbarrano la strada. I loro sguardi sono vitrei, asserviti alla volontà oscura di Malakor. I dardi delle loro balestre sono incoccati e puntati al tuo petto a bruciapelo.`,
+        choices: [
+          { text: "Estrai la spada e combatti i Guardiani Neri!", target: "6_combat" },
+          { text: "Getta la spada e arrenditi confidando nella clemenza", target: "12" }
+        ]
+      },
+      "6_combat": {
+        title: "6. Duello con i Guardiani Neri",
+        text: (p) => `Schivi d'istinto il primo dardo che si conficca nel tronco alle tue spalle e ti lanci all'attacco a spada sguainata!`,
+        combat: {
+          enemy_name: "Pattuglia dei Guardiani Neri",
+          enemy_stamina: 3
+        },
+        on_victory: {
+          text: (p) => `Con un affondo preciso spezzi la guardia dei due soldati, che crollano a terra privi di sensi. Frugando tra i loro equipaggiamenti trovi <strong>6 Monete d'Oro</strong> e l'imponente <strong>Spadone del Crociato</strong> abbandonato dal capitano.<br><br>Davanti a te la strada prosegue verso le forche dei bastioni.`,
+          loot: {
+            gold: 6,
+            items: [],
+            weapon: "greatsword"
+          },
+          target: "13"
+        }
+      },
+      "7": {
+        title: "7. La Locanda del Cinghiale Cieco",
+        text: (p) => `La porta di legno massiccio cigola mentre entri nella locanda. Tra l'odore di spezzatino e birra rancida, contadini impauriti siedono a testa bassa sotto gli occhi di guardie ubriache.<br><br>
+                     In un angolo, un vecchio cantastorie cieco pizzica un liuto intonando strofe clandestine sulla dinastia caduta. Lo sguardo cieco del bardo si volge verso di te intuendo la tua stirpe, mentre dall'altro capo della sala un caporale nemico rovescia la panca sguainando il ferro con un grido d'allarme!`,
+        choices: [
+          { text: "Avvicinati al Bardo Ribelle e ascolta il suo messaggio", target: "14" },
+          { text: "Balza sui tavoli e fuggi attraverso la finestra sui tetti", target: "15" }
+        ]
+      },
+      "8": {
+        title: "8. Cripta degli Antichi Sovrani",
+        text: (p) => `Polvere e silenzio regnano in questa maestosa sala sepolcrale. Al centro, sopra il sarcofago del Reale Fondatore, splende incontaminato il <strong>Sigillo dei Sovrani</strong>, anello d'oro puro intarsiato con rubini dell'Alba.<br><br>
+                     Quando indossi l'anello, senti il calore degli antenati scorrere nelle tue vene (Recuperi +3 PF). Sul retro della cripta, un passaggio segreto tra le radici giganti porta verso i sotterranei della Rocca.`,
+        loot: {
+          gold: 4,
+          relic: "Sigillo dei Sovrani",
+          heal: 3
+        },
+        choices: [
+          { text: "Avanza nel Portale delle Radici Arcane", target: "16" }
+        ]
+      },
+      "9": {
+        title: "9. Sifone Sommerso",
+        text: (p) => `L'acqua è gelida come ghiaccio fuso. Trattieni il respiro e ti immergi nella condotta allagata. Grazie all'agilità del tuo equipaggiamento, nuoti tra le alghe sotterranee fino a riemergere con un colpo di reni in una grotta illuminata da fiaccole: sei entrat${p.o_a} nella <strong>Darsena Sotterranea</strong> della Rocca!`,
+        choices: [
+          { text: "Arrampicati sui pontili della Darsena", target: "17" }
+        ]
+      },
+      "10": {
+        title: "10. Il Tracollo del Ponte",
+        text: (p) => `Le funi centrali, corrose dal tempo e dall'umidità, cedono di colpo sotto il tuo peso. Con uno strappo terrificante il ponte si spezza a metà!<br><br>
+                     Cerchi disperatamente un appiglio, ma la roccia umida scivola via tra le tue dita mentre precipiti nell'abisso senza fine del crepaccio...<br><br>
+                     <strong class="text-red-500 font-fantasy text-xl">Fine dell'Impresa (Caduta Fatale)</strong>`,
+        is_game_over: true,
+        choices: [
+          { text: "Ricarica Ultimo Salvataggio", load_game: true },
+          { text: "Ricomincia dall'Inizio", target: "1", reset_game: true }
+        ]
+      },
+      "11": {
+        title: "11. Il Rifugio dell'Eremita Erborista",
+        text: (p) => `Scendendo lungo la cengia rocciosa raggiungi una caverna riscaldata da un piccolo braciere profumato d'incenso e salvia selvatica. Un vecchio speziale dalla barba nivea alza lo sguardo su di te.<br><br>
+                     «Ti aspettavo, erede d'Aethelgard,» sussurra con voce commossa. «Malakor tiene il tuo compagno d'infanzia, <strong>Roland</strong>, prigioniero di una maledizione mentale: il <em>Sigillo Notturno</em>. Se lo incontrerai nel palazzo egli ti attaccherà come un nemico mortale! Prendi questa fiala: è l'<strong>Elisir Spezzaincanto</strong>. Soltanto infrangendola su di lui potrai risvegliare la sua vera anima!»<br><br>
+                     Custodisci con cura l'Elisir e prendi il sentiero protetto che risale verso le radici della fortezza.`,
+        loot: {
+          items: ["Elisir Spezzaincanto"],
+          is_elisir: true
+        },
+        choices: [
+          { text: "Ringrazia l'Eremita e prosegui verso il Portale delle Radici", target: "16" }
+        ]
+      },
+      "12": {
+        title: "12. Prigioniero alle Gole",
+        text: (p) => `Circondat${p.o_a} dai rinforzi nemici, deponi le armi sperando nella clemenza. Ma i servi di Malakor non conoscono pietà: vieni trascinat${p.o_a} nelle segrete più oscure e giustiziat${p.o_a} all'alba.<br><br>
+                     <strong class="text-red-500 font-fantasy text-xl">Fine dell'Impresa (Catturato)</strong>`,
+        is_game_over: true,
+        choices: [
+          { text: "Ricarica Ultimo Salvataggio", load_game: true },
+          { text: "Ricomincia dall'Inizio", target: "1", reset_game: true }
+        ]
+      },
+      "13": {
+        title: "13. Spoglie del Capitano",
+        text: (p) => `Rifletti sull'arma appena raccolta. Lo <strong>Spadone del Crociato</strong> offre colpi devastanti in mischia, ma il suo peso imponente ti impedirà di nuotare agilmente o strisciare in cunicoli stretti.<br><br>
+                     Davanti a te il cammino sale verso il <strong>Passaggio delle Forche</strong>, che costeggia i bastioni della rocca.`,
+        choices: [
+          { text: "Avanza verso il Passaggio delle Forche", target: "18" }
+        ]
+      },
+      "14": {
+        title: "14. L'Enigma del Bardo Ribelle",
+        text: (p) => `Il cantastorie ti afferra il braccio mentre le guardie avanzano rovesciando sedie: «Ascoltami, mio erede! Per aprire la grata segreta delle fogne devi conoscere la parola d'ordine che solo i figli d'Aethelgard ricordano:<br><br>
+                     <div class="p-3.5 bg-black/60 border border-amber-600/80 rounded-xl italic text-amber-200 text-center text-sm sm:text-base">
+                       “Non ha voce ma parla nei canti,<br>
+                       risplende nell'oro e nei cuori costanti.<br>
+                       Caccia le ombre che coprono il mondo,<br>
+                       chi è la signora del giorno giocondo?”
+                     </div><br>
+                     Pronuncia la parola che spezza il silenzio:`,
+        input_riddle: {
+          correct_answer: "luce",
+          alt_answers: ["la luce", "sole", "il sole", "aurora", "alba", "l'alba"],
+          success: {
+            text: `«Esatto! La Luce d'Alba!» esclama il bardo. Ti infila in mano una chiave di ferro e tira una leva dietro il bancone: una botola si apre sotto i tuoi piedi conducendoti direttamente nel <strong>Canale di Scolo</strong> della fortezza!`,
+            target: "19"
+          },
+          failure: {
+            text: `«No, non è questa la risposta!» Il tempo stringe: le guardie ti piombano addosso rovesciando boccali. Non ti resta che sfondare la finestra sul retro e arrampicarti sui tetti del borgo!`,
+            target: "15"
+          }
+        }
+      },
+      "15": {
+        title: "15. Fuga sui Tetti del Borgo",
+        text: (p) => `Con un balzo scavalchi la grondaia e corri sulle tegole umide mentre i dardi delle balestre fischiano a pochi centimetri dal tuo mantello. Scivolando lungo un cavo di carrucola atterri su un bastione secondario: sei giunt${p.o_a} al <strong>Passaggio delle Forche</strong>.`,
+        choices: [
+          { text: "Avanza con cautela verso i Bastioni", target: "18" }
+        ]
+      },
+      "16": {
+        title: "16. Portale delle Radici Arcane",
+        text: (p) => `Seguendo le immense radici di quercia che sostengono le fondamenta della fortezza, giungi a una terrazza coperta da rovi di rosa nera e brina magica. Sei entrat${p.o_a} nei <strong>Giardini d'Inverno</strong> di Malakor, un luogo corrotto dove le ombre prendono forma vivente.`,
+        choices: [
+          { text: "Avanza con la spada sguainata tra le siepi ghiacciate", target: "20" }
+        ]
+      },
+      "17": {
+        title: "17. Darsena Sotterranea",
+        text: (p) => `Sgattaioli fuori dall'acqua tra barili di pece e remi spezzati. Due sentinelle distratte giocano a dadi poco lontano. Oltrepassandole con passo felpato, raggiungi una scala a chiocciola che sale verso le <strong>Prigioni</strong> della fortezza.`,
+        choices: [
+          { text: "Sali verso le Prigioni della Fortezza", target: "21" }
+        ]
+      },
+      "18": {
+        title: "18. Il Passaggio delle Forche",
+        text: (p) => `Ti trovi su un camminamento sospeso sui bastioni orientali. Davanti a te si trova un passaggio strettissimo tra le merlature crollate. Se indossi un'arma troppo ingombrante, il passaggio è impraticabile e dovrai attirare l'attenzione sui parapetti; se sei agile, passi inosservat${p.o_a} verso il cortile del Grande Salone.`,
+        choices: [
+          { 
+            text: "Infiltrati nella stretta fessura tra le merlature (Furtivo)", 
+            target: "25",
+            require_light_weapon: true
+          },
+          { text: "Affronta il camminamento principale del Bastione Esterno", target: "22" }
+        ]
+      },
+      "19": {
+        title: "19. Canale di Scolo della Fortezza",
+        text: (p) => `Avanzi nell'acqua melmosa usando la chiave del bardo per sbloccare la pesante grata di scarico. Con uno sforzo sollevi una botola arrugginita che conduce all'interno delle <strong>Prigioni</strong> sotterranee.`,
+        choices: [
+          { text: "Entra nelle Prigioni della Fortezza", target: "21" }
+        ]
+      },
+      "20": {
+        title: "20. I Giardini d'Inverno Infestati",
+        text: (p) => `Dalle siepi gelide emerge una sagoma mostruosa: è una <strong>Bestia d'Ombra</strong>, un mastino con zanne di fiamme viola ed occhi privi di pupilla creato dalla stregoneria di Malakor. Ruggisce rabbioso e balza all'attacco!`,
+        combat: {
+          enemy_name: "Bestia d'Ombra Mutata",
+          enemy_stamina: 3
+        },
+        on_victory: {
+          text: (p) => `Con un fendente deciso trafiggi il cuore d'ombra della creatura, che si dissolve in fumo acre. Oltre le siepi scorgi un padiglione di cristallo intatto: il <strong>Santuario del Vetro</strong>.`,
+          target: "23"
+        }
+      },
+      "21": {
+        title: "21. Prigioni della Fortezza",
+        text: (p) => `Le celle sono piene di vecchi soldati fedeli alla dinastia caduta. Con una sbarra di ferro scardini le serrature liberandoli: i veterani ti riconoscono subito e si inginocchiano in lacrime.<br><br>
+                     Il loro capitano ti consegna la <strong>Chiave dell'Armeria Reale</strong> e ti indica una via d'accesso al piano superiore prima di organizzare la rivolta nelle caserme.`,
+        loot: {
+          gold: 5,
+          items: ["Chiave dell'Armeria"]
+        },
+        choices: [
+          { text: "Apri l'Armeria Reale Sigillata", target: "24" },
+          { text: "Sali direttamente verso il Grande Salone", target: "25" }
+        ]
+      },
+      "22": {
+        title: "22. Bastione Esterno",
+        text: (p) => `Mentre avanzi sui bastioni, una delle statue di pietra sui cornicioni prende vita con uno stridore agghiacciante: è un <strong>Gargoyle di Malakor</strong> con ali di roccia e artigli affilati!`,
+        combat: {
+          enemy_name: "Gargoyle Alato di Roccia",
+          enemy_stamina: 3
+        },
+        on_victory: {
+          text: (p) => `Il mostro di pietra si frantuma al suolo in mille schegge. La porta posteriore del bastione ti conduce direttamente nel <strong>Grande Salone</strong>.`,
+          target: "25"
+        }
+      },
+      "23": {
+        title: "23. Santuario del Vetro",
+        text: (p) => `All'interno del padiglione di cristallo, immune alla corruzione della nebbia oscura, riposa sopra un altare d'ebano la seconda Reliquia Ancestrale: il <strong>Prisma di Stella</strong>.<br><br>
+                     Quando lo raccogli, una luce calda pervade la tua mente, scacciando la fatica (Recuperi +4 PF). Ora non ti resta che varcare il portale dorato che conduce al Salone del Trono!`,
+        loot: {
+          relic: "Prisma di Stella",
+          heal: 4
+        },
+        choices: [
+          { text: "Varca le doppie porte verso il Salone del Trono", target: "26" }
+        ]
+      },
+      "24": {
+        title: "24. L'Armeria Reale Sigillata",
+        text: (p) => `La chiave gira perfettamente nella toppa di bronzo. L'armeria contiene le armi leggendarie dei Re dell'Alba. Sopra un piedistallo d'argento brilla la terza Reliquia Ancestrale: l'<strong>Egida d'Argento</strong>, scudo ancestrale indistruttibile.<br><br>
+                     Inoltre trovi lo <strong>Stocco Elfico delle Foglie</strong> e l'<strong>Ascia da Guerra dei Nani</strong>. Puoi decidere quale arma impugnare per la battaglia imminente!`,
+        loot: {
+          relic: "Egida d'Argento",
+          weapon_options: ["elven_rapier", "dwarven_axe"]
+        },
+        choices: [
+          { text: "Avanza verso il Salone del Trono", target: "26" }
+        ]
+      },
+      "25": {
+        title: "25. Il Grande Salone delle Guardie",
+        text: (p) => `Attraversi i corridoi affrescati dove un tempo suonavano le arpe dei Re. Gli arazzi sono strappati e le guardie corrotte dormono o fuggono udendo i clamori della rivolta che divampa dal basso.<br><br>
+                     Di fronte a te si stagliano le imponenti porte di ferro nero che aprono la sala del trono.`,
+        choices: [
+          { text: "Spalanca le porte del Salone del Trono d'Ossidiana", target: "26" }
+        ]
+      },
+      "26": {
+        title: "26. Il Salone del Trono: Roland il Campione Corrotto",
+        text: (p) => `Spalanchi le porte. Nel vasto salone colonnato, ai piedi del Trono d'Ossidiana avvolto da spire di nebbia nera, si staglia un guerriero in armatura scintillante con la spada sguainata.<br><br>
+                     Il tuo cuore ha un sussulto: è <strong>Roland</strong>, il tuo compagno d'infanzia, l'amico più fraterno con cui sei cresciut${p.o_a}! Ma i suoi occhi sono velati da un bagliore violaceo spettrale: sulla sua fronte pulsa il marchio del <em>Sigillo Notturno</em>.<br><br>
+                     «Fermati, intruso!» proclama Roland con voce roca e disumana. «Nessuno può sfidare il volere di Malakor!»`,
+        has_friend_encounter: true
+      },
+      "27": {
+        title: "27. Roland Liberato dal Sortilegio!",
+        text: (p) => `Con uno scatto fulmineo schivi il suo fendente e gli scagli sul petto l'<strong>Elisir Spezzaincanto</strong>! La fiala si infrange in una vampa di luce argentea.<br><br>
+                     Roland emette un grido straziante mentre il marchio nero sulla fronte si dissolve in fumo bianco. Cade in ginocchio, respirando a fatica... poi alza lo sguardo verso di te. Gli occhi grigi sono tornati limpidi.<br><br>
+                     «${p.name}... sei davvero tu?» mormora con voce tremante, stringendoti l'avambraccio. «Che cosa ho fatto in questi anni bui...? Malakor è oltre quel portale, nella Torre Alta. Permettimi di combattere al tuo fianco per riparare ai miei peccati!»`,
+        friend_saved: true,
+        choices: [
+          { text: "Avanza fianco a fianco con Roland verso lo Scontro Finale", target: "29" }
+        ]
+      },
+      "28": {
+        title: "28. La Caduta di Roland",
+        text: (p) => `Non possiedi l'Elisir per spezzare il sortilegio oscuro. Roland ti attacca a testa bassa, con furia cieca alimentata dalla magia nera. Non hai scelta: devi difenderti con la spada per non morire!`,
+        combat: {
+          enemy_name: "Roland (Asservito dall'Ombra)",
+          enemy_stamina: 3
+        },
+        on_victory: {
+          text: (p) => `La tua lama trafigge il suo fianco. Roland crolla al suolo. Con il colpo mortale, la nebbia purpurea svanisce dai suoi occhi. «${p.name}... perdonami... ti ho riconosciuto... troppo tardi...» sussurra con un filo di voce prima di spirare tra le tue braccia.<br><br>
+                       Con il cuore straziato dal dolore e le lacrime agli occhi, ti rialzi. Ora non c'è pietà: Malakor pagherà per ogni vita spezzata!`,
+          target: "30"
+        }
+      },
+      "29": {
+        title: "29. Duello Finale: Malakor l'Ombromante (con Roland)",
+        text: (p) => `Varcate la terrazza sommitale. Al centro di un vortice di tempesta fluttua <strong>Malakor l'Ombromante</strong>, avvolto da vesti di fumo nero e con il bastone sormontato da un teschio di drago.<br><br>
+                     «Maledetti ribelli!» urla lo stregone scagliando dardi d'ombra. Ma Roland para un colpo col suo scudo dandoti spazio per l'assalto: insieme siete invincibili!`,
+        combat: {
+          enemy_name: "Malakor l'Ombromante",
+          enemy_stamina: 4,
+          hero_buff: true
+        },
+        on_victory: {
+          text: (p) => `Unendo le vostre forze, la tua lama fende il petto del mago oscuro mentre il suo bastone si spezza in mille frammenti incandescenti. Malakor si dissolve in un urlo d'agonia disperso dal vento dell'Alba!`,
+          check_true_ending: true
+        }
+      },
+      "30": {
+        title: "30. Duello Finale: Malakor l'Ombromante (da Solo)",
+        text: (p) => `Varchi da sol${p.o_a} la terrazza sommitale, con la spada lorda del sangue del tuo migliore amico e il cuore colmo d'ira. Malakor ridacchia dall'alto del suo vortice oscuro:<br><br>
+                     «Hai dovuto uccidere il tuo cavaliere più fedele con le tue stesse mani! Sei solo, ultimo rampollo di una stirpe estinta!»<br><br>
+                     «Non sono sol${p.o_a},» ribatti con voce d'acciaio. «Tutta Aethelgard combatte con me!»`,
+        combat: {
+          enemy_name: "Malakor l'Ombromante",
+          enemy_stamina: 4
+        },
+        on_victory: {
+          text: (p) => `Con un affondo disperato guidato dalla memoria di tuo padre e di Roland, trafiggi il cuore corrotto dello stregone. Malakor si disintegra in cenere mentre le nubi scure si diradano.`,
+          target: "33"
+        }
+      },
+      "31": {
+        title: "31. IL RINASCIMENTO DI AETHELGARD (FINALE OTTIMO)",
+        text: (p) => `<div class="p-4 bg-amber-950/40 border-2 border-amber-500 rounded-2xl text-center space-y-4 shadow-2xl">
+                       <span class="text-4xl">👑</span>
+                       <h2 class="font-title text-2xl sm:text-3xl text-amber-300 font-bold">LA LUCE DELL'ALBA RISORGE</h2>
+                       <p class="text-sm sm:text-base text-amber-100 leading-relaxed italic">
+                         Hai compiuto l'impresa più grande mai cantata dai bardi. Roland è al tuo fianco, salvo e redento; tutte e tre le Reliquie Ancestrali dell'Alba (il Sigillo dei Sovrani, il Prisma di Stella e l'Egida d'Argento) brillano all'unisono sul trono reale, purificando la terra da ogni traccia di corruzione.
+                       </p>
+                       <p class="text-sm sm:text-base text-emerald-300 font-semibold">
+                         Il popolo di Aethelgard accorre acclamando ${p.title} ${p.name}! Roland viene nominato Primo Guardiano del Reame, e sotto la tua guida saggia e valorosa ha inizio una nuova, splendida Età dell'Oro.
+                       </p>
+                       <div class="pt-3 border-t border-amber-900/60 font-fantasy text-amber-400 text-lg">
+                         ✨ VITTORIA LEGGENDARIA - VERO FINALE RAGGIUNTO ✨
+                       </div>
+                       <p class="text-xs text-amber-300/80 italic mt-3 pt-2 border-t border-amber-900/40">
+                         Hai raggiunto uno dei finali possibili! Puoi rigiocare compiendo scelte differenti per scoprire gli altri due finali alternativi della storia.
+                       </p>
+                     </div>`,
+        is_victory: true,
+        choices: [
+          { text: "Ritorna al Menu Principale", to_menu: true }
+        ]
+      },
+      "32": {
+        title: "32. L'Alba della Ricostruzione (Finale Buono II)",
+        text: (p) => `<div class="p-4 bg-emerald-950/30 border border-emerald-600 rounded-2xl text-center space-y-4">
+                       <span class="text-4xl">🕊️</span>
+                       <h2 class="font-title text-2xl text-emerald-300 font-bold">LA PACE RITROVATA</h2>
+                       <p class="text-sm sm:text-base text-amber-100 leading-relaxed italic">
+                         Malakor è stato distrutto per sempre e il tuo fedele amico Roland è salvo al tuo fianco. Anche se non tutte le antiche Reliquie dei Re sono state recuperate, la tirannia è spezzata.
+                       </p>
+                       <p class="text-sm sm:text-base text-amber-200">
+                         Insieme a Roland e ai capitani ribelli inizi la grande opera di ricostruzione di Aethelgard. Ci vorranno anni di fatiche, ma la libertà è tornata a fiorire nei cuori della gente.
+                       </p>
+                       <div class="pt-3 border-t border-emerald-900/60 font-fantasy text-emerald-400">
+                         🌟 FINALE POSITIVO RAGGIUNTO 🌟
+                       </div>
+                       <p class="text-xs text-amber-300/80 italic mt-3 pt-2 border-t border-amber-900/40">
+                         Hai raggiunto uno dei finali possibili! Puoi rigiocare compiendo scelte differenti per scoprire gli altri due finali alternativi della storia.
+                       </p>
+                     </div>`,
+        is_victory: true,
+        choices: [
+          { text: "Ritorna al Menu Principale", to_menu: true }
+        ]
+      },
+      "33": {
+        title: "33. Il Trono Solitario (Finale Buono I)",
+        text: (p) => `<div class="p-4 bg-blue-950/30 border border-blue-700 rounded-2xl text-center space-y-4">
+                       <span class="text-4xl">⚔️</span>
+                       <h2 class="font-title text-2xl text-blue-300 font-bold">IL TRIONFO AMARO</h2>
+                       <p class="text-sm sm:text-base text-amber-100 leading-relaxed italic">
+                         La campana della cattedrale suona a festa: Aethelgard è libera dal giogo di Malakor l'Ombromante. Sali i gradini del trono paterno mentre la folla applaude in festa.
+                       </p>
+                       <p class="text-sm sm:text-base text-amber-200/90">
+                         Eppure, il tuo sguardo rimane fisso sulla spada d'ordinanza posata accanto allo scettro: l'arma di Roland, caduto per tua mano sotto l'incantesimo del mago. Governerai con saggezza e rettitudine, ma il tuo cuore porterà per sempre il peso del sacrificio.
+                       </p>
+                       <div class="pt-3 border-t border-blue-900/60 font-fantasy text-blue-300">
+                         🛡️ FINALE AMARO CONSEGUITO 🛡️
+                       </div>
+                       <p class="text-xs text-amber-300/80 italic mt-3 pt-2 border-t border-amber-900/40">
+                         Hai raggiunto uno dei finali possibili! Puoi rigiocare compiendo scelte differenti per scoprire gli altri due finali alternativi della storia.
+                       </p>
+                     </div>`,
+        is_victory: true,
+        choices: [
+          { text: "Ritorna al Menu Principale", to_menu: true }
+        ]
+      },
+      "34": {
+        title: "34. Caduto in Battaglia",
+        text: (p) => `<div class="text-center space-y-3">
+                       <span class="text-4xl">💀</span>
+                       <h3 class="font-fantasy text-2xl text-red-400">La Tua Resistenza è Scaduta</h3>
+                       <p class="text-sm sm:text-base text-amber-200/90 leading-relaxed">
+                         Le tue forze ti abbandonano mentre crolli sul freddo suolo di pietra. L'eco dei tuoi passi si spegne nell'oscurità e il destino di Aethelgard resta avvolto nelle ombre di Malakor...
+                       </p>
+                     </div>`,
+        is_game_over: true,
+        choices: [
+          { text: "Ricarica Ultimo Salvataggio", load_game: true },
+          { text: "Ricomincia l'Avventura", target: "1", reset_game: true }
+        ]
+      }
+    };
+
+    // Pronouns & Titles Helper
+    function getPronouns(state) {
+      const g = state.gender || "M";
+      const name = state.hero_name || (g === 'F' ? 'Elysia' : (g === 'NB' ? 'Elen' : 'Elyan'));
+      return {
+        name: name,
+        title: g === 'F' ? 'la Regina' : (g === 'NB' ? "l'Erede Sovrano" : 'il Re'),
+        sub_title: g === 'F' ? "Principessa d'Aethelgard" : (g === 'NB' ? "Erede d'Aethelgard" : "Principe d'Aethelgard"),
+        o_a: g === 'F' ? 'a' : (g === 'NB' ? 'ə' : 'o'),
+        egli_ella: g === 'F' ? 'ella' : (g === 'NB' ? 'essa' : 'egli')
+      };
+    }
+
+    // UI Elements
+    const viewMainMenu = document.getElementById('view-main-menu');
+    const viewCharCreation = document.getElementById('view-character-creation');
+    const viewGameplay = document.getElementById('view-gameplay');
+    
+    const charNameInput = document.getElementById('char-name-input');
+    const btnMenuContinue = document.getElementById('btn-menu-continue');
+    const menuSavePreview = document.getElementById('menu-save-preview');
+
+    const desktopAvatarSlot = document.getElementById('desktop-avatar-slot');
+    const drawerAvatarSlot = document.getElementById('drawer-avatar-slot');
+    const desktopHeroName = document.getElementById('desktop-hero-name');
+    const desktopHeroTitle = document.getElementById('desktop-hero-title');
+    const drawerHeroName = document.getElementById('drawer-hero-name');
+    const drawerHeroTitle = document.getElementById('drawer-hero-title');
+
     const staminaText = document.getElementById('stamina-text');
     const staminaBar = document.getElementById('stamina-bar');
     const goldValue = document.getElementById('gold-value');
     const inventoryList = document.getElementById('inventory-list');
     const desktopItemCount = document.getElementById('desktop-item-count');
-    
-    // Mobile HUD Elements
+    const desktopRelicsList = document.getElementById('desktop-relics-list');
+    const drawerRelicsList = document.getElementById('drawer-relics-list');
+
+    const desktopWeaponName = document.getElementById('desktop-weapon-name');
+    const desktopWeaponTrait = document.getElementById('desktop-weapon-trait');
+    const desktopWeaponDesc = document.getElementById('desktop-weapon-desc');
+    const drawerWeaponName = document.getElementById('drawer-weapon-name');
+    const drawerWeaponTrait = document.getElementById('drawer-weapon-trait');
+
     const mobileStaminaText = document.getElementById('mobile-stamina-text');
     const mobileStaminaBar = document.getElementById('mobile-stamina-bar');
     const mobileGoldValue = document.getElementById('mobile-gold-value');
     const mobileBackpackBadge = document.getElementById('mobile-backpack-badge');
 
-    // Mobile Drawer Elements
     const mobileHeroDrawer = document.getElementById('mobile-hero-drawer');
     const drawerStaminaText = document.getElementById('drawer-stamina-text');
     const drawerStaminaBar = document.getElementById('drawer-stamina-bar');
     const drawerGoldValue = document.getElementById('drawer-gold-value');
     const drawerInventoryList = document.getElementById('drawer-inventory-list');
     const drawerItemCount = document.getElementById('drawer-item-count');
-    
-    // Story & Interaction Elements
+
     const storySection = document.getElementById('story-section');
     const nodeTitle = document.getElementById('node-title');
     const nodeText = document.getElementById('node-text');
     const choicesContainer = document.getElementById('choices-container');
-    
+
     const lootBox = document.getElementById('loot-box');
     const lootButtons = document.getElementById('loot-buttons');
 
@@ -768,16 +1191,192 @@
     const enemyStamina = document.getElementById('enemy-stamina');
     const combatLog = document.getElementById('combat-log');
     const diceIcon = document.getElementById('dice-icon');
-    
+
     const riddleBox = document.getElementById('riddle-box');
     const riddleInput = document.getElementById('riddle-input');
 
-    // Modal Elements
     const fantasyModal = document.getElementById('fantasy-modal');
     const modalTitle = document.getElementById('modal-title');
     const modalBody = document.getElementById('modal-body');
     const modalBtn = document.getElementById('modal-btn');
 
+    // ==========================================
+    // NAVIGATION & VIEW CONTROLS
+    // ==========================================
+    function checkExistingSave() {
+      const saved = localStorage.getItem('aethelgard_save');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          btnMenuContinue.disabled = false;
+          menuSavePreview.classList.remove('hidden');
+          menuSavePreview.innerHTML = `Partita salvata: <strong>${parsed.hero_name}</strong> • Paragrafo ${parsed.current_node} • HP: ${parsed.stamina}/${parsed.max_stamina} • Oro: ${parsed.gold}`;
+        } catch(e) {
+          btnMenuContinue.disabled = true;
+        }
+      } else {
+        btnMenuContinue.disabled = true;
+        menuSavePreview.classList.add('hidden');
+      }
+    }
+
+    function startNewGameFlow() {
+      viewMainMenu.classList.add('hidden');
+      viewCharCreation.classList.remove('hidden');
+      viewGameplay.classList.add('hidden');
+      selectGender('M');
+    }
+
+    function backToMainMenu() {
+      viewCharCreation.classList.add('hidden');
+      viewGameplay.classList.add('hidden');
+      viewMainMenu.classList.remove('hidden');
+      checkExistingSave();
+    }
+
+    function returnToMainMenuFromGame() {
+      stopAutoCombat();
+      viewGameplay.classList.add('hidden');
+      viewCharCreation.classList.add('hidden');
+      viewMainMenu.classList.remove('hidden');
+      checkExistingSave();
+    }
+
+    function selectGender(gender) {
+      characterCreation.gender = gender;
+      
+      document.querySelectorAll('.gender-card').forEach(c => {
+        c.classList.remove('border-amber-400', 'bg-amber-950/40');
+      });
+      const selectedBtn = document.getElementById(`gender-btn-${gender}`);
+      if (selectedBtn) {
+        selectedBtn.classList.add('border-amber-400', 'bg-amber-950/40');
+      }
+
+      if (gender === 'M') {
+        characterCreation.name = "Elyan";
+        characterCreation.avatar = "elyan";
+        charNameInput.value = "Elyan";
+      } else if (gender === 'F') {
+        characterCreation.name = "Elysia";
+        characterCreation.avatar = "elysia";
+        charNameInput.value = "Elysia";
+      } else {
+        characterCreation.name = "Elen";
+        characterCreation.avatar = "elen";
+        charNameInput.value = "Elen";
+      }
+
+      selectAvatar(characterCreation.avatar);
+    }
+
+    function selectAvatar(avatarKey) {
+      characterCreation.avatar = avatarKey;
+      document.querySelectorAll('.avatar-card').forEach(c => {
+        c.classList.remove('border-amber-400', 'bg-amber-950/50');
+        c.classList.add('border-transparent');
+      });
+      const selCard = document.getElementById(`avatar-card-${avatarKey}`);
+      if (selCard) {
+        selCard.classList.remove('border-transparent');
+        selCard.classList.add('border-amber-400', 'bg-amber-950/50');
+      }
+    }
+
+    function confirmCharacterAndStart() {
+      const chosenName = charNameInput.value.trim() || characterCreation.name;
+      
+      gameState = {
+        hero_name: chosenName,
+        gender: characterCreation.gender,
+        avatar: characterCreation.avatar,
+        stamina: 12,
+        max_stamina: 12,
+        gold: 5,
+        weapon: { ...WEAPONS.ranger_blade },
+        relics: [],
+        has_elisir: false,
+        roland_saved: false,
+        inventory: ["Mappa delle Terre d'Ombra", "Corda da Viaggio"],
+        current_node: "1",
+        current_enemy_stamina: 0
+      };
+
+      viewCharCreation.classList.add('hidden');
+      viewMainMenu.classList.add('hidden');
+      viewGameplay.classList.remove('hidden');
+
+      updateCharacterPresentation();
+      updateUI();
+      goToNode("1");
+      saveGameAuto();
+    }
+
+    function updateCharacterPresentation() {
+      const pronouns = getPronouns(gameState);
+      desktopHeroName.textContent = pronouns.name;
+      desktopHeroTitle.textContent = pronouns.sub_title;
+      drawerHeroName.textContent = pronouns.name;
+      drawerHeroTitle.textContent = pronouns.sub_title;
+
+      const avatarSvg = AVATARS[gameState.avatar] || AVATARS.elyan;
+      desktopAvatarSlot.innerHTML = avatarSvg;
+      drawerAvatarSlot.innerHTML = avatarSvg;
+    }
+
+    // ==========================================
+    // SAVE & LOAD LOGIC
+    // ==========================================
+    function saveGameAuto() {
+      try {
+        localStorage.setItem('aethelgard_save', JSON.stringify(gameState));
+      } catch(e) {
+        console.error("Auto-save fallito:", e);
+      }
+    }
+
+    function manualSaveGame() {
+      saveGameAuto();
+      showModal(
+        "Partita Salvata!",
+        `I tuoi progressi per <strong>${gameState.hero_name}</strong> (Paragrafo ${gameState.current_node}) sono stati salvati con successo nella memoria del browser.<br><br>Potrai riprendere la tua avventura in qualsiasi momento!`,
+        "Ottimo"
+      );
+    }
+
+    function loadSavedGame() {
+      const saved = localStorage.getItem('aethelgard_save');
+      if (!saved) return;
+      try {
+        gameState = JSON.parse(saved);
+        viewMainMenu.classList.add('hidden');
+        viewCharCreation.classList.add('hidden');
+        viewGameplay.classList.remove('hidden');
+
+        updateCharacterPresentation();
+        updateUI();
+        goToNode(gameState.current_node);
+      } catch(e) {
+        showModal("Errore Caricamento", "Il file di salvataggio è corrotto o non leggibile.", "Chiudi");
+      }
+    }
+
+    function openRulesModal() {
+      showModal(
+        "Regolamento & Meccaniche di Gioco",
+        `<div class="text-left space-y-3 text-xs sm:text-sm">
+          <p><strong>⚔️ Combattimenti Veloci:</strong> Ad ogni round vengono lanciati 2 dadi per te e 2 per il mostro. Ogni 6 ottenuto infligge 1 punto di danno (Resistenza). Un doppio 6 infligge 2 danni critici!</p>
+          <p><strong>🗡️ Armi & Ingombro:</strong> Alcune armi (come lo Spadone o l'Ascia) infliggono danni maggiori ma hanno <em>Ingombro Pesante</em>: ti impediranno scelte situazionali come nuotare o passare strettoie.</p>
+          <p><strong>👑 Destino del Regno:</strong> Le tue decisioni morali, gli alleati che saprai salvare e le reliquie che riuscirai a scoprire plasmeranno la sorte finale di Aethelgard.</p>
+          <p><strong>💾 Salvataggi:</strong> Il gioco salva automaticamente ad ogni paragrafo.</p>
+        </div>`,
+        "Ho Capito"
+      );
+    }
+
+    // ==========================================
+    // UI UPDATES & INVENTORY
+    // ==========================================
     function toggleMobileDrawer() {
       mobileHeroDrawer.classList.toggle('hidden');
     }
@@ -793,24 +1392,27 @@
       fantasyModal.classList.add('hidden');
     }
 
-    function initGame() {
-      resetGame();
-    }
+    function renderRelics(container) {
+      if (!container) return;
+      container.innerHTML = '';
+      
+      const allRelics = [
+        { name: "Sigillo dei Sovrani", icon: "👑", key: "Sigillo dei Sovrani" },
+        { name: "Prisma di Stella", icon: "💎", key: "Prisma di Stella" },
+        { name: "Egida d'Argento", icon: "🛡️", key: "Egida d'Argento" }
+      ];
 
-    function resetGame() {
-      gameState = {
-        stamina: gamebook.initial_state.stamina,
-        max_stamina: gamebook.initial_state.max_stamina,
-        gold: gamebook.initial_state.gold,
-        inventory: [...gamebook.initial_state.inventory],
-        current_node: gamebook.initial_state.current_node,
-        current_enemy_stamina: 0
-      };
-      updateUI();
-      goToNode(gameState.current_node);
+      allRelics.forEach(r => {
+        const hasIt = gameState.relics.includes(r.key);
+        const div = document.createElement('div');
+        div.className = `p-1.5 rounded-lg border flex flex-col items-center justify-center ${hasIt ? 'border-amber-500 bg-amber-950/60 text-amber-200' : 'border-amber-950/80 bg-black/40 text-amber-600/40 opacity-40'}`;
+        div.innerHTML = `<span class="text-sm">${r.icon}</span><span class="text-[9px] truncate max-w-full font-bold">${hasIt ? r.name.split(' ')[0] : '???'}</span>`;
+        container.appendChild(div);
+      });
     }
 
     function renderInventoryItems(listElement) {
+      if (!listElement) return;
       listElement.innerHTML = '';
       if (gameState.inventory.length === 0) {
         listElement.innerHTML = '<li class="text-amber-600/60 italic text-xs py-1">Lo zaino è vuoto.</li>';
@@ -821,61 +1423,14 @@
         const li = document.createElement('li');
         li.className = 'flex items-center justify-between text-amber-200 bg-black/40 px-2.5 py-1.5 rounded-lg border border-amber-950 text-xs sm:text-sm';
         
-        let actions = '';
-        if (item.startsWith('Pergamena')) {
-          actions += `<button onclick="readParchment('${item}')" class="text-xs text-amber-300 hover:text-amber-100 underline mr-1.5">Leggi</button>`;
-        }
-        if (item === 'Pergamena E') {
-          actions += `<button onclick="usePotion()" class="text-xs bg-emerald-950/80 text-emerald-300 border border-emerald-700/80 hover:bg-emerald-900/90 px-2 py-0.5 rounded font-semibold transition active:scale-95">Usa (+5 HP)</button>`;
-        }
-        
-        li.innerHTML = `<span class="flex items-center gap-1.5 cursor-pointer" onclick="if('${item}'.startsWith('Pergamena')) readParchment('${item}')"><span class="text-amber-400">📜</span> <span class="font-medium">${item}</span></span> <div class="flex items-center">${actions}</div>`;
+        let icon = '📜';
+        if (item.includes('Elisir') || item.includes('Pozione')) icon = '🧪';
+        if (item.includes('Chiave')) icon = '🗝️';
+        if (item.includes('Corda') || item.includes('Mappa')) icon = '🧭';
+
+        li.innerHTML = `<span class="flex items-center gap-1.5 font-medium"><span class="text-amber-400">${icon}</span> <span>${item}</span></span>`;
         listElement.appendChild(li);
       });
-    }
-
-    function readParchment(item) {
-      if (item === 'Pergamena B') {
-        showModal(
-          "Pergamena “B” (Numero 1)",
-          `<div class="p-4 bg-black/60 border border-amber-700/80 rounded-xl italic text-amber-200 text-center leading-relaxed">
-            “Se Grand Alf, nonostante<br>
-            sembri un tipo assai paziente,<br>
-            è potente più di un drago<br>
-            di sicuro è un grande _ _ _ _ ?”
-          </div>
-          <p class="text-xs text-amber-500/80 mt-3 text-center">Un antico enigma magico per aprire passaggi sigillati.</p>`,
-          "Chiudi Pergamena"
-        );
-      } else if (item === 'Pergamena E') {
-        showModal(
-          "Pergamena “E”",
-          `<div class="p-4 bg-black/60 border border-emerald-700/80 rounded-xl italic text-emerald-200 text-center leading-relaxed">
-            “Se hai subito una ferita<br>
-            questo incanto ti riassesta<br>
-            a partire dalla testa<br>
-            giù alla punta delle dita”
-          </div>
-          <p class="text-xs text-emerald-400/90 mt-3 text-center">Incanto curativo: ripristina fino a 5 Punti di Resistenza (PF).</p>`,
-          "Chiudi Pergamena"
-        );
-      } else if (item === 'Pergamena H') {
-        showModal(
-          "Pergamena “H” (Numero 3)",
-          `<div class="p-4 bg-black/60 border border-amber-700/80 rounded-xl italic text-amber-200 text-center leading-relaxed">
-            “Se sei in cerca di un tesoro<br>
-            trova il Genio e lo otterrai:<br>
-            il suo nome scoprirai<br>
-            e ti donerà dell'oro!<br><br>
-            Se per caso ancor non sai<br>
-            come il Genio vien chiamato<br>
-            un indizio ti sia dato:<br>
-            <em>«Nel pericolo che fai?»</em>”
-          </div>
-          <p class="text-xs text-amber-500/80 mt-3 text-center">Indizio sul nome del Genio della lampada/campanella.</p>`,
-          "Chiudi Pergamena"
-        );
-      }
     }
 
     function updateUI() {
@@ -888,6 +1443,12 @@
       goldValue.textContent = gameState.gold;
       desktopItemCount.textContent = `${gameState.inventory.length}`;
       renderInventoryItems(inventoryList);
+      renderRelics(desktopRelicsList);
+
+      // Weapon Desktop
+      desktopWeaponName.innerHTML = `<span>🗡️</span> ${gameState.weapon.name}`;
+      desktopWeaponTrait.textContent = gameState.weapon.trait;
+      desktopWeaponDesc.textContent = gameState.weapon.desc;
 
       // Mobile HUD
       mobileStaminaText.textContent = `${gameState.stamina}/${gameState.max_stamina}`;
@@ -901,24 +1462,45 @@
       drawerGoldValue.textContent = gameState.gold;
       drawerItemCount.textContent = `${gameState.inventory.length} oggetti`;
       renderInventoryItems(drawerInventoryList);
+      renderRelics(drawerRelicsList);
+
+      // Weapon Mobile Drawer
+      drawerWeaponName.innerHTML = `<span>🗡️</span> ${gameState.weapon.name}`;
+      drawerWeaponTrait.textContent = gameState.weapon.trait;
     }
 
-    function usePotion() {
-      if (gameState.inventory.includes('Pergamena E')) {
-        const cureAmount = 5;
-        gameState.stamina = Math.min(gameState.max_stamina, gameState.stamina + cureAmount);
-        gameState.inventory = gameState.inventory.filter(i => i !== 'Pergamena E');
-        updateUI();
-        showModal("Incanto della Pergamena E", `Reciti la formula magica:<br><br>
-        <div class="italic text-emerald-300 p-2 border border-emerald-800 rounded bg-black/40 text-center text-xs">
-          “Se hai subito una ferita / questo incanto ti riassesta...”
-        </div><br>
-        Recuperi <strong class="text-emerald-400">+${cureAmount} Punti di Resistenza</strong> (PF).`, "Accetta Cura");
+    // ==========================================
+    // STORYTELLING & NODE EXECUTION
+    // ==========================================
+    function handleChoiceClick(choice) {
+      if (choice.to_menu) {
+        returnToMainMenuFromGame();
+        return;
+      }
+      if (choice.reset_game) {
+        confirmCharacterAndStart();
+        return;
+      }
+      if (choice.load_game) {
+        loadSavedGame();
+        return;
+      }
+      if (choice.target) {
+        goToNode(choice.target);
       }
     }
 
-    function hasRemainingLoot() {
-      return !lootBox.classList.contains('hidden') && lootButtons.children.length > 0;
+    function equipNewWeapon(weaponKey) {
+      const targetW = WEAPONS[weaponKey];
+      if (targetW) {
+        gameState.weapon = { ...targetW };
+        updateUI();
+        showModal(
+          "Nuova Arma Impugnata!",
+          `Hai equipaggiato: <strong>${targetW.name}</strong> (${targetW.trait}).<br><br><em>${targetW.desc}</em>`,
+          "Perfetto"
+        );
+      }
     }
 
     function showLoot(lootData) {
@@ -930,29 +1512,91 @@
         hasLoot = true;
         const btn = document.createElement('button');
         btn.className = 'w-full text-left btn-fantasy btn-loot p-3 rounded-lg text-emerald-100 font-semibold text-sm flex items-center justify-between shadow active:scale-98 min-h-[44px]';
-        btn.innerHTML = `<span class="flex items-center gap-2"><span class="text-lg">💰</span> Raccogli <strong>${lootData.gold} Pezzi d'Oro</strong></span> <span class="text-xs bg-emerald-900/60 px-2 py-0.5 rounded border border-emerald-700">Prendi</span>`;
+        btn.innerHTML = `<span class="flex items-center gap-2"><span class="text-lg">💰</span> Raccogli <strong>${lootData.gold} Monete d'Oro</strong></span> <span class="text-xs bg-emerald-900/60 px-2.5 py-1 rounded border border-emerald-700">Prendi</span>`;
         btn.onclick = () => {
           gameState.gold += lootData.gold;
           lootData.gold = 0;
           btn.remove();
           updateUI();
-          if (!hasRemainingLoot()) lootBox.classList.add('hidden');
+          if (lootButtons.children.length === 0) lootBox.classList.add('hidden');
         };
         lootButtons.appendChild(btn);
       }
 
-      if (lootData.items && lootData.items.length > 0) {
+      if (lootData.relic && !gameState.relics.includes(lootData.relic)) {
+        hasLoot = true;
+        const btn = document.createElement('button');
+        btn.className = 'w-full text-left btn-fantasy p-3 rounded-lg text-amber-200 font-semibold text-sm flex items-center justify-between border-2 border-amber-500 shadow active:scale-98 min-h-[44px] bg-amber-950/60';
+        btn.innerHTML = `<span class="flex items-center gap-2"><span class="text-xl">👑</span> Raccogli la Reliquia: <strong>${lootData.relic}</strong></span> <span class="text-xs bg-amber-600 text-black font-extrabold px-2.5 py-1 rounded">Consacra</span>`;
+        btn.onclick = () => {
+          gameState.relics.push(lootData.relic);
+          btn.remove();
+          updateUI();
+          if (lootButtons.children.length === 0) lootBox.classList.add('hidden');
+          showModal("Reliquia Ancestrale Ottenuta!", `Hai recuperato la sacra reliquia: <strong>${lootData.relic}</strong>!<br>Il potere dell'Alba risuona nel tuo animo.`, "Continua");
+        };
+        lootButtons.appendChild(btn);
+      }
+
+      if (lootData.is_elisir && !gameState.has_elisir) {
+        hasLoot = true;
+        const btn = document.createElement('button');
+        btn.className = 'w-full text-left btn-fantasy btn-loot p-3 rounded-lg text-emerald-100 font-semibold text-sm flex items-center justify-between shadow active:scale-98 min-h-[44px]';
+        btn.innerHTML = `<span class="flex items-center gap-2"><span class="text-xl">🧪</span> Prendi l'<strong>Elisir Spezzaincanto</strong></span> <span class="text-xs bg-emerald-800 px-2.5 py-1 rounded border border-emerald-600">Custodisci</span>`;
+        btn.onclick = () => {
+          gameState.has_elisir = true;
+          if (!gameState.inventory.includes("Elisir Spezzaincanto")) gameState.inventory.push("Elisir Spezzaincanto");
+          btn.remove();
+          updateUI();
+          if (lootButtons.children.length === 0) lootBox.classList.add('hidden');
+        };
+        lootButtons.appendChild(btn);
+      }
+
+      if (lootData.weapon && WEAPONS[lootData.weapon]) {
+        hasLoot = true;
+        const w = WEAPONS[lootData.weapon];
+        const btn = document.createElement('button');
+        btn.className = 'w-full text-left btn-fantasy p-3 rounded-lg text-amber-100 font-semibold text-sm flex items-center justify-between border border-amber-600 shadow active:scale-98 min-h-[44px]';
+        btn.innerHTML = `<span class="flex items-center gap-2"><span class="text-xl">⚔️</span> Sostituisci arma con: <strong>${w.name}</strong> (${w.trait})</span> <span class="text-xs bg-amber-900/80 px-2.5 py-1 rounded border border-amber-700">Impugna</span>`;
+        btn.onclick = () => {
+          equipNewWeapon(lootData.weapon);
+          btn.remove();
+          if (lootButtons.children.length === 0) lootBox.classList.add('hidden');
+        };
+        lootButtons.appendChild(btn);
+      }
+
+      if (lootData.weapon_options) {
+        lootData.weapon_options.forEach(wKey => {
+          const w = WEAPONS[wKey];
+          if (w) {
+            hasLoot = true;
+            const btn = document.createElement('button');
+            btn.className = 'w-full text-left btn-fantasy p-3 rounded-lg text-amber-100 font-semibold text-sm flex items-center justify-between border border-amber-700 shadow active:scale-98 min-h-[44px]';
+            btn.innerHTML = `<span class="flex items-center gap-2"><span>⚔️</span> Scegli: <strong>${w.name}</strong> (${w.trait})</span> <span class="text-xs bg-amber-900/80 px-2.5 py-1 rounded">Prendi</span>`;
+            btn.onclick = () => {
+              equipNewWeapon(wKey);
+              btn.remove();
+              if (lootButtons.children.length === 0) lootBox.classList.add('hidden');
+            };
+            lootButtons.appendChild(btn);
+          }
+        });
+      }
+
+      if (lootData.items) {
         lootData.items.forEach(item => {
           if (!gameState.inventory.includes(item)) {
             hasLoot = true;
             const btn = document.createElement('button');
             btn.className = 'w-full text-left btn-fantasy btn-loot p-3 rounded-lg text-emerald-100 font-semibold text-sm flex items-center justify-between shadow active:scale-98 min-h-[44px]';
-            btn.innerHTML = `<span class="flex items-center gap-2"><span class="text-lg">📜</span> Prendi <strong>${item}</strong></span> <span class="text-xs bg-emerald-900/60 px-2 py-0.5 rounded border border-emerald-700">Raccogli</span>`;
+            btn.innerHTML = `<span class="flex items-center gap-2"><span class="text-lg">📜</span> Raccogli <strong>${item}</strong></span> <span class="text-xs bg-emerald-900/60 px-2.5 py-1 rounded border border-emerald-700">Prendi</span>`;
             btn.onclick = () => {
               gameState.inventory.push(item);
               btn.remove();
               updateUI();
-              if (!hasRemainingLoot()) lootBox.classList.add('hidden');
+              if (lootButtons.children.length === 0) lootBox.classList.add('hidden');
             };
             lootButtons.appendChild(btn);
           }
@@ -966,122 +1610,85 @@
       }
     }
 
-    function handleChoiceClick(targetNodeId, resetGameFlag = false) {
-      if (hasRemainingLoot()) {
-        showModal(
-          "Attenzione, Eroe!",
-          "Ci sono ancora oggetti o monete da raccogliere davanti a te! <strong>Raccogli tutto il bottino</strong> prima di proseguire il tuo cammino.",
-          "Ho Capito"
-        );
-        return;
-      }
-
-      if (resetGameFlag) {
-        resetGame();
-      } else {
-        goToNode(targetNodeId);
-      }
-    }
-
     function goToNode(nodeId) {
-      // Controllo Chiave di Rame (Paragrafo 14)
-      if (nodeId === "14") {
-        if (gameState.inventory.includes("Chiave di Rame")) {
-          nodeId = "14_unlocked";
-        } else {
-          nodeId = "13";
-        }
-      }
-
-      gameState.current_node = nodeId;
-      const node = gamebook.nodes[nodeId];
-
-      if (!node) {
-        console.error("Nodo non trovato:", nodeId);
-        return;
-      }
-
-      if (typeof stopAutoCombat === 'function') stopAutoCombat();
+      stopAutoCombat();
       combatBox.classList.add('hidden');
       riddleBox.classList.add('hidden');
       lootBox.classList.add('hidden');
 
-      if (node.gold_change) {
-        gameState.gold = Math.max(0, gameState.gold + node.gold_change);
-        node.gold_change = 0;
+      gameState.current_node = nodeId;
+      const node = storyNodes[nodeId];
+
+      if (!node) {
+        console.error("Nodo inesistente:", nodeId);
+        return;
       }
 
-      if (node.stamina_change) {
-        gameState.stamina = Math.max(0, gameState.stamina + node.stamina_change);
-        node.stamina_change = 0;
-      }
-
-      if (node.trap_damage) {
-        const trapRoll = Math.floor(Math.random() * 6) + 1;
-        gameState.stamina = Math.max(0, gameState.stamina - trapRoll);
-        
-        const woundText = trapRoll === 1 ? "-1 Ferita" : `-${trapRoll} Ferite`;
-        showModal(
-          "Agguato del Troll!", 
-          `Il Troll ti ha sorpreso con un pesante colpo di clava alle spalle!<br>Il dado segna <strong>${trapRoll}</strong>.<br><br>Perdi <strong class="text-red-400">${trapRoll} Punti di Resistenza</strong>!`,
-          woundText
-        );
-        node.trap_damage = false;
-      }
-
-      updateUI();
-
+      const pronouns = getPronouns(gameState);
       nodeTitle.textContent = node.title;
-      nodeText.innerHTML = node.text;
+      nodeText.innerHTML = typeof node.text === 'function' ? node.text(pronouns) : node.text;
 
+      // Handle Healing / Relic effects
+      if (node.loot && node.loot.heal) {
+        gameState.stamina = Math.min(gameState.max_stamina, gameState.stamina + node.loot.heal);
+      }
+
+      // Handle Loot
       if (node.loot) {
         showLoot(node.loot);
       }
 
       choicesContainer.innerHTML = '';
 
-      if (nodeId === "7") {
-        if (gameState.inventory.includes("Pergamena B")) {
-          const btn = document.createElement('button');
-          btn.className = 'w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-emerald-200 font-semibold text-sm sm:text-base flex items-center justify-between border border-emerald-700/80 shadow-md active:scale-98 min-h-[48px]';
-          btn.innerHTML = `<span class="flex items-center gap-2"><span>📜</span> <span>Leggi la Pergamena B (Usa Magia)</span></span> <span class="text-emerald-400 text-lg">➔</span>`;
-          btn.onclick = () => handleChoiceClick("7_riddle");
-          choicesContainer.appendChild(btn);
-        } else {
-          const btn = document.createElement('button');
-          btn.className = 'w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-red-300 font-semibold text-sm sm:text-base flex items-center justify-between border border-red-800 shadow-md active:scale-98 min-h-[48px]';
-          btn.innerHTML = `<span class="flex items-center gap-2"><span>🚫</span> <span>Non possiedi la Pergamena B (Bloccato)</span></span> <span class="text-red-500 text-lg">➔</span>`;
-          btn.onclick = () => handleChoiceClick("7_deadend");
-          choicesContainer.appendChild(btn);
+      // Special Roland Encounter (Node 26)
+      if (node.has_friend_encounter) {
+        if (gameState.has_elisir) {
+          const btnSave = document.createElement('button');
+          btnSave.className = 'w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-emerald-300 font-bold text-sm sm:text-base flex items-center justify-between border-2 border-emerald-600 shadow-xl active:scale-98 min-h-[48px] bg-emerald-950/40';
+          btnSave.innerHTML = `<span class="flex items-center gap-2"><span>🧪</span> <span>Infrangi l'Elisir Spezzaincanto su Roland (Salva l'Amico!)</span></span> <span class="text-emerald-400 text-lg">➔</span>`;
+          btnSave.onclick = () => goToNode("27");
+          choicesContainer.appendChild(btnSave);
         }
+
+        const btnFight = document.createElement('button');
+        btnFight.className = `w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-red-300 font-semibold text-sm sm:text-base flex items-center justify-between border border-red-800 shadow-md active:scale-98 min-h-[48px] ${gameState.has_elisir ? 'opacity-80' : ''}`;
+        btnFight.innerHTML = `<span class="flex items-center gap-2"><span>⚔️</span> <span>${gameState.has_elisir ? 'Ignora la pozione e duella all\'ultimo sangue' : 'Non possiedi l\'Elisir: Duella all\'ultimo sangue con Roland'}</span></span> <span class="text-red-400 text-lg">➔</span>`;
+        btnFight.onclick = () => goToNode("28");
+        choicesContainer.appendChild(btnFight);
       } else if (node.combat) {
-        setupCombat(node.combat);
+        setupCombat(node.combat, node.on_victory);
       } else if (node.input_riddle) {
         riddleBox.classList.remove('hidden');
-        setTimeout(() => {
-          riddleInput.focus();
-        }, 300);
+        setTimeout(() => riddleInput.focus(), 250);
       } else if (node.choices) {
         node.choices.forEach(choice => {
           const btn = document.createElement('button');
-          btn.className = 'w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-amber-100 font-semibold text-sm sm:text-base flex items-center justify-between border border-amber-800/80 shadow-md active:scale-98 min-h-[48px]';
-          btn.innerHTML = `<span class="pr-2">${choice.text}</span> <span class="text-amber-400 text-lg shrink-0">➔</span>`;
-          btn.onclick = () => handleChoiceClick(choice.target, choice.reset_game);
+          
+          // Check Encumbrance Requirement (e.g. Swimming / Narrow crevices)
+          let isBlocked = false;
+          let blockReason = "";
+          if (choice.require_light_weapon && gameState.weapon.encumbrance === 'pesante') {
+            isBlocked = true;
+            blockReason = ` [Bloccato: Troppo pesante per nuotare/infiltrarsi con ${gameState.weapon.name}]`;
+          }
+
+          if (isBlocked) {
+            btn.disabled = true;
+            btn.className = 'w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-amber-500/50 font-semibold text-xs sm:text-sm flex items-center justify-between border border-amber-950 min-h-[48px] cursor-not-allowed';
+            btn.innerHTML = `<span class="pr-2 flex items-center gap-2"><span class="text-amber-600">🔒</span> <span>${choice.text} <em class="text-red-400/80 font-normal text-[11px]">${blockReason}</em></span></span>`;
+          } else {
+            btn.className = 'w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-amber-100 font-semibold text-sm sm:text-base flex items-center justify-between border border-amber-800/80 shadow-md active:scale-98 min-h-[48px]';
+            btn.innerHTML = `<span class="pr-2">${choice.text}</span> <span class="text-amber-400 text-lg shrink-0">➔</span>`;
+            btn.onclick = () => handleChoiceClick(choice);
+          }
           choicesContainer.appendChild(btn);
         });
       }
 
-      if (gameState.stamina <= 0 && !node.is_game_over) {
-        nodeTitle.textContent = "Sei Stato Sconfitto!";
-        nodeText.innerHTML = "<p class='text-red-400 font-bold'>La tua Resistenza è scesa a 0. Sei caduto nelle profondità di Monte Pauroso...</p>";
-        choicesContainer.innerHTML = `
-          <button onclick="resetGame()" class="w-full btn-fantasy min-h-[48px] p-3.5 rounded-xl text-amber-200 font-bold text-base text-center border border-amber-600 shadow-lg active:scale-98">
-            🔄 Ricomincia l'Avventura
-          </button>
-        `;
-      }
+      updateUI();
+      saveGameAuto();
 
-      // Smooth scroll back to top of story section on mobile so the player sees the newly loaded text
+      // Smooth scroll back to top of story
       if (window.innerWidth < 768) {
         window.scrollTo({
           top: Math.max(0, storySection.offsetTop - 60),
@@ -1090,8 +1697,10 @@
       }
     }
 
-    const diceIcons = ['', '⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
-    let autoCombatTimer = null;
+    // ==========================================
+    // 2-DICE COMBAT SYSTEM (2d6 vs 2d6)
+    // ==========================================
+    let currentCombatVictory = null;
 
     function stopAutoCombat() {
       if (autoCombatTimer) {
@@ -1129,13 +1738,13 @@
       }
     }
 
-    function setupCombat(combatData) {
+    function setupCombat(combatData, onVictory) {
       stopAutoCombat();
       combatBox.classList.remove('hidden');
       enemyName.innerHTML = `<span>⚔️</span> <span>${combatData.enemy_name}</span>`;
       gameState.current_enemy_stamina = combatData.enemy_stamina;
       enemyStamina.textContent = gameState.current_enemy_stamina;
-      combatLog.innerHTML = '<p class="text-amber-500/80 italic">Inizia lo scontro! 2 dadi per parte: ogni 6 toglie 1 HP.</p>';
+      currentCombatVictory = onVictory;
 
       const heroVisual = document.getElementById('hero-dice-visual');
       const enemyVisual = document.getElementById('enemy-dice-visual');
@@ -1151,22 +1760,24 @@
           <span class="px-2.5 py-0.5 rounded bg-black/60 border border-red-900/60 text-red-300">🎲 -</span>
         `;
       }
+
+      combatLog.innerHTML = `<p class="text-amber-500/80 italic">Inizia lo scontro! 2 dadi per parte: ogni 6 toglie 1 PF.${combatData.hero_buff ? ' (Roland combatte con te!)' : ''}</p>`;
     }
 
     function handleCombatRound() {
       if (diceIcon) {
         diceIcon.classList.remove('rolling');
-        void diceIcon.offsetWidth; // Trigger reflow for animation restart
+        void diceIcon.offsetWidth;
         diceIcon.classList.add('rolling');
       }
 
-      // 2 Dadi Eroe e 2 Dadi Mostro (Regolamento originale Steve Jackson, pag. 10 del documento)
+      // Roll 2 dice for Hero, 2 dice for Monster
       const heroD1 = Math.floor(Math.random() * 6) + 1;
       const heroD2 = Math.floor(Math.random() * 6) + 1;
       const enemyD1 = Math.floor(Math.random() * 6) + 1;
       const enemyD2 = Math.floor(Math.random() * 6) + 1;
 
-      // Aggiornamento visuale dadi
+      // Visual Dice Update
       const heroVisual = document.getElementById('hero-dice-visual');
       const enemyVisual = document.getElementById('enemy-dice-visual');
       if (heroVisual) {
@@ -1182,9 +1793,23 @@
         `;
       }
 
-      // Conteggio colpi da 6
-      const heroHits = (heroD1 === 6 ? 1 : 0) + (heroD2 === 6 ? 1 : 0);
-      const enemyHits = (enemyD1 === 6 ? 1 : 0) + (enemyD2 === 6 ? 1 : 0);
+      // Count 6s
+      let heroHits = (heroD1 === 6 ? 1 : 0) + (heroD2 === 6 ? 1 : 0);
+      let enemyHits = (enemyD1 === 6 ? 1 : 0) + (enemyD2 === 6 ? 1 : 0);
+
+      // Weapon damage bonus on hits
+      if (heroHits > 0 && gameState.weapon.damage_bonus) {
+        heroHits += gameState.weapon.damage_bonus;
+      }
+      if (heroHits === 2 && gameState.weapon.is_axe) {
+        heroHits += 1; // Devastating triple on double 6 with dwarven axe
+      }
+
+      // Roland Buff in Final Fight (parries 1 enemy hit)
+      const currentNode = storyNodes[gameState.current_node];
+      if (currentNode && currentNode.combat && currentNode.combat.hero_buff && enemyHits > 0) {
+        enemyHits -= 1; // Roland defends you!
+      }
 
       if (heroHits > 0) {
         gameState.current_enemy_stamina = Math.max(0, gameState.current_enemy_stamina - heroHits);
@@ -1197,78 +1822,85 @@
       if (heroHits > 0 && enemyHits > 0) {
         logMessage = `<span class="text-amber-300 font-semibold">💥 Scambio violento! Infliggi ${heroHits} danno/i ma subisci ${enemyHits} danno/i!</span>`;
       } else if (heroHits > 0) {
-        logMessage = heroHits === 2 
-          ? `<span class="text-emerald-400 font-bold text-sm">🔥 DOPPIO 6! Colpo micidiale: infliggi 2 Danni al mostro!</span>`
-          : `<span class="text-emerald-400 font-semibold">⚔️ Colpo a segno! Un 6: il mostro perde 1 HP.</span>`;
+        logMessage = heroHits >= 2 
+          ? `<span class="text-emerald-400 font-bold text-sm">🔥 COLPO CRITICO DEVASTANTE! Infliggi ${heroHits} Danni al nemico!</span>`
+          : `<span class="text-emerald-400 font-semibold">⚔️ Fendente a segno! Il nemico perde ${heroHits} PF.</span>`;
       } else if (enemyHits > 0) {
-        logMessage = enemyHits === 2
-          ? `<span class="text-red-400 font-bold text-sm">⚠️ Il mostro ottiene DOPPIO 6! Subisci 2 danni pesanti!</span>`
-          : `<span class="text-red-400 font-semibold">🩸 Sei stato colpito! Il mostro fa 6: perdi 1 HP.</span>`;
+        logMessage = enemyHits >= 2
+          ? `<span class="text-red-400 font-bold text-sm">⚠️ Colpo pesante nemico! Subisci ${enemyHits} danni!</span>`
+          : `<span class="text-red-400 font-semibold">🩸 Sei stat${getPronouns(gameState).o_a} colpit${getPronouns(gameState).o_a}! Perdi 1 PF.</span>`;
       } else {
         logMessage = `<span class="text-amber-400/70">Nessun colpo critico in questo round (nessun 6).</span>`;
       }
 
       combatLog.innerHTML = `<p>${logMessage}</p>`;
-
       enemyStamina.textContent = Math.max(0, gameState.current_enemy_stamina);
       updateUI();
 
+      // Check Combat Outcome
       if (gameState.current_enemy_stamina <= 0) {
         stopAutoCombat();
         combatBox.classList.add('hidden');
-        const currentNode = gamebook.nodes[gameState.current_node];
-        if (currentNode.on_victory) {
-          nodeText.innerHTML = currentNode.on_victory.text;
-          
-          if (currentNode.on_victory.loot) {
-            showLoot(currentNode.on_victory.loot);
+        
+        if (currentCombatVictory) {
+          const pronouns = getPronouns(gameState);
+          if (currentCombatVictory.text) {
+            nodeText.innerHTML = typeof currentCombatVictory.text === 'function' ? currentCombatVictory.text(pronouns) : currentCombatVictory.text;
           }
-
-          updateUI();
-
-          choicesContainer.innerHTML = '';
-          if (currentNode.on_victory.choices) {
-            currentNode.on_victory.choices.forEach(choice => {
-              const btn = document.createElement('button');
-              btn.className = 'w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-amber-100 font-semibold text-sm sm:text-base flex items-center justify-between border border-amber-800/80 shadow-md active:scale-98 min-h-[48px]';
-              btn.innerHTML = `<span class="pr-2">${choice.text}</span> <span class="text-amber-400 text-lg shrink-0">➔</span>`;
-              btn.onclick = () => handleChoiceClick(choice.target);
-              choicesContainer.appendChild(btn);
-            });
-          } else if (currentNode.on_victory.target) {
-            const btn = document.createElement('button');
-            btn.className = 'w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-amber-100 font-semibold text-sm sm:text-base flex items-center justify-between border border-amber-800/80 shadow-md active:scale-98 min-h-[48px]';
-            btn.innerHTML = `<span>Prosegui l'Avventura</span> <span class="text-amber-400 text-lg shrink-0">➔</span>`;
-            btn.onclick = () => handleChoiceClick(currentNode.on_victory.target);
-            choicesContainer.appendChild(btn);
+          if (currentCombatVictory.loot) {
+            showLoot(currentCombatVictory.loot);
+          }
+          if (currentCombatVictory.check_true_ending) {
+            // Check True Ending: 3 relics + Roland
+            if (gameState.relics.length >= 3) {
+              goToNode("31"); // Finale Ottimo
+            } else {
+              goToNode("32"); // Finale Buono II
+            }
+            return;
+          }
+          if (currentCombatVictory.target) {
+            choicesContainer.innerHTML = `
+              <button onclick="goToNode('${currentCombatVictory.target}')" class="w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-amber-100 font-semibold text-sm sm:text-base flex items-center justify-between border border-amber-800 shadow-md active:scale-98 min-h-[48px]">
+                <span>Prosegui l'Avventura</span> <span class="text-amber-400 text-lg shrink-0">➔</span>
+              </button>
+            `;
           }
         }
       } else if (gameState.stamina <= 0) {
         stopAutoCombat();
         combatBox.classList.add('hidden');
-        goToNode(gameState.current_node);
+        goToNode("34"); // Game Over Screen
       }
     }
 
+    // ==========================================
+    // NON-BLOCKING RIDDLE SYSTEM
+    // ==========================================
     function submitRiddle() {
       const answer = riddleInput.value.trim().toLowerCase();
-      const currentNode = gamebook.nodes[gameState.current_node];
-
-      if (!currentNode.input_riddle) return;
+      const currentNode = storyNodes[gameState.current_node];
+      if (!currentNode || !currentNode.input_riddle) return;
 
       riddleBox.classList.add('hidden');
       riddleInput.value = '';
 
-      if (answer === currentNode.input_riddle.correct_answer) {
-        showModal("Indovinello Risolto!", currentNode.input_riddle.success.text, "Prosegui");
-        goToNode(currentNode.input_riddle.success.target);
+      const r = currentNode.input_riddle;
+      const isCorrect = answer === r.correct_answer || (r.alt_answers && r.alt_answers.includes(answer));
+
+      if (isCorrect) {
+        showModal("Enigma Risolto!", r.success.text, "Prosegui");
+        goToNode(r.success.target);
       } else {
-        showModal("Risposta Errata", currentNode.input_riddle.failure.text, "Riprova");
-        goToNode(currentNode.input_riddle.failure.target);
+        showModal("Risposta Errata!", r.failure.text, "Continua la fuga");
+        goToNode(r.failure.target);
       }
     }
 
-    window.onload = initGame;
+    // Initialize on Page Load
+    window.onload = function() {
+      checkExistingSave();
+    };
   </script>
 </body>
 </html>
