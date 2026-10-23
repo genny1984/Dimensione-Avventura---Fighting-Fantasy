@@ -307,15 +307,40 @@
             </div>
           </div>
 
-          <!-- COMBAT LOG -->
-          <div id="combat-log" class="bg-black/70 p-3 rounded-lg text-xs sm:text-sm font-mono text-amber-200/90 mb-3 border border-amber-900/40 text-center min-h-[42px] flex items-center justify-center">
-            <p class="text-amber-500/60 italic">Inizia lo scontro! Tira i dadi per combattere.</p>
+          <!-- ACTIVE DICE DISPLAY (2 DADI EROE vs 2 DADI MOSTRO - REGOLA UFFICIALE PAG. 10) -->
+          <div id="dice-display-area" class="grid grid-cols-2 gap-2 mb-3 text-xs sm:text-sm">
+            <div class="bg-black/50 p-2 rounded-lg border border-amber-900/40 text-center">
+              <span class="text-amber-300 font-semibold block text-[11px] mb-1">Dadi Eroe (Tu)</span>
+              <div id="hero-dice-visual" class="flex justify-center items-center gap-2 text-sm sm:text-base font-mono">
+                <span class="px-2.5 py-0.5 rounded bg-black/60 border border-amber-800/60 text-amber-200">🎲 -</span>
+                <span class="px-2.5 py-0.5 rounded bg-black/60 border border-amber-800/60 text-amber-200">🎲 -</span>
+              </div>
+            </div>
+            <div class="bg-black/50 p-2 rounded-lg border border-red-900/40 text-center">
+              <span class="text-red-300 font-semibold block text-[11px] mb-1">Dadi Mostro</span>
+              <div id="enemy-dice-visual" class="flex justify-center items-center gap-2 text-sm sm:text-base font-mono">
+                <span class="px-2.5 py-0.5 rounded bg-black/60 border border-red-900/60 text-red-300">🎲 -</span>
+                <span class="px-2.5 py-0.5 rounded bg-black/60 border border-red-900/60 text-red-300">🎲 -</span>
+              </div>
+            </div>
           </div>
 
-          <button id="btn-roll-dice" onclick="handleCombatRound()" class="w-full btn-fantasy btn-dice min-h-[48px] py-3 rounded-xl text-white font-bold text-base sm:text-lg flex items-center justify-center gap-2 shadow-lg active:scale-98">
-            <span id="dice-icon" class="text-xl">🎲</span>
-            <span>Tira i Dadi</span>
-          </button>
+          <!-- COMBAT LOG -->
+          <div id="combat-log" class="bg-black/70 p-3 rounded-lg text-xs sm:text-sm font-mono text-amber-200/90 mb-3 border border-amber-900/40 text-center min-h-[44px] flex items-center justify-center">
+            <p class="text-amber-500/70 italic">Inizia lo scontro! 2 dadi per parte: ogni 6 toglie 1 HP.</p>
+          </div>
+
+          <!-- ACTION BUTTONS -->
+          <div class="flex flex-col sm:flex-row gap-2">
+            <button id="btn-roll-dice" onclick="handleCombatRound()" class="flex-1 btn-fantasy btn-dice min-h-[48px] py-2.5 px-4 rounded-xl text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-lg active:scale-98">
+              <span id="dice-icon" class="text-xl">🎲</span>
+              <span>Tira i Dadi (1 Round)</span>
+            </button>
+            <button id="btn-auto-combat" onclick="toggleAutoCombat()" class="btn-fantasy min-h-[48px] py-2.5 px-4 rounded-xl text-amber-200 font-bold text-xs sm:text-sm border border-amber-600/80 hover:border-amber-400 bg-amber-950/40 flex items-center justify-center gap-1.5 active:scale-98 shrink-0">
+              <span id="auto-combat-icon">⚡</span>
+              <span id="auto-combat-label">Combatti a Raffica</span>
+            </button>
+          </div>
         </div>
 
         <!-- RIDDLE INPUT SECTION -->
@@ -366,11 +391,11 @@
         "1": {
           title: "1. Ingresso",
           text: `Alto tra i Colli Esterni, vicino alla città di Sonoria si trova Monte Pauroso. Il monte è chiamato così per le creature che vivono lì attorno. C'è un vero e proprio tesoro da trovare qui, frutto delle venature d'oro estratte in passato, sorvegliato però da feroci mostri.<br><br>
-                 Dopo una dura marcia di alcuni giorni attraverso i Colli esterni, il nostro Eroe è finalmente giunto di fronte l'ingresso del vecchio Pandoro. Di fronte a lui c'è un'oscura caverna. Le stalattiti pendono dal soffitto della grotta. Brrrr. Entrare in questo luogo sembra come camminare tra le zanne di un'immensa bestia. La prima cosa che si nota è una scritta incisa sulla roccia. Ecco cosa dice:<br>
-                 <strong class="text-amber-400">REЖTA A DEЖTRA</strong><br>
+                 Dopo una dura marcia di alcuni giorni attraverso i Colli esterni, il nostro Eroe è finalmente giunto di fronte l'ingresso del vecchio Pandoro. Di fronte a lui c'è un'oscura caverna. Le stalattiti pendono dal soffitto della grotta. Brrrr. Entrare in questo luogo sembra come camminare tra le zanne di un'immensa bestia. La prima cosa che si nota è una scritta incisa sulla roccia. Ecco cosa dice:<br><br>
+                 <div class="text-center font-bold tracking-widest text-amber-400 my-2 text-base sm:text-lg">REЖTA A DEЖTRA</div>
                  E un'altra scritta dice:<br>
-                 <strong class="text-emerald-400">VERDE = VAI</strong><br><br>
-                 Forse si tratta di una specie di antichi graffiti..<br>
+                 <div class="text-center font-bold tracking-widest text-emerald-400 my-2 text-base sm:text-lg">VERDE = VAI</div>
+                 Forse si tratta di una specie di antichi graffiti..<br><br>
                  Entrando nella caverna, il nostro Eroe segue la parete alla sua destra, quando sente il rumore di un grande crollo!<br>
                  Alla sua sinistra, un'immensa stalattite è caduta a terra e si è infranta in mille pezzi. Accende la sua torcia e avanza nella grotta.<br>
                  Ad un tratto si sente di nuovo qualcosa. Presto! Un enorme macigno sta rotolando verso di lui. Cosa deve fare il nostro eroe? Lanciarsi sulla sinistra e cercare di evitarlo? O schiacciarsi contro la parete a destra?`,
@@ -389,9 +414,9 @@
         },
         "3": {
           title: "3. Rimanere a Destra",
-          text: `Il macigno rotola con fragore alle sue spalle.<br>
-                 Il nostro Eroe procede lungo un passaggio nell'oscurità. L'aria è fredda e umida. La tremolante luce della sua torcia danza sulle viscide pareti di roccia, attraverso le inquietanti ombre che lo circondano. Un brivido corre lungo la sua schiena. Quali pericoli potrebbero nascondersi dinnanzi a lui?<br>
-                 Presto egli arriva ad una biforcazione. Dove decidi di dirigerti?`,
+          text: `Il macigno rotola con fragore alle sue spalle.<br><br>
+                 Il nostro Eroe procede lungo un passaggio nell'oscurità. L'aria è fredda e umida. La tremolante luce della sua torcia danza sulle viscide pareti di roccia, attraverso le inquietanti ombre che lo circondano. Un brivido corre lungo la sua schiena. Quali pericoli potrebbero nascondersi dinnanzi a lui?<br><br>
+                 Presto egli arriva ad una biforcazione e può dirigersi a destra o a sinistra. Dove si dirigerà?`,
           choices: [
             { text: "Svolta a Destra", target: "4" },
             { text: "Svolta a Sinistra", target: "4" }
@@ -399,8 +424,10 @@
         },
         "4": {
           title: "4. Lupi di Montagna",
-          text: `Avanzando nel passaggio, immediatamente si sente un cupo ringhio.<br>
-                 Sei entrato nella tana di un branco di Lupi di Montagna affamati che ti saltano addosso! Aaargh! Mordono!<br>
+          text: `Il nostro Eroe prende la direzione di destra/sinistra.<br><br>
+                 Immediatamente si sente ringhiare.<br>
+                 È entrato nella tana di un branco di Lupi di Montagna affamati!<br>
+                 Che gli saltano addosso! Aaargh! Mordono!<br><br>
                  Inizia il combattimento!`,
           combat: {
             enemy_name: "Lupi di Montagna",
@@ -411,8 +438,8 @@
                    Non appena il nostro Eroe muove qualche passo per riprendere il cammino, inciampa in qualcosa di morbido. É un cadavere!<br>
                    Deve essere stato qualcuno ucciso dai Lupi.<br>
                    Mmmhhh.. Non ha un buon odore. Vediamo se possiede dell'oro..<br>
-                   Aha! Si. Ha 5 Pezzi d'Oro in tasca. E c'è anche qualcos'altro.. Un foglio di pergamena! C'è sopra un numero, il Numero 1.<br><br>
-                   Lasciando perdere il cadavere, poco più avanti si trova un altro incrocio. Che direzione prendere?`,
+                   Aha! Si. Ha 5 Pezzi d'Oro in tasca. E c'è anche qualcos'altro.. Un foglio di pergamena! C'è sopra un numero, il Numero 1 (Pergamena “B”).<br><br>
+                   Lasciando perdere il cadavere, poco più avanti si trova un altro incrocio, nel quale è possibile dirigersi a destra o a sinistra. Che direzione prendere?`,
             loot: {
               gold: 5,
               items: ["Pergamena B"]
@@ -425,18 +452,19 @@
         },
         "5": {
           title: "5. Il Troll delle Caverne",
-          text: `Il nostro Eroe segue il passaggio con cautela, finché non giunge ad una vasta caverna scavata nella roccia. Ad un tratto si sente un rumore di passi strascicati provenire da dietro...<br><br>
-                 Il nostro Eroe si lancia istintivamente da un lato, appena in tempo per evitare la clava di legno che si abbatte a terra. Apre gli occhi e sobbalza di paura: è finito nella tana di un Troll delle Caverne!<br><br>
-                 La battaglia comincia! Il Troll ha 3 punti di Resistenza.`,
+          text: `Il nostro Eroe svolge il passaggio con cautela, finché non giunge ad una vasta caverna scavata nella roccia. Ad un tratto si sente un rumore di passi strascicati provenire da dietro. Prima che se ne renda conto, un pesante colpo lo fa rotolare per terra. La sua testa sembra quasi esplodere.<br><br>
+                 Il nostro Eroe si lancia istintivamente da un lato, appena in tempo per evitare una clava di legno che si abbatte a terra accanto a lui. Apre gli occhi e sobbalza di paura, nel vedere le dimensioni della creatura che incombe su di lui. È finito nella tana di un Troll delle Caverne!<br><br>
+                 Di nuovo il Mostro fende l'aria con la sua clava e di nuovo il nostro Eroe riesce a scansarla, ma questa volta è pronto a reagire.<br><br>
+                 La battaglia cominci! Il Troll ha 3 punti di Resistenza.`,
           trap_damage: true,
           combat: {
             enemy_name: "Troll delle Caverne",
             enemy_stamina: 3
           },
           on_victory: {
-            text: `Bene! La spada si infila in profondità nel suo ventre. La creatura ruggisce di dolore e cade in ginocchio. È finita.<br><br>
-                   Attaccato alla cintura del Troll c'è un borsello. Dentro ci sono 3 Pezzi d'Oro e una Chiave di Rame. C'è anche un foglio di pergamena.<br><br>
-                   Proseguendo dalla caverna del Troll, il nostro Eroe scopre una porta sul muro a destra. È difficile da distinguere bene, ma sembra dipinta di verde. O forse è semplicemente ammuffita. Che fare?`,
+            text: `Bene! La spada si infila in profondità nel suo ventre. La creatura ruggisce di dolore e cade in ginocchio. É finita.<br><br>
+                   Attaccato alla cintura del Troll c'è un borsello. Dentro ci sono 3 Pezzi d'Oro e una Chiave di Rame. C'è anche un foglio di pergamena (Pergamena “E”).<br><br>
+                   Proseguendo dalla caverna del Troll, il nostro Eroe scopre una porta sul muro a destra. È difficile da distinguere bene, ma sembra dipinta di verde. O forse è semplicemente ammuffita. Che fare? Aprire la porta ed entrare? Oppure proseguire dritto?`,
             loot: {
               gold: 3,
               items: ["Chiave di Rame", "Pergamena E"]
@@ -449,7 +477,7 @@
         },
         "6": {
           title: "6. La Porta",
-          text: `La porta è vecchia e arrugginita, con cardini induriti. Scricchiola rumorosamente quando viene aperta. Dietro la porta c'è una piccola stanza e nel centro della stanza c'è un tavolo con una campanella sopra. Una scritta davanti al campanello dice <strong class="text-amber-300">"Suonare Per Chiamare Aiuto"</strong>. Che fare?`,
+          text: `La porta è vecchia e arrugginita, con cardini induriti. Scricchiola rumorosamente quando viene aperta. Dietro la porta c'è una piccola stanza e nel centro della stanza c'è un tavolo con una campanella sopra. Una scritta davanti al campanello dice <strong class="text-amber-300">“Suonare Per Chiamare Aiuto”</strong>. Che fare?`,
           choices: [
             { text: "Suonare la campanella", target: "6_genie" },
             { text: "Uscire e percorrere il passaggio", target: "7" }
@@ -457,28 +485,27 @@
         },
         "6_genie": {
           title: "Incontro con il Genio",
-          text: `Un Genio appare magicamente nella stanza. "Salve," dice, "perché mi hai convocato? Io non ti ho mai visto prima. Posso servire solamente chi conosce il mio nome. Tu conosci il mio nome?"`,
+          text: `Un Genio appare magicamente nella stanza. “Salve,” dice, “perché mi hai convocato? Io non ti ho mai visto prima. Posso servire solamente chi conosce il mio nome. Tu conosci il mio nome?”`,
           input_riddle: {
             correct_answer: "aiuto",
             success: {
-              text: `Il Genio sorride! Riconoscendo che lo hai chiamato per nome ("Aiuto"), prima di svanire ti lascia in dono <strong>10 Pezzi d'Oro</strong>!<br><br>Raccogli la ricompensa qui sotto prima di proseguire:`,
+              text: `Il Genio sorride! Riconoscendo che lo hai chiamato correttamente per nome (“Aiuto”), prima di svanire regala all'Eroe una scatola con dentro <strong>10 Pezzi d'Oro</strong>!<br><br>L'unico modo per continuare è uscire e percorrere il passaggio. Raccogli la ricompensa prima di proseguire:`,
               loot: { gold: 10, items: [] },
               target: "7"
             },
             failure: {
-              text: `Il Genio scuote la testa: "Non è questo il mio nome!" e svanisce nel nulla. Non ti resta che uscire e percorrere il passaggio.`,
+              text: `Il Genio scuote la testa: “Non è questo il mio nome!” e svanisce nel nulla.<br><br>L'unico modo per continuare è uscire e percorrere il passaggio.`,
               target: "7"
             }
           }
         },
         "7": {
           title: "7. Proseguire",
-          text: `Il passaggio prosegue nell'oscurità finché non giungi a un vicolo cieco formato da enormi massi che sbarrano la strada.<br><br>
-                 Osservando bene le rocce, scorgi delle antiche incisioni magiche. Sembra serva un incantesimo per smuovere la roccia...`
+          text: `Il passaggio prosegue finché non giunge ad un vicolo cieco.`
         },
         "7_deadend": {
           title: "Vicolo Cieco Senza Uscita",
-          text: `Sei giunto di fronte a un vicolo cieco! Non possiedi la Pergamena B e non conosci l'incantesimo per smuovere le rocce. Sei intrappolato per sempre nel cunicolo.`,
+          text: `Sei giunto di fronte a un vicolo cieco! Non possiedi la Pergamena B e non conosci l'incantesimo per superare il blocco. Sei intrappolato nel cunicolo.`,
           is_game_over: true,
           choices: [
             { text: "Ricomincia l'Avventura", target: "1", reset_game: true }
@@ -487,16 +514,19 @@
         "7_riddle": {
           title: "7. Lettura della Pergamena B",
           text: `Osservi attentamente il foglio della Pergamena B. Sopra vi è inciso il seguente enigma:<br><br>
-                 <div class="p-3 bg-black/50 border border-amber-700/60 rounded italic text-amber-200">
-                 "Se Grand Alf, nonostante sembri un tipo assai paziente, è potente più di un drago di sicuro è un grande ____?"
+                 <div class="p-4 bg-black/60 border border-amber-600/60 rounded-xl italic text-amber-200 text-center leading-relaxed">
+                 “Se Grand Alf, nonostante<br>
+                 sembri un tipo assai paziente,<br>
+                 è potente più di un drago<br>
+                 di sicuro è un grande _ _ _ _ ?”
                  </div><br>
                  Inserisci la parola corretta per completare la formula magica e sbloccare la via:`,
           input_riddle: {
             correct_answer: "mago",
             success: {
               text: `Hai pronunciato la parola magica corretta!<br><br>
-                     Ehi! Accade qualcosa! Il cunicolo sta diventando più scuro. Ci sono strani suoni stridenti di rocce che si spostano! Il terreno sotto i tuoi piedi diventa rapidamente scintillante. Ben presto l'oscurità si schiarisce e i rumori si fermano.<br>
-                     Il nostro Eroe si trova ora all'interno di un passaggio differente. Dopo averlo percorso, giunge ad un'altra intersezione. Quale via scegliere?`,
+                     Ehi! Accade qualcosa! Il cunicolo sta diventando più scuro. Ci sono strani suoni stridenti di rocce che si spostano! Il terreno sotto i tuoi piedi diventa rapidamente scintillante. Ben presto l'oscurità si schiarisce e i rumori si fermano.<br><br>
+                     Il nostro Eroe si trova ora all'interno di un passaggio che sembra leggermente differente. Dopo averlo percorso, giunge ad un'altra intersezione, nella quale è possibile continuare dritto o girare a sinistra. Quale via scegliere?`,
               target: "7_unlocked_choices"
             },
             failure: {
@@ -506,46 +536,47 @@
           }
         },
         "7_unlocked_choices": {
-          title: "7. Proseguire (Sbloccato)",
-          text: `Il nostro Eroe si trova ora all'interno di un passaggio differente. Dopo averlo percorso, giunge ad un'altra intersezione. Quale via scegliere?`,
+          title: "7. Proseguire",
+          text: `Il nostro Eroe si trova ora all'interno di un passaggio che sembra leggermente differente. Dopo averlo percorso, giunge ad un'altra intersezione, nella quale è possibile continuare dritto o girare a sinistra. Quale via scegliere?`,
           choices: [
-            { text: "Prosegui Dritto", target: "8" },
-            { text: "Girare a Sinistra", target: "8" }
+            { text: "Continua Dritto", target: "8" },
+            { text: "Gira a Sinistra", target: "8" }
           ]
         },
         "8": {
           title: "8. L'Eremita",
-          text: `Il passaggio termina ben presto contro una porta di legno. Il nostro Eroe si appoggia silenziosamente e la apre con cautela. All'interno di una stanza c'è un uomo anziano, vestito di stracci, con una lunga barba grigia. Molto più preoccupante è la sua Pantera delle Montagne dal pelo nero e dall'aspetto feroce, che ringhia attaccata ad un guinzaglio. La camera sembra la dimora di un Eremita, con un vecchio forziere di legno come comodino. Una porta dall'altro lato della stanza permette di proseguire. Cosa fare?`,
+          text: `Il passaggio termina ben presto contro una porta di legno. Il nostro Eroe si appoggia silenziosamente e la apre con cautela. All'interno di una stanza c'è un uomo anziano, vestito di stracci, con una lunga barba grigia e troppo pacioccone per sembrare pericoloso. Molto più preoccupante è quello che sembra il suo animale da compagnia, una Pantera delle Montagne dal pelo nero e dall'aspetto feroce, che ringhia e si stiracchia attaccata ad un guinzaglio. La camera sembra essere la dimora di un Eremita, con un giaciglio di paglia in un angolo e una piccola dispensa nell'altro. Un vecchio forziere di legno costituisce il suo comodino. Una porta dall'altro lato della stanza potrebbe permettere di proseguire. Cosa fare? Salutare con un cortese “Buon Giorno” e uscire dall'altra porta? Oppure spingere via il vecchio eremita e frugare nel suo forziere?`,
           choices: [
-            { text: "Frugare nel forziere dell'eremita", target: "9" },
-            { text: "Salutare con un cortese 'Buon Giorno' e uscire dall'altra porta", target: "10" }
+            { text: "Spingere via il vecchio eremita e frugare nel suo forziere", target: "9" },
+            { text: "Salutare con un cortese “Buon Giorno” e uscire dall'altra porta", target: "10" }
           ]
         },
         "9": {
           title: "9. Il Forziere",
           text: `L'anziano individuo sguinzaglia la sua Pantera, che ruggisce e parte all'attacco, sfregiando al petto il nostro Eroe con i suoi artigli! Perde 1 punto Resistenza!<br><br>
-                 Comincia la battaglia! La Pantera ha 2 punti Resistenza!`,
+                 Cominci la battaglia! La Pantera ha 2 punti Resistenza!`,
           stamina_change: -1,
           combat: {
             enemy_name: "Pantera delle Montagne",
             enemy_stamina: 2
           },
           on_victory: {
-            text: `La creatura salta di nuovo! Ma stavolta il nostro Eroe è pronto con la sua spada. Il colpo si abbatte sul collo della bestia. Sgozz! La belva è morta.<br><br>
-                   Adesso il forziere può essere aperto. Dentro ci sono 6 Pezzi d'Oro, un paio di fetide mutande e un foglio di Pergamena con su scritto "3" (Pergamena H).<br>
-                   Il nostro Eroe prende i Pezzi d'Oro e il foglio ed esce dalla porta dall'altro lato della stanza.`,
+            text: `La creatura salta di nuovo! Ma stavolta il nostro Eroe è pronto con la sua spada. Il suo colpo si abbatte sul collo della bestia mentre è a mezz'aria. Il rumore della spada che squarcia la sua gola è terribile. Sgozz! La belva è morta.<br><br>
+                   Adesso il forziere può essere aperto. Dentro ci sono 6 Pezzi d'Oro, un paio di fetide mutande e un foglio di Pergamena con su scritto “3” (Pergamena “H”).<br><br>
+                   Il nostro Eroe prende i Pezzi d'Oro e il foglio (lasciando perdere le mutande) ed esce dalla porta dall'altro lato della stanza, lasciando il vecchio a lamentarsi per la morte del suo animaletto.`,
             loot: {
               gold: 6,
               items: ["Pergamena H"]
             },
             choices: [
-              { text: "Uscici dalla stanza e continua", target: "10" }
+              { text: "Esci dalla porta e continua", target: "10" }
             ]
           }
         },
         "10": {
           title: "10. Uscire",
-          text: `Il passaggio dall'altro lato prosegue lungo un corridoio scavato nella roccia. Lungo il percorso ci sono due Porte: una con Serratura di Rame e una con Serratura d'Argento. Che fare?`,
+          text: `Il passaggio dall'altro lato prosegue lungo un corridoio scavato nella roccia. Lungo il percorso ci sono due Porte. Una ha una Serratura di Rame e l'altra una Serratura d'Argento. Che fare?<br><br>
+                 Provare ad aprire le Porte? O proseguire?`,
           choices: [
             { text: "Prova ad aprire le Porte", target: "11" },
             { text: "Ignora le porte e continua dritto", target: "12" }
@@ -553,7 +584,7 @@
         },
         "11": {
           title: "11. Le Porte",
-          text: `Con quale delle due porte decidi di provare?`,
+          text: `Meglio provare con la Porta dalla Serratura di Rame? O con la Porta dalla Serratura d'Argento?`,
           choices: [
             { text: "Sblocca la Porta con Serratura d'Argento", target: "13" },
             { text: "Sblocca la Porta con Serratura di Rame", target: "14" }
@@ -561,7 +592,7 @@
         },
         "12": {
           title: "12. Continuare",
-          text: `Finalmente raggiungi un incrocio a T. Ci sono dei segni scolpiti nella roccia. Una freccia punta a sinistra e dice <strong class="text-amber-400">"MORTI"</strong>. Un'altra indica la destra e dice <strong class="text-purple-400">"NONMORTI"</strong>. Che fare?`,
+          text: `Finalmente raggiungi un incrocio a T. Ci sono dei segni scolpiti nella roccia. Una freccia punta a sinistra e dice <strong class="text-amber-400">“MORTI”</strong>. Un'altra indica la destra e dice <strong class="text-purple-400">“NONMORTI”</strong>. Che fare?`,
           choices: [
             { text: "Svolta a Sinistra (MORTI)", target: "16" },
             { text: "Svolta a Destra (NONMORTI)", target: "16" }
@@ -569,9 +600,9 @@
         },
         "13": {
           title: "13. Argento",
-          text: `La Porta è chiusa a chiave. Non possiedi la Chiave d'Argento per aprirla. Non ti resta che proseguire lungo il corridoio.`,
+          text: `La Porta è chiusa a chiave. Devi continuare lungo il passaggio finché non trovi la Chiave d'Argento.`,
           choices: [
-            { text: "Prosegui lungo il corridoio", target: "12" }
+            { text: "Continua lungo il passaggio", target: "12" }
           ]
         },
         "14": {
@@ -579,52 +610,65 @@
           text: `Inserisci la Chiave di Rame nella serratura della porta di rame e prova ad aprirla...`
         },
         "14_unlocked": {
-          title: "14. Rame (Sbloccato)",
-          text: `La Chiave di Rame entra nella serratura e gira perfettamente! La porta si apre su una stanza buia con un grande forziere.<br><br>
-                 Aprendolo, trovi 8 Pezzi d'Oro e una bottiglia di Pozione con una grande croce rossa sopra. Che fare?`,
+          title: "14. Rame",
+          text: `La chiave entra nella serratura e funziona perfettamente. La porta si apre lentamente su una piccola stanza buia, vuota, eccetto che per un grande forziere. Quando il forziere viene aperto, rivela al proprio interno 8 Pezzi d'Oro e una bottiglia di Pozione. La bottiglia ha una grande croce rossa sopra. Che fare?<br><br>
+                 Prendere solo l'Oro e continuare lungo il corridoio? O bere anche la Pozione?`,
           loot: {
             gold: 8,
             items: []
           },
           choices: [
-            { text: "Stappa e bevi la Pozione", target: "15" },
-            { text: "Lascia la pozione ed esci dalla stanza", target: "12" }
+            { text: "Stappa la bottiglia di Pozione", target: "15" },
+            { text: "Prendi l'oro e continua lungo il corridoio", target: "12" }
           ]
         },
         "15": {
           title: "15. Pozione",
-          text: `Non appena la bottiglia viene stappata, un Genio appare! "Oh, perdonami", dice. "Mi sembrava di aver sentito qualcuno Chiamare Aiuto".<br>
-                 Chiedi se la pozione sia velenosa, ma il Genio pretende che tu indovini il suo nome per risponderti... Qual è il suo nome?`,
+          text: `Non appena la bottiglia viene stappata, un Genio appare (nuovamente). “Oh, perdonami”, dice. “Errore mio. Mi era sembrato di sentire qualcuno Chiamare Aiuto”.<br><br>
+                 Il nostro Eroe chiede al Genio se la Pozione è velenosa.<br>
+                 “Questo ti costerà”, risponde il Genio. “Dammi 8 Pezzi d'Oro e io ti dirò di cosa si tratta. OPPURE te lo dirò se riesci a indovinare il mio nome. Nessuna idea?<br><br>
+                 No? Allora me ne vado. Tornerò di nuovo se dovessi trovare un'altra campanella. Una con la scritta ‘Suonare Per Chiamare Aiuto’. Non toccare nessun altra campanella, mi raccomando. A presto.”<br><br>
+                 Che fare? Indovinare il nome del Genio, bere la Pozione o continuare lungo il corridoio?`,
           input_riddle: {
             correct_answer: "aiuto",
             success: {
-              text: `Il Genio sorride! Riconoscendo che hai indovinato il suo nome ("Aiuto"), ti svela che la pozione è sicura e svanisce nel nulla.`,
-              target: "15_drink"
+              text: `Il Genio sorride! Riconoscendo che hai indovinato il suo nome (“Aiuto”), ti rivela il segreto: <em>si tratta di una Pozione dell'Incubo!</em> Prima di svanire, ti mette in guardia dal berla.`,
+              target: "15_choice_after_riddle"
             },
             failure: {
-              text: `Il Genio scuote la testa: "Non è questo il mio nome!" e svanisce nel nulla, lasciandoti con i tuoi dubbi.`,
-              target: "15_drink"
+              text: `Il Genio scuote la testa: “Non è questo il mio nome!” e svanisce nel nulla, lasciandoti con i tuoi dubbi.`,
+              target: "15_choice_after_riddle"
             }
           }
         },
+        "15_choice_after_riddle": {
+          title: "15. Pozione (Decisione)",
+          text: `Il Genio è svanito. Ti trovi nella stanza con la bottiglia di Pozione aperta tra le mani. Che cosa decidi di fare?`,
+          choices: [
+            { text: "Non bere la Pozione e continua il cammino", target: "12" },
+            { text: "Bevi la Pozione", target: "15_drink" }
+          ]
+        },
         "15_drink": {
           title: "15. Bevi la Pozione",
-          text: `Decidi di bere la Pozione... Il nostro Eroe comincia ad addormentarsi in un pesante sonno... quando ad un tratto qualcuno suona alla porta! Aaargh! È un disgustoso Hobgoblin che ti aggredisce!<br><br>
-                 La battaglia comincia! L'Hobgoblin ha 4 punti di Resistenza.`,
+          text: `Il nostro Eroe comincia ad addormentarsi. Si sdraia a terra e si lascia cadere in un pesante sonno.<br><br>
+                 Presto inizia a sognare del suo grande amore, la bellissima principessa Arabella. Il nostro Eroe è andato all'Antica Videoteca e ha noleggiato una sfera di cristallo, per trascorrere la serata in casa assieme alla sua bella a guardare insieme uno dei loro programmi preferiti. Si tratta della storia di questi supereroi che sono sempre splendidi e mettono a posto i giardini più disordinati, i <em>Mighty Morphin’ Flower Arrangers</em>.<br><br>
+                 Comunque sia, qualcuno suona alla porta. Sarà di certo la bella Principessa, pensa il nostro Eroe, mentre si lancia verso la porta e la spalanca, con le braccia aperte per stringere a sé il suo unico amore. Aaargh! No! Non è la Principessa, ma un disgustoso Hobgoblin. Lo spavento fa svegliare di colpo il nostro eroe.. ed è allora che scopre che l'Hobgoblin non è un sogno!<br><br>
+                 La battaglia cominci! L'Hobgoblin ha 4 punti di Resistenza.`,
           combat: {
             enemy_name: "Hobgoblin",
             enemy_stamina: 4
           },
           on_victory: {
-            text: `Sconfitto l'Hobgoblin, ti risvegli e continui lungo il passaggio!`,
+            text: `È meglio continuare lungo il passaggio.`,
             choices: [
-              { text: "Prosegui il cammino", target: "12" }
+              { text: "Prosegui lungo il corridoio", target: "12" }
             ]
           }
         },
         "16": {
           title: "16. Zombi",
-          text: `Il passaggio conduce in un'ampia caverna, al centro della quale si trova un forziere di legno. Ci sono tre larghe pietre piatte oltre il forziere. Che fare?`,
+          text: `Il passaggio conduce in un'ampia caverna, al centro della quale si trova un forziere di legno. Ci sono tre larghe pietre piatte che sporgono dal terreno oltre il forziere. Che fare?`,
           choices: [
             { text: "Fermarsi ad aprire il forziere", target: "17" },
             { text: "Ignorare il forziere e proseguire", target: "18" }
@@ -632,14 +676,16 @@
         },
         "17": {
           title: "17. Aprire il Forziere",
-          text: `Dentro il forziere ci sono 7 Pezzi d'Oro, ma non appena lo apri, il terreno si spacca e tre Zombi scheletrici escono dalle tombe!<br><br>
-                 Devi combatterli uno alla volta. Ciascuno possiede 2 punti di Resistenza!`,
+          text: `Dentro il forziere ci sono 7 Pezzi d'Oro, ma non appena il coperchio viene sollevato, il terreno inizia a tremare e franare tutto attorno. Di fronte alle pietre piatte, il suolo fangoso si sta muovendo. Sembra quasi come se una talpa stesse scavando un passaggio verso la superficie, finché questa si spacca e si apre. Ma non è una talpa quella che appare.. è una mano scheletrica!<br><br>
+                 Sotto gli occhi del nostro Eroe, tre Zombi in avanzato stato di decomposizione escono dalle proprie tombe e lo affrontano.<br><br>
+                 Bisogna combattere gli Zombi uno alla volta. Ciascuno di essi possiede 2 punti di Resistenza e un potere speciale detto Putrefazione. Se uno di loro colpisce tre volte il nostro Eroe prima di essere sconfitto, la sua carne inizierà a marcire ed egli si trasformerà a sua volta in uno Zombi privo di intelletto.<br><br>
+                 La battaglia cominci!`,
           combat: {
             enemy_name: "3 Zombi (uno alla volta)",
             enemy_stamina: 2
           },
           on_victory: {
-            text: `Sconfitti i tre non-morti, questi tornano polvere. Raccogli il tesoro e prosegui!`,
+            text: `Sconfitti i tre non-morti, la battaglia si conclude. Raccogli i 7 Pezzi d'Oro e prosegui verso l'uscita!`,
             loot: {
               gold: 7,
               items: []
@@ -650,10 +696,10 @@
           }
         },
         "18": {
-          title: "18. Il Vecchio",
+          title: "18. Vittoria!",
           text: `Un passaggio ventoso lascia la caverna, lungo un percorso che normalmente condurrebbe il nostro Eroe ancora più addentro nella montagna. Ma i Nani che hanno scavato il passaggio hanno sentito che a noi rimane poco tempo per quest'avventura e, per tirarci fuori, hanno preparato una deviazione che conduce a una porta di legno. Accanto alla porta c'è un vecchio con una lunga barba, che intima al nostro Eroe di fermarsi.<br><br>
-                 “E così, vorresti abbandonare Monte Pauroso?” ridacchia. “Lascia che mi presenti. Il mio nome è Alf. Sebbene non sia molto grande di taglia mi chiamano Grand Alf. Se vuoi passare attraverso questa porta dovrai prima darmi 6 Pezzi d'Oro. Altrimenti ho paura che non lascerai mai più il Monte Pauroso.”<br><br>
-                 Che fare? Il vecchio non sembra molto forte, ma d'altra parte forse il nostro Eroe si sente generoso...`,
+                 “E così, vorresti abbandonare Pauroso?” ridacchia. “Lascia che mi presenti. Il mio nome è Alf. Sebbene non sia molto grande di taglia mi chiamano Grand Alf. Se vuoi passare attraverso questa porta dovrai prima darmi 6 Pezzi d'Oro. Altrimenti ho paura che non lascerai mai più il Monte Pauroso.”<br><br>
+                 Che fare? Pagarlo? Affrontarlo? Il vecchio non sembra molto forte, ma d'altra parte forse il nostro Eroe si sente generoso..`,
           choices: [
             { text: "Affronta e combatti Grand Alf", target: "19" },
             { text: "Paga i 6 Pezzi d'Oro pretesi", target: "20" }
@@ -661,7 +707,7 @@
         },
         "19": {
           title: "19. Combattere",
-          text: `Grand Alf ha 18 punti di Resistenza ed è invincibile. Il nostro Eroe è prigioniero per sempre nel suo dominio..<br><br>
+          text: `Grand Alf ha 18 punti di Resistenza e non c'è modo di sconfiggerlo. Egli è, in realtà, il Signore di Monte Pauroso. Il nostro Eroe è prigioniero per sempre nel suo dominio. Non fuggirà mai più..<br><br>
                  <strong class="text-red-500 font-fantasy text-xl">Fine dell'Avventura (Sconfitta)</strong>`,
           is_game_over: true,
           choices: [
@@ -670,7 +716,7 @@
         },
         "20": {
           title: "20. Pagare",
-          text: `"Molte grazie!" Il vecchio apre la porta e il nostro Eroe può finalmente uscire alla luce del sole.<br><br>
+          text: `“Molte grazie, ragazzi!” Il vecchio apre la porta e il nostro Eroe può finalmente uscire. Ma prima che se ne vada, il mago parla un'ultima volta. “Puoi chiedermi ancora una cosa sull'avventura, se lo desideri. Come posso essere d'aiuto? Altrimenti, addio. Possa la tua Resistenza non scemare mai...”<br><br>
                  <strong class="text-emerald-400 font-fantasy text-2xl">FINE DELL'AVVENTURA - VITTORIA!</strong>`,
           gold_change: -6,
           is_victory: true
@@ -775,14 +821,61 @@
         const li = document.createElement('li');
         li.className = 'flex items-center justify-between text-amber-200 bg-black/40 px-2.5 py-1.5 rounded-lg border border-amber-950 text-xs sm:text-sm';
         
-        let actionBtn = '';
+        let actions = '';
+        if (item.startsWith('Pergamena')) {
+          actions += `<button onclick="readParchment('${item}')" class="text-xs text-amber-300 hover:text-amber-100 underline mr-1.5">Leggi</button>`;
+        }
         if (item === 'Pergamena E') {
-          actionBtn = `<button onclick="usePotion()" class="text-xs bg-emerald-950/80 text-emerald-300 border border-emerald-700/80 hover:bg-emerald-900/90 px-2 py-0.5 rounded font-semibold transition active:scale-95">Usa (+4 HP)</button>`;
+          actions += `<button onclick="usePotion()" class="text-xs bg-emerald-950/80 text-emerald-300 border border-emerald-700/80 hover:bg-emerald-900/90 px-2 py-0.5 rounded font-semibold transition active:scale-95">Usa (+5 HP)</button>`;
         }
         
-        li.innerHTML = `<span class="flex items-center gap-1.5"><span class="text-amber-400">📜</span> <span>${item}</span></span> ${actionBtn}`;
+        li.innerHTML = `<span class="flex items-center gap-1.5 cursor-pointer" onclick="if('${item}'.startsWith('Pergamena')) readParchment('${item}')"><span class="text-amber-400">📜</span> <span class="font-medium">${item}</span></span> <div class="flex items-center">${actions}</div>`;
         listElement.appendChild(li);
       });
+    }
+
+    function readParchment(item) {
+      if (item === 'Pergamena B') {
+        showModal(
+          "Pergamena “B” (Numero 1)",
+          `<div class="p-4 bg-black/60 border border-amber-700/80 rounded-xl italic text-amber-200 text-center leading-relaxed">
+            “Se Grand Alf, nonostante<br>
+            sembri un tipo assai paziente,<br>
+            è potente più di un drago<br>
+            di sicuro è un grande _ _ _ _ ?”
+          </div>
+          <p class="text-xs text-amber-500/80 mt-3 text-center">Un antico enigma magico per aprire passaggi sigillati.</p>`,
+          "Chiudi Pergamena"
+        );
+      } else if (item === 'Pergamena E') {
+        showModal(
+          "Pergamena “E”",
+          `<div class="p-4 bg-black/60 border border-emerald-700/80 rounded-xl italic text-emerald-200 text-center leading-relaxed">
+            “Se hai subito una ferita<br>
+            questo incanto ti riassesta<br>
+            a partire dalla testa<br>
+            giù alla punta delle dita”
+          </div>
+          <p class="text-xs text-emerald-400/90 mt-3 text-center">Incanto curativo: ripristina fino a 5 Punti di Resistenza (PF).</p>`,
+          "Chiudi Pergamena"
+        );
+      } else if (item === 'Pergamena H') {
+        showModal(
+          "Pergamena “H” (Numero 3)",
+          `<div class="p-4 bg-black/60 border border-amber-700/80 rounded-xl italic text-amber-200 text-center leading-relaxed">
+            “Se sei in cerca di un tesoro<br>
+            trova il Genio e lo otterrai:<br>
+            il suo nome scoprirai<br>
+            e ti donerà dell'oro!<br><br>
+            Se per caso ancor non sai<br>
+            come il Genio vien chiamato<br>
+            un indizio ti sia dato:<br>
+            <em>«Nel pericolo che fai?»</em>”
+          </div>
+          <p class="text-xs text-amber-500/80 mt-3 text-center">Indizio sul nome del Genio della lampada/campanella.</p>`,
+          "Chiudi Pergamena"
+        );
+      }
     }
 
     function updateUI() {
@@ -812,11 +905,15 @@
 
     function usePotion() {
       if (gameState.inventory.includes('Pergamena E')) {
-        const cureAmount = 4;
+        const cureAmount = 5;
         gameState.stamina = Math.min(gameState.max_stamina, gameState.stamina + cureAmount);
         gameState.inventory = gameState.inventory.filter(i => i !== 'Pergamena E');
         updateUI();
-        showModal("Pozione della Pergamena E", `Hai bevuto la pozione e recitato la formula magica!<br><br>Recuperi <strong class="text-emerald-400">+${cureAmount} Punti di Resistenza</strong> (PF).`, "Accetta Cura");
+        showModal("Incanto della Pergamena E", `Reciti la formula magica:<br><br>
+        <div class="italic text-emerald-300 p-2 border border-emerald-800 rounded bg-black/40 text-center text-xs">
+          “Se hai subito una ferita / questo incanto ti riassesta...”
+        </div><br>
+        Recuperi <strong class="text-emerald-400">+${cureAmount} Punti di Resistenza</strong> (PF).`, "Accetta Cura");
       }
     }
 
@@ -904,6 +1001,7 @@
         return;
       }
 
+      if (typeof stopAutoCombat === 'function') stopAutoCombat();
       combatBox.classList.add('hidden');
       riddleBox.classList.add('hidden');
       lootBox.classList.add('hidden');
@@ -992,12 +1090,67 @@
       }
     }
 
+    const diceIcons = ['', '⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+    let autoCombatTimer = null;
+
+    function stopAutoCombat() {
+      if (autoCombatTimer) {
+        clearTimeout(autoCombatTimer);
+        autoCombatTimer = null;
+      }
+      const autoBtnLabel = document.getElementById('auto-combat-label');
+      const autoBtnIcon = document.getElementById('auto-combat-icon');
+      if (autoBtnLabel) autoBtnLabel.textContent = "Combatti a Raffica";
+      if (autoBtnIcon) autoBtnIcon.textContent = "⚡";
+    }
+
+    function toggleAutoCombat() {
+      if (autoCombatTimer) {
+        stopAutoCombat();
+      } else {
+        const autoBtnLabel = document.getElementById('auto-combat-label');
+        const autoBtnIcon = document.getElementById('auto-combat-icon');
+        if (autoBtnLabel) autoBtnLabel.textContent = "Ferma Raffica";
+        if (autoBtnIcon) autoBtnIcon.textContent = "⏹";
+        runAutoCombatStep();
+      }
+    }
+
+    function runAutoCombatStep() {
+      if (gameState.current_enemy_stamina <= 0 || gameState.stamina <= 0) {
+        stopAutoCombat();
+        return;
+      }
+      handleCombatRound();
+      if (gameState.current_enemy_stamina > 0 && gameState.stamina > 0) {
+        autoCombatTimer = setTimeout(runAutoCombatStep, 280);
+      } else {
+        stopAutoCombat();
+      }
+    }
+
     function setupCombat(combatData) {
+      stopAutoCombat();
       combatBox.classList.remove('hidden');
       enemyName.innerHTML = `<span>⚔️</span> <span>${combatData.enemy_name}</span>`;
       gameState.current_enemy_stamina = combatData.enemy_stamina;
       enemyStamina.textContent = gameState.current_enemy_stamina;
-      combatLog.innerHTML = '<p class="text-amber-500/70 italic">Inizia lo scontro! Tira i dadi per combattere.</p>';
+      combatLog.innerHTML = '<p class="text-amber-500/80 italic">Inizia lo scontro! 2 dadi per parte: ogni 6 toglie 1 HP.</p>';
+
+      const heroVisual = document.getElementById('hero-dice-visual');
+      const enemyVisual = document.getElementById('enemy-dice-visual');
+      if (heroVisual) {
+        heroVisual.innerHTML = `
+          <span class="px-2.5 py-0.5 rounded bg-black/60 border border-amber-800/60 text-amber-200">🎲 -</span>
+          <span class="px-2.5 py-0.5 rounded bg-black/60 border border-amber-800/60 text-amber-200">🎲 -</span>
+        `;
+      }
+      if (enemyVisual) {
+        enemyVisual.innerHTML = `
+          <span class="px-2.5 py-0.5 rounded bg-black/60 border border-red-900/60 text-red-300">🎲 -</span>
+          <span class="px-2.5 py-0.5 rounded bg-black/60 border border-red-900/60 text-red-300">🎲 -</span>
+        `;
+      }
     }
 
     function handleCombatRound() {
@@ -1007,23 +1160,52 @@
         diceIcon.classList.add('rolling');
       }
 
-      const heroDice = Math.floor(Math.random() * 6) + 1;
-      const enemyDice = Math.floor(Math.random() * 6) + 1;
+      // 2 Dadi Eroe e 2 Dadi Mostro (Regolamento originale Steve Jackson, pag. 10 del documento)
+      const heroD1 = Math.floor(Math.random() * 6) + 1;
+      const heroD2 = Math.floor(Math.random() * 6) + 1;
+      const enemyD1 = Math.floor(Math.random() * 6) + 1;
+      const enemyD2 = Math.floor(Math.random() * 6) + 1;
 
-      let logMessage = `Tiro: Tu [${heroDice}] vs Mostro [${enemyDice}] → `;
+      // Aggiornamento visuale dadi
+      const heroVisual = document.getElementById('hero-dice-visual');
+      const enemyVisual = document.getElementById('enemy-dice-visual');
+      if (heroVisual) {
+        heroVisual.innerHTML = `
+          <span class="px-2.5 py-0.5 rounded border transition-all ${heroD1 === 6 ? 'bg-amber-500/40 border-amber-300 text-amber-200 font-extrabold shadow-[0_0_12px_rgba(251,191,36,0.6)] scale-105' : 'bg-black/60 border-amber-800/60 text-amber-200'}">${diceIcons[heroD1]} ${heroD1}</span>
+          <span class="px-2.5 py-0.5 rounded border transition-all ${heroD2 === 6 ? 'bg-amber-500/40 border-amber-300 text-amber-200 font-extrabold shadow-[0_0_12px_rgba(251,191,36,0.6)] scale-105' : 'bg-black/60 border-amber-800/60 text-amber-200'}">${diceIcons[heroD2]} ${heroD2}</span>
+        `;
+      }
+      if (enemyVisual) {
+        enemyVisual.innerHTML = `
+          <span class="px-2.5 py-0.5 rounded border transition-all ${enemyD1 === 6 ? 'bg-red-500/40 border-red-400 text-red-200 font-extrabold shadow-[0_0_12px_rgba(239,68,68,0.6)] scale-105' : 'bg-black/60 border-red-900/60 text-red-300'}">${diceIcons[enemyD1]} ${enemyD1}</span>
+          <span class="px-2.5 py-0.5 rounded border transition-all ${enemyD2 === 6 ? 'bg-red-500/40 border-red-400 text-red-200 font-extrabold shadow-[0_0_12px_rgba(239,68,68,0.6)] scale-105' : 'bg-black/60 border-red-900/60 text-red-300'}">${diceIcons[enemyD2]} ${enemyD2}</span>
+        `;
+      }
 
-      if (heroDice === 6 && enemyDice === 6) {
-        logMessage += `<span class="text-amber-300 font-semibold">Parità critica! Entrambi subite 1 danno.</span>`;
-        gameState.current_enemy_stamina -= 1;
-        gameState.stamina -= 1;
-      } else if (heroDice === 6) {
-        gameState.current_enemy_stamina -= 1;
-        logMessage += `<span class="text-emerald-400 font-semibold">Colpo a segno! Il mostro perde 1 HP.</span>`;
-      } else if (enemyDice === 6) {
-        gameState.stamina -= 1;
-        logMessage += `<span class="text-red-400 font-semibold">Sei stato colpito! Perdi 1 HP.</span>`;
+      // Conteggio colpi da 6
+      const heroHits = (heroD1 === 6 ? 1 : 0) + (heroD2 === 6 ? 1 : 0);
+      const enemyHits = (enemyD1 === 6 ? 1 : 0) + (enemyD2 === 6 ? 1 : 0);
+
+      if (heroHits > 0) {
+        gameState.current_enemy_stamina = Math.max(0, gameState.current_enemy_stamina - heroHits);
+      }
+      if (enemyHits > 0) {
+        gameState.stamina = Math.max(0, gameState.stamina - enemyHits);
+      }
+
+      let logMessage = '';
+      if (heroHits > 0 && enemyHits > 0) {
+        logMessage = `<span class="text-amber-300 font-semibold">💥 Scambio violento! Infliggi ${heroHits} danno/i ma subisci ${enemyHits} danno/i!</span>`;
+      } else if (heroHits > 0) {
+        logMessage = heroHits === 2 
+          ? `<span class="text-emerald-400 font-bold text-sm">🔥 DOPPIO 6! Colpo micidiale: infliggi 2 Danni al mostro!</span>`
+          : `<span class="text-emerald-400 font-semibold">⚔️ Colpo a segno! Un 6: il mostro perde 1 HP.</span>`;
+      } else if (enemyHits > 0) {
+        logMessage = enemyHits === 2
+          ? `<span class="text-red-400 font-bold text-sm">⚠️ Il mostro ottiene DOPPIO 6! Subisci 2 danni pesanti!</span>`
+          : `<span class="text-red-400 font-semibold">🩸 Sei stato colpito! Il mostro fa 6: perdi 1 HP.</span>`;
       } else {
-        logMessage += `<span class="text-amber-400/80">Nessun colpo critico (serve un 6).</span>`;
+        logMessage = `<span class="text-amber-400/70">Nessun colpo critico in questo round (nessun 6).</span>`;
       }
 
       combatLog.innerHTML = `<p>${logMessage}</p>`;
@@ -1032,6 +1214,7 @@
       updateUI();
 
       if (gameState.current_enemy_stamina <= 0) {
+        stopAutoCombat();
         combatBox.classList.add('hidden');
         const currentNode = gamebook.nodes[gameState.current_node];
         if (currentNode.on_victory) {
@@ -1061,6 +1244,7 @@
           }
         }
       } else if (gameState.stamina <= 0) {
+        stopAutoCombat();
         combatBox.classList.add('hidden');
         goToNode(gameState.current_node);
       }
