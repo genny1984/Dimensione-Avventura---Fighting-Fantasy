@@ -1050,7 +1050,8 @@
       heal: 4
     },
     choices: [
-      { text: "Spalanca le monumentali porte dorate verso il Salone del Trono", target: "26" }
+      { text: "Spalanca le monumentali porte dorate verso il Salone del Trono", target: "26" },
+      { text: "Spingi con troppa foga la vetrata scheggiata sporgendoti nel vuoto del crepaccio", target: "35" }
     ]
   },
   "24": {
@@ -1235,6 +1236,27 @@
                    <h3 class="font-fantasy text-2xl text-red-400">La Tua Resistenza è Scaduta</h3>
                    <p class="text-sm sm:text-base text-amber-200/90 leading-relaxed">
                      Le tue forze ti abbandonano mentre crolli sul freddo suolo di pietra. L'eco dei tuoi passi si spegne nell'oscurità e il destino di Aethelgard resta avvolto nelle ombre di Malakor...
+                   </p>
+                 </div>`,
+    is_game_over: true,
+    choices: [
+      { text: "Ricarica Ultimo Salvataggio", load_game: true },
+      { text: "Ricomincia l'Avventura", target: "1", reset_game: true }
+    ]
+  },
+  "35": {
+    title: "35. Il Precipizio di Cristallo",
+    image: "assets/node_35.jpg",
+    image_caption: "La caduta fatale nel baratro della fortezza",
+    text: (p) => `<div class="text-center space-y-3">
+                   <span class="text-4xl">⚠️</span>
+                   <h3 class="font-fantasy text-2xl text-red-400">Tragica Caduta nel Vuoto</h3>
+                   <p class="text-sm sm:text-base text-amber-200/90 leading-relaxed">
+                     Nel tentativo di oltrepassare la vetrata scheggiata per scivolare all'esterno lungo il cornicione, la fragile intelaiatura di piombo e cristallo cede di schianto sotto la tua spinta. I frammenti acuminati precipitano nel vuoto e, prima che tu possa trovare un appiglio sulla roccia viscida di brina, i tuoi stivali scivolano dal parapetto.<br><br>
+                     Cadi senza scampo nel crepaccio senza fondo che circonda la Rocca del Crepuscolo, mentre l'eco del tuo grido si perde per sempre nella nebbia dell'abisso...
+                   </p>
+                   <p class="font-fantasy text-red-500 text-lg font-bold">
+                     💀 Fine dell'Impresa (Caduta Fatale)
                    </p>
                  </div>`,
     is_game_over: true,
