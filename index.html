@@ -268,7 +268,7 @@
           <!-- Avatar 1 (Male Ranger Prince) -->
           <div onclick="selectAvatar('elyan')" id="avatar-card-elyan" class="avatar-card cursor-pointer p-2 rounded-xl border-2 border-amber-700 bg-black/30 text-center transition hover:border-amber-400">
             <div class="ink-portrait rounded-lg w-full aspect-square flex items-center justify-center mb-2 overflow-hidden border border-[#3c2a16]">
-              <img src="assets/avatar_elyan.jpg" alt="Principe Ramingo" class="w-full h-full object-cover">
+              <img src="assets/avatar_elyan.jpg" alt="Principe Ramingo" class="w-full h-full object-cover" loading="lazy" decoding="async">
             </div>
             <span class="text-xs font-fantasy text-amber-200 block">Ramingo</span>
           </div>
@@ -276,7 +276,7 @@
           <!-- Avatar 2 (Female Ranger Princess) -->
           <div onclick="selectAvatar('elysia')" id="avatar-card-elysia" class="avatar-card cursor-pointer p-2 rounded-xl border-2 border-transparent bg-black/30 text-center transition hover:border-amber-400">
             <div class="ink-portrait rounded-lg w-full aspect-square flex items-center justify-center mb-2 overflow-hidden border border-[#3c2a16]">
-              <img src="assets/avatar_elysia.jpg" alt="Principessa Esule" class="w-full h-full object-cover">
+              <img src="assets/avatar_elysia.jpg" alt="Principessa Esule" class="w-full h-full object-cover" loading="lazy" decoding="async">
             </div>
             <span class="text-xs font-fantasy text-amber-200 block">Esule</span>
           </div>
@@ -284,7 +284,7 @@
           <!-- Avatar 3 (Mysterious Cloaked Heir) -->
           <div onclick="selectAvatar('elen')" id="avatar-card-elen" class="avatar-card cursor-pointer p-2 rounded-xl border-2 border-transparent bg-black/30 text-center transition hover:border-amber-400">
             <div class="ink-portrait rounded-lg w-full aspect-square flex items-center justify-center mb-2 overflow-hidden border border-[#3c2a16]">
-              <img src="assets/avatar_elen.jpg" alt="Erede Guardiano" class="w-full h-full object-cover">
+              <img src="assets/avatar_elen.jpg" alt="Erede Guardiano" class="w-full h-full object-cover" loading="lazy" decoding="async">
             </div>
             <span class="text-xs font-fantasy text-amber-200 block">Guardiano</span>
           </div>
@@ -534,7 +534,7 @@
 
           <!-- PARAGRAPH SCENE ILLUSTRATION (MEDIEVAL INK WOODCUT) -->
           <div id="node-illustration-box" class="hidden mb-4 rounded-xl overflow-hidden border-2 border-amber-800/80 shadow-2xl relative ink-portrait bg-[#120e0b]">
-            <img id="node-illustration-img" src="" alt="Illustrazione Scena" class="w-full max-h-72 object-cover object-center filter contrast-105">
+            <img id="node-illustration-img" src="" alt="Illustrazione Scena" class="w-full max-h-72 object-cover object-center filter contrast-105 transition-opacity duration-300" loading="eager" decoding="async">
             <div class="absolute inset-0 pointer-events-none border border-amber-500/20 rounded-xl shadow-inner"></div>
             <div id="node-illustration-caption" class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/95 via-black/75 to-transparent px-3 py-1.5 text-center text-xs text-amber-200/95 font-fantasy tracking-wider"></div>
           </div>
@@ -1871,18 +1871,36 @@
       nodeTitle.textContent = node.title;
       nodeText.innerHTML = typeof node.text === 'function' ? node.text(pronouns) : node.text;
 
-      // Handle Paragraph Scene Illustration (Medieval Ink Etching)
+      // Handle Paragraph Scene Illustration (Medieval Ink Etching) with Smooth Crossfade & Preloading
       const illustBox = document.getElementById('node-illustration-box');
       const illustImg = document.getElementById('node-illustration-img');
       const illustCaption = document.getElementById('node-illustration-caption');
       if (illustBox && illustImg) {
         if (node.image) {
-          illustImg.src = node.image;
+          if (illustImg.getAttribute('data-current-src') !== node.image) {
+            illustImg.setAttribute('data-current-src', node.image);
+            illustImg.style.opacity = '0.35';
+            illustImg.src = node.image;
+            illustImg.onload = () => { illustImg.style.opacity = '1'; };
+          } else {
+            illustImg.style.opacity = '1';
+          }
           if (illustCaption) illustCaption.textContent = node.image_caption || node.title;
           illustBox.classList.remove('hidden');
         } else {
           illustBox.classList.add('hidden');
         }
+      }
+
+      // Preload next choice images for instantaneous zero-lag navigation on mobile
+      if (node.choices && Array.isArray(node.choices)) {
+        node.choices.forEach(ch => {
+          if (ch.target && storyNodes[ch.target] && storyNodes[ch.target].image) {
+            const pre = new Image();
+            pre.decoding = 'async';
+            pre.src = storyNodes[ch.target].image;
+          }
+        });
       }
 
       // Handle Roland saved state
@@ -2199,27 +2217,30 @@
         this.ctx = null;
         this.isPlaying = false;
         this.masterGain = null;
-        this.reverbNode = null;
+        this.delay = null;
+        this.delayFeedback = null;
+        this.delayFilter = null;
         this.loopTimer = null;
         this.tempo = 72; // BPM solenne e maestoso
+        this.activeNodes = new Set();
       }
 
       init() {
         if (!this.ctx) {
           const AudioContext = window.AudioContext || window.webkitAudioContext;
-          this.ctx = new AudioContext();
+          this.ctx = new AudioContext({ latencyHint: 'playback' });
 
           this.masterGain = this.ctx.createGain();
           this.masterGain.gain.setValueAtTime(0.0001, this.ctx.currentTime);
 
-          // Simulated Cathedral/Hall Reverb via Feedback Delay Network
+          // Simulated Cathedral/Hall Reverb via lightweight Feedback Delay Network
           this.delay = this.ctx.createDelay();
-          this.delay.delayTime.value = 0.44;
+          this.delay.delayTime.value = 0.42;
           this.delayFeedback = this.ctx.createGain();
-          this.delayFeedback.gain.value = 0.42;
+          this.delayFeedback.gain.value = 0.38;
           this.delayFilter = this.ctx.createBiquadFilter();
           this.delayFilter.type = 'lowpass';
-          this.delayFilter.frequency.value = 2200;
+          this.delayFilter.frequency.value = 2000;
 
           this.delay.connect(this.delayFilter);
           this.delayFilter.connect(this.delayFeedback);
@@ -2239,7 +2260,7 @@
         if (this.isPlaying) return;
         this.isPlaying = true;
         this.masterGain.gain.cancelScheduledValues(this.ctx.currentTime);
-        this.masterGain.gain.linearRampToValueAtTime(0.35, this.ctx.currentTime + 1.5);
+        this.masterGain.gain.linearRampToValueAtTime(0.35, this.ctx.currentTime + 1.2);
         this.scheduleOrchestraLoop(this.ctx.currentTime + 0.1);
       }
 
@@ -2251,92 +2272,109 @@
           this.loopTimer = null;
         }
         this.masterGain.gain.cancelScheduledValues(this.ctx.currentTime);
-        this.masterGain.gain.linearRampToValueAtTime(0.0001, this.ctx.currentTime + 1.2);
+        this.masterGain.gain.linearRampToValueAtTime(0.0001, this.ctx.currentTime + 0.8);
+        this.cleanupAllNodes();
       }
 
-      // Detuned multi-saw/triangle string section (Violins/Violas/Cellos)
-      playStringChord(chordFreqs, startTime, duration, velocity = 0.18) {
-        if (!this.ctx || !this.isPlaying) return;
-        chordFreqs.forEach(freq => {
-          [-6, 0, 6].forEach((detune, idx) => {
-            const osc = this.ctx.createOscillator();
-            const gain = this.ctx.createGain();
-            const filter = this.ctx.createBiquadFilter();
+      registerNode(node) {
+        this.activeNodes.add(node);
+        node.onended = () => {
+          try { node.disconnect(); } catch (e) {}
+          this.activeNodes.delete(node);
+        };
+      }
 
-            osc.type = idx === 1 ? 'sawtooth' : 'triangle';
-            osc.frequency.setValueAtTime(freq, startTime);
-            osc.detune.setValueAtTime(detune, startTime);
-
-            // Vibrato LFO
-            const lfo = this.ctx.createOscillator();
-            const lfoGain = this.ctx.createGain();
-            lfo.frequency.setValueAtTime(5.2, startTime);
-            lfoGain.gain.setValueAtTime(0, startTime);
-            lfoGain.gain.linearRampToValueAtTime(3.2, startTime + 0.6);
-            lfo.connect(osc.frequency);
-            lfo.start(startTime);
-            lfo.stop(startTime + duration + 0.8);
-
-            filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(freq * 3.2, startTime);
-            filter.Q.value = 1.0;
-
-            const attack = 0.4;
-            const release = 0.8;
-            gain.gain.setValueAtTime(0.0001, startTime);
-            gain.gain.linearRampToValueAtTime(velocity * 0.35, startTime + attack);
-            gain.gain.setValueAtTime(velocity * 0.35, startTime + duration - 0.2);
-            gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration + release);
-
-            osc.connect(filter);
-            filter.connect(gain);
-            gain.connect(this.masterGain);
-
-            osc.start(startTime);
-            osc.stop(startTime + duration + release);
-          });
+      cleanupAllNodes() {
+        this.activeNodes.forEach(node => {
+          try {
+            if (typeof node.stop === 'function') node.stop();
+            node.disconnect();
+          } catch (e) {}
         });
+        this.activeNodes.clear();
       }
 
-      // Noble French Horn / Brass for the Heroic Fellowship Leitmotif
-      playFrenchHorn(freq, startTime, duration, velocity = 0.28) {
+      // Mobile-optimized lush strings (single chord filter & natural detune chorus)
+      playStringChord(chordFreqs, startTime, duration, velocity = 0.22) {
+        if (!this.ctx || !this.isPlaying) return;
+
+        const chordFilter = this.ctx.createBiquadFilter();
+        chordFilter.type = 'lowpass';
+        chordFilter.frequency.setValueAtTime(650, startTime);
+        chordFilter.frequency.linearRampToValueAtTime(950, startTime + duration * 0.5);
+
+        const chordGain = this.ctx.createGain();
+        const attack = 0.5;
+        const release = 0.8;
+        chordGain.gain.setValueAtTime(0.0001, startTime);
+        chordGain.gain.linearRampToValueAtTime(velocity, startTime + attack);
+        chordGain.gain.setValueAtTime(velocity * 0.85, startTime + duration - 0.2);
+        chordGain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration + release);
+
+        chordFilter.connect(chordGain);
+        chordGain.connect(this.masterGain);
+
+        chordFreqs.forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator();
+          osc.type = idx % 2 === 0 ? 'sawtooth' : 'triangle';
+          osc.frequency.setValueAtTime(freq, startTime);
+          osc.detune.setValueAtTime(idx % 2 === 0 ? 5 : -5, startTime);
+
+          osc.connect(chordFilter);
+          osc.start(startTime);
+          osc.stop(startTime + duration + release);
+          this.registerNode(osc);
+        });
+
+        setTimeout(() => {
+          try {
+            chordFilter.disconnect();
+            chordGain.disconnect();
+          } catch(e) {}
+        }, (startTime + duration + release - this.ctx.currentTime + 0.1) * 1000);
+      }
+
+      // Noble French Horn / Brass for Heroic Fellowship Leitmotif
+      playFrenchHorn(freq, startTime, duration, velocity = 0.32) {
         if (!this.ctx || !this.isPlaying) return;
         const osc = this.ctx.createOscillator();
-        const subOsc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         const filter = this.ctx.createBiquadFilter();
 
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(freq, startTime);
-        subOsc.type = 'triangle';
-        subOsc.frequency.setValueAtTime(freq * 0.5, startTime);
 
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(freq * 1.4, startTime);
-        filter.frequency.exponentialRampToValueAtTime(freq * 3.6, startTime + 0.2);
+        filter.frequency.setValueAtTime(freq * 1.5, startTime);
+        filter.frequency.exponentialRampToValueAtTime(freq * 3.8, startTime + 0.18);
         filter.frequency.linearRampToValueAtTime(freq * 2.2, startTime + duration);
-        filter.Q.value = 2.2;
+        filter.Q.value = 2.0;
 
-        const attack = 0.15;
-        const release = 0.5;
+        const attack = 0.12;
+        const release = 0.45;
         gain.gain.setValueAtTime(0.0001, startTime);
         gain.gain.linearRampToValueAtTime(velocity, startTime + attack);
-        gain.gain.setValueAtTime(velocity * 0.88, startTime + duration - 0.1);
+        gain.gain.setValueAtTime(velocity * 0.85, startTime + duration - 0.1);
         gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration + release);
 
         osc.connect(filter);
-        subOsc.connect(filter);
         filter.connect(gain);
         gain.connect(this.masterGain);
 
         osc.start(startTime);
-        subOsc.start(startTime);
         osc.stop(startTime + duration + release);
-        subOsc.stop(startTime + duration + release);
+        this.registerNode(osc);
+
+        setTimeout(() => {
+          try {
+            filter.disconnect();
+            gain.disconnect();
+          } catch(e) {}
+        }, (startTime + duration + release - this.ctx.currentTime + 0.1) * 1000);
       }
 
-      // Symphonic Timpani / Taiko with deep pitch slide
-      playTimpani(startTime, freq = 65, velocity = 0.4) {
+      // Symphonic Timpani with pitch slide
+      playTimpani(startTime, freq = 65, velocity = 0.42) {
         if (!this.ctx || !this.isPlaying) return;
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
@@ -2346,17 +2384,22 @@
         osc.frequency.exponentialRampToValueAtTime(freq, startTime + 0.1);
 
         gain.gain.setValueAtTime(velocity, startTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 1.4);
+        gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 1.2);
 
         osc.connect(gain);
         gain.connect(this.masterGain);
 
         osc.start(startTime);
-        osc.stop(startTime + 1.4);
+        osc.stop(startTime + 1.2);
+        this.registerNode(osc);
+
+        setTimeout(() => {
+          try { gain.disconnect(); } catch(e) {}
+        }, (startTime + 1.3 - this.ctx.currentTime) * 1000);
       }
 
-      // Elven Harp crystalline arpeggio note
-      playHarp(freq, startTime, velocity = 0.14) {
+      // Elegant Elven Harp arpeggio note (lightweight triangle wave)
+      playHarp(freq, startTime, velocity = 0.12) {
         if (!this.ctx || !this.isPlaying) return;
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
@@ -2365,13 +2408,18 @@
         osc.frequency.setValueAtTime(freq, startTime);
 
         gain.gain.setValueAtTime(velocity, startTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 2.0);
+        gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 1.5);
 
         osc.connect(gain);
         gain.connect(this.masterGain);
 
         osc.start(startTime);
-        osc.stop(startTime + 2.0);
+        osc.stop(startTime + 1.5);
+        this.registerNode(osc);
+
+        setTimeout(() => {
+          try { gain.disconnect(); } catch(e) {}
+        }, (startTime + 1.6 - this.ctx.currentTime) * 1000);
       }
 
       // Schedules a full 16-beat LotR symphonic progression
@@ -2387,35 +2435,27 @@
           F2: 87.31, C3: 130.81, G2: 98.0, Bb2: 116.54, E2: 82.41
         };
 
-        // 1. Lush String Chords (4 beats each)
-        // Measure 1: D minor (D2 - A2 - F3 - A3)
+        // 1. Strings: Dm -> Bb -> C -> Dm
         this.playStringChord([N.D2, N.A2, N.F3, N.A3], startTime + 0 * b, 4 * b);
-        // Measure 2: Bb Major / D (Bb2 - F3 - Bb3 - D4)
         this.playStringChord([N.Bb2, N.F3, N.Bb3, N.D4], startTime + 4 * b, 4 * b);
-        // Measure 3: C Major (C3 - G3 - C4 - E4)
         this.playStringChord([N.C3, N.G3, N.C4, N.E4], startTime + 8 * b, 4 * b);
-        // Measure 4: D minor triumphant (D2 - A2 - D3 - F4)
         this.playStringChord([N.D2, N.A2, N.D3, N.F4], startTime + 12 * b, 4 * b);
 
-        // 2. Majestic Fellowship Horn Melody (The Ring / Rohan leitmotif)
-        // Measure 1
+        // 2. French Horn Solo (Fellowship / Rohan leitmotif)
         this.playFrenchHorn(N.D3, startTime + 0.0 * b, 1.5 * b, 0.32);
         this.playFrenchHorn(N.E3, startTime + 1.5 * b, 0.5 * b, 0.28);
         this.playFrenchHorn(N.F3, startTime + 2.0 * b, 1.0 * b, 0.34);
         this.playFrenchHorn(N.G3, startTime + 3.0 * b, 1.0 * b, 0.35);
 
-        // Measure 2
         this.playFrenchHorn(N.A3, startTime + 4.0 * b, 2.0 * b, 0.38);
         this.playFrenchHorn(N.F3, startTime + 6.0 * b, 1.0 * b, 0.32);
         this.playFrenchHorn(N.E3, startTime + 7.0 * b, 1.0 * b, 0.30);
 
-        // Measure 3 (Ascending glory)
         this.playFrenchHorn(N.D3, startTime + 8.0 * b, 1.5 * b, 0.34);
         this.playFrenchHorn(N.F3, startTime + 9.5 * b, 0.5 * b, 0.30);
         this.playFrenchHorn(N.A3, startTime + 10.0 * b, 1.0 * b, 0.36);
         this.playFrenchHorn(N.C4, startTime + 11.0 * b, 1.0 * b, 0.38);
 
-        // Measure 4 (Heroic resolution)
         this.playFrenchHorn(N.D4, startTime + 12.0 * b, 2.0 * b, 0.40);
         this.playFrenchHorn(N.A3, startTime + 14.0 * b, 1.0 * b, 0.32);
         this.playFrenchHorn(N.D3, startTime + 15.0 * b, 1.0 * b, 0.35);
@@ -2427,11 +2467,10 @@
         this.playTimpani(startTime + 12.0 * b, 73, 0.50);
         this.playTimpani(startTime + 12.5 * b, 73, 0.35);
 
-        // 4. Elven Harp Flowing Arpeggios (8th-note gentle ripples)
-        const harpScale = [N.D3, N.F3, N.A3, N.D4, N.F4, N.A4];
-        for (let step = 0; step < 32; step++) {
-          const harpFreq = harpScale[step % harpScale.length];
-          this.playHarp(harpFreq, startTime + step * (b * 0.5), 0.12);
+        // 4. Refined Elven Harp: 8 resonant flourishes instead of 32 CPU-choking nodes
+        const harpNotes = [N.D4, N.F4, N.A4, N.D4, N.C4, N.E4, N.A4, N.D4];
+        for (let i = 0; i < harpNotes.length; i++) {
+          this.playHarp(harpNotes[i], startTime + i * (2 * b) + (b * 0.5), 0.12);
         }
 
         // Schedule next iteration seamlessly
