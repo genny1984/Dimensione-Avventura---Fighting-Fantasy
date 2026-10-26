@@ -1066,19 +1066,19 @@
     },
     choices: [
       { text: "Sali per il corridoio segreto verso il Santuario del Vetro e i Giardini", target: "23" },
-      { text: "Raggiungi i ribelli radunati nel Grande Salone delle Guardie", target: "25" },
+      { text: "Attraversa il portone principale verso la Galleria dei Balconi", target: "25" },
       { text: "Marcia a testa alta verso le imponenti porte del Salone del Trono", target: "26" }
     ]
   },
   "25": {
-    title: "25. Il Grande Salone delle Guardie",
+    title: "25. La Galleria dei Balconi",
     image: "assets/node_25.jpg",
-    image_caption: "Il Grande Salone delle Guardie e le arcate gotiche",
-    text: (p) => `Attraversi i corridoi affrescati dove un tempo suonavano le arpe dei Re. Gli arazzi sono lacerati e le guardie corrotte dormono o fuggono udendo i clamori della rivolta che divampa dal basso.<br><br>
-                 Ti trovi nel fulcro del palazzo: di fronte a te si stagliano le imponenti porte di ferro nero del Salone del Trono, mentre una porta laterale conduce al camminamento del Bastione Esterno.`,
+    image_caption: "La Galleria dei Balconi e la vista sul mercato della cittadella",
+    text: (p) => `Attraversi i corridoi affrescati dove un tempo risuonavano le arpe dei Re d'Aethelgard. Dalle maestose arcate gotiche e dalle ampie balconate in pietra che affacciano sulla parte bassa della cittadella, salgono nitide le voci concitate, il vociare indaffarato e i richiami dei mercanti del mercato cittadino.<br><br>
+                 Ti trovi a uno snodo cruciale: davanti a te si stagliano le imponenti porte di ferro nero del Salone del Trono, mentre una rampa laterale di servizio scende verso la piazza del mercato, offrendo l'opportunità di uscire e cercare una via secondaria per raggiungere la sala reale evitando l'ingresso principale.`,
     choices: [
-      { text: "Spalanca con decisione le porte del Salone del Trono d'Ossidiana", target: "26" },
-      { text: "Sorveglia i camminamenti esterni verso il Bastione", target: "22" }
+      { text: "Avanza con determinazione verso le imponenti porte del Salone del Trono d'Ossidiana", target: "26" },
+      { text: "Scendi per la rampa di servizio verso il Mercato della Cittadella per cercare una via alternativa", target: "36" }
     ]
   },
   "26": {
@@ -1122,14 +1122,15 @@
   "29": {
     title: "29. Duello Finale: Malakor l'Ombromante (con Roland)",
     image: "assets/node_29.jpg",
-    image_caption: "Il duello supremo: Roland e l'Erede contro Malakor",
+    image_caption: "Il duello supremo: Roland e l'Erede contro lo stregone Malakor",
     text: (p) => `Varcate la terrazza sommitale. Al centro di un vortice di tempesta fluttua <strong>Malakor l'Ombromante</strong>, avvolto da vesti di fumo nero e con il bastone sormontato da un teschio di drago.<br><br>
                  «Maledetti ribelli!» sibila lo stregone con una risata gelida. «Dunque ${p.heir_title} è ${p.tornato_a} a reclamare la cenere del suo trono! E tu, stolto Roland, hai osato spezzare il mio giogo? Morirete entrambi tra le fiamme d'ombra!»<br><br>
                  Ma Roland solleva lo scudo bloccando una raffica di dardi oscuri: «Non vincerai, stregone! Per ${p.hero_title} e per Aethelgard!»`,
     combat: {
       enemy_name: "Malakor l'Ombromante",
       enemy_stamina: 4,
-      hero_buff: true
+      hero_buff: true,
+      enemy_hits_on_5: true
     },
     on_victory: {
       text: (p) => `Unendo le vostre forze, la tua lama fende il petto del mago oscuro mentre il suo bastone si spezza in mille frammenti incandescenti. Malakor si dissolve in un urlo d'agonia disperso dal vento dell'Alba!`,
@@ -1139,16 +1140,17 @@
   "30": {
     title: "30. Duello Finale: Malakor l'Ombromante (da Solo)",
     image: "assets/node_30.jpg",
-    image_caption: "Lo scontro solitario contro Malakor l'Ombromante",
+    image_caption: "La caduta di Malakor l'Ombromante e la sua dissoluzione in cenere",
     text: (p) => `Varchi da sol${p.o_a} la terrazza sommitale, con la spada intrisa del sangue del tuo migliore amico e il cuore colmo d'ira. Malakor ridacchia dall'alto del suo vortice oscuro:<br><br>
                  «Hai dovuto uccidere il tuo cavaliere più fedele con le tue stesse mani! Sei ${p.solo_a}, ultim${p.o_a} rampoll${p.o_a} di una stirpe estinta!»<br><br>
                  «Non sono ${p.solo_a},» ribatti con voce fiera che rimbomba tra le pietre della rocca. «Tutta Aethelgard combatte nel mio pugno!»`,
     combat: {
       enemy_name: "Malakor l'Ombromante",
-      enemy_stamina: 4
+      enemy_stamina: 4,
+      enemy_hits_on_5: true
     },
     on_victory: {
-      text: (p) => `Con un affondo disperato guidato dalla memoria di tuo padre e di Roland, trafiggi il cuore corrotto dello stregone. Malakor si disintegra in cenere mentre le nubi scure si diradano.`,
+      text: (p) => `Con un affondo disperato guidato dalla memoria di tuo padre e di Roland, trafiggi il cuore corrotto dello stregone. Malakor si disintegra in vortici di cenere e fumo mentre le nubi scure si diradano e la luce dell'Alba risplende sulla terrazza.`,
       target: "33"
     }
   },
@@ -1263,6 +1265,93 @@
     choices: [
       { text: "Ricarica Ultimo Salvataggio", load_game: true },
       { text: "Ricomincia l'Avventura", target: "1", reset_game: true }
+    ]
+  },
+  "36": {
+    title: "36. Il Mercato della Cittadella",
+    image: "assets/node_36.jpg",
+    image_caption: "Il mercato brulicante della cittadella e il posto di blocco delle guardie",
+    text: (p) => `Scendendo con passo felpato lungo la rampa di servizio, sbuchi nella piazza affollata del mercato della cittadella. Tra banchi di spezie, stoffe, ceste di granaglie e botteghe di fabbri, la gente del popolo si muove sotto lo sguardo torvo e vigile degli armigeri di Malakor.<br><br>
+                 Di fronte a te, a sbarramento della grande scalinata nobiliare che risale verso l'ala reale, un drappello di guardie pesanti in armatura a piastre ha allestito un rigido posto di blocco, perquisendo e interrogando rudemente chiunque provi ad avvicinarsi al palazzo. Come decidi di procedere?`,
+    choices: [
+      { text: "Tenta di forzare il passaggio a testa alta oltre il posto di blocco", target: "37" },
+      { text: "Copriti con un vecchio mantello lacerato e prova a sfuggire fingendoti un mendicante", check_spadone: true, target_normal: "41", target_spadone: "38" }
+    ]
+  },
+  "37": {
+    title: "37. Sopraffatt${p.o_a} dal Presidio",
+    image: "assets/node_34.jpg",
+    image_caption: "Accerchiat${p.o_a} e sopraffatt${p.o_a} dal presidio delle guardie",
+    text: (p) => `<div class="text-center space-y-3">
+                   <span class="text-4xl">⚔️</span>
+                   <h3 class="font-fantasy text-2xl text-red-400">Allarme e Massacro al Presidio</h3>
+                   <p class="text-sm sm:text-base text-amber-200/90 leading-relaxed">
+                     Avanzi senza nasconderti verso il posto di blocco. I sergenti notano immediatamente il tuo portamento marziale e l'assetto da combattimento: prima che tu possa reagire, un ufficiale suona un corno d'allarme dal boato lacerante.<br><br>
+                     In pochi istanti, decine di guardie pesanti e tiratori scelti sciamano dalle caserme vicine serrando i ranghi in una foresta impenetrabile di scudi e picche. Combatti con indomito coraggio abbattendo i primi assalitori, ma il numero schiacciante dei nemici finisce per sopraffarti senza scampo...
+                   </p>
+                   <p class="font-fantasy text-red-500 text-lg font-bold">
+                     💀 Fine dell'Impresa (Catturat${p.o_a} e Giustiziat${p.o_a})
+                   </p>
+                 </div>`,
+    is_game_over: true,
+    choices: [
+      { text: "Ricarica Ultimo Salvataggio", load_game: true },
+      { text: "Ricomincia l'Avventura", target: "1", reset_game: true }
+    ]
+  },
+  "38": {
+    title: "38. Fuga nei Vicoli della Cittadella",
+    image: "assets/node_38.jpg",
+    image_caption: "Fuga a perdifiato nell'intrico dei vicoli medievali",
+    text: (p) => `Cerchi di avvolgerti negli stracci logori per camuffarti, ma la colossale mole a due mani dello <strong>Spadone del Crociato</strong> è impossibile da celare! La massiccia elsa decorata spunta vistosamente da sotto il mantello e l'acciaio sferraglia contro i ciottoli della piazza.<br><br>
+                 Il capitano delle sentinelle sbarra gli occhi incredulo, puntandoti la picca contro: <em>«Un mendicante che nasconde uno spadone da guerra d'ordinanza?! È una spia ribelle, fermatelo! All'armi!»</em><br><br>
+                 Le guardie si lanciano compatte al tuo inseguimento gridando l'allarme. Non puoi affrontarle tutte in piazza aperta: scatti a tutta velocità infilandoti nell'intrico buio dei vicoli della cittadella, mentre i dardi delle balestre rimbalzano sui muri alle tue spalle. Raggiungi ben presto una biforcazione tra le viuzze dei bassifondi:`,
+    choices: [
+      { text: "Svolta a destra nel vicolo buio dei magazzini", target: "39" },
+      { text: "Svolta a sinistra nella stretta viuzza selciata", target: "40" }
+    ]
+  },
+  "39": {
+    title: "39. Il Vicolo Cieco e l'Imboscata del Ladro",
+    image: "assets/node_39.jpg",
+    image_caption: "L'agguato del ladro dei bassifondi nel vicolo cieco",
+    text: (p) => `Svolti a destra a rotta di collo, ma dopo poche curve ti trovi la strada sbarrata da cataste di botti rotte e casse marce: sei finit${p.o_a} in un vicolo cieco!<br><br>
+                 Dall'ombra di un porticato cala agilmente una sagoma mascherata con due daghe ricurve strette in pugno: è un <strong>Ladro dei Bassifondi</strong>.<br><br>
+                 «Ti sei cacciat${p.o_a} in trappola!» sibila con un ghigno velenoso. «Sento le guardie che setacciano il mercato... dammi la tua borsa d'oro e le tue armi, o pianterò queste lame nella tua gola prima che arrivino!»`,
+    combat: {
+      enemy_name: "Ladro dei Bassifondi",
+      enemy_stamina: 3
+    },
+    on_victory: {
+      text: (p) => `Con un fendente deciso disarmi il malvivente, che crolla tramortito sul selciato. Frugando rapidamente nella sua bisaccia trovi <strong>4 Monete d'Oro</strong>.<br><br>
+                   Sul fondo del vicolo scorgi una vecchia scaletta di ferro che risale il contrafforte della fortezza: salendo con agilità ti infili in una conduttura d'aerazione murata che sbuca direttamente nei corridoi superiori, a pochi passi dalle imponenti porte del Salone del Trono!`,
+      loot: {
+        gold: 4
+      },
+      choices: [
+        { text: "Avanza verso il Salone del Trono d'Ossidiana per affrontare il tuo destino", target: "26" }
+      ]
+    }
+  },
+  "40": {
+    title: "40. Il Passaggio della Memoria",
+    image: "assets/node_40.jpg",
+    image_caption: "La viuzza segreta coperta d'edera e il passaggio verso il palazzo",
+    text: (p) => `Svolti a sinistra scivolando nell'ombra sotto archi ribassati e rampicanti. Man mano che avanzi nel silenzio del vicolo, il selciato muschioso e un piccolo fregio solare inciso sull'architrave ti accendono un brivido di riconoscimento...<br><br>
+                 Questa via ti è incredibilmente familiare: è la viuzza segreta che da giovanissim${p.o_a} percorrevi insieme a <strong>Roland</strong> durante le vostre scorribande per eludere la sorveglianza dei precettori reali e scendere di nascosto in città!<br><br>
+                 Dietro una vecchia porta di quercia mezza mimetizzata dall'edera trovi l'antico passaggio privato intatto: una scalinata coperta sale silenziosamente fino al cuore della rocca, facendoti sbucare proprio davanti alle porte del Salone del Trono!`,
+    choices: [
+      { text: "Spingi la porta segreta e varca la soglia verso il Salone del Trono", target: "26" }
+    ]
+  },
+  "41": {
+    title: "41. Infiltrazione tra la Folla",
+    image: "assets/node_36.jpg",
+    image_caption: "Il travestimento da mendicante e l'accesso furtivo all'ala reale",
+    text: (p) => `Curvi la schiena, avvolgi i tuoi abiti sotto gli stracci logori e avanzi zoppicando e tossendo con voce roca. Il sergente al blocco ti scruta con disprezzo e serra il pugno sull'elsa, poi storce il naso nauseato: <em>«Fila via, lurido pezzente! Non osare lordare i gradini dei Signori!»</em><br><br>
+                 Oltrepassata la barriera senza che nessuno sospetti della tua vera identità, ti sfili furtivamente dalla calca e varchi una porta di servizio per i magazzinieri. La scala a chiocciola sale indisturbata fino ai corridoi nobiliari, conducendoti dritto dinanzi alle porte del Salone del Trono!`,
+    choices: [
+      { text: "Avanza furtivamente verso le porte del Salone del Trono", target: "26" }
     ]
   }
 };
@@ -1749,6 +1838,14 @@
         loadSavedGame();
         return;
       }
+      if (choice.check_spadone) {
+        if (gameState.weapon && gameState.weapon.id === 'greatsword') {
+          goToNode(choice.target_spadone);
+        } else {
+          goToNode(choice.target_normal || choice.target);
+        }
+        return;
+      }
       if (choice.target) {
         goToNode(choice.target);
       }
@@ -1921,6 +2018,16 @@
             pre.decoding = 'async';
             pre.src = storyNodes[ch.target].image;
           }
+          if (ch.target_spadone && storyNodes[ch.target_spadone] && storyNodes[ch.target_spadone].image) {
+            const pre = new Image();
+            pre.decoding = 'async';
+            pre.src = storyNodes[ch.target_spadone].image;
+          }
+          if (ch.target_normal && storyNodes[ch.target_normal] && storyNodes[ch.target_normal].image) {
+            const pre = new Image();
+            pre.decoding = 'async';
+            pre.src = storyNodes[ch.target_normal].image;
+          }
         });
       }
 
@@ -2067,7 +2174,11 @@
         `;
       }
 
-      combatLog.innerHTML = `<p class="text-amber-500/80 italic">Inizia lo scontro! 2 dadi per parte: ogni 6 toglie 1 PF.${combatData.hero_buff ? ' (Roland combatte con te!)' : ''}</p>`;
+      if (combatData.enemy_hits_on_5) {
+        combatLog.innerHTML = `<p class="text-purple-300 italic font-semibold">🔮 Duello con Malakor: la sua stregoneria oscura è letale! I suoi dadi colpiscono con 5 e 6!${combatData.hero_buff ? ' (Roland devia 1 colpo con lo scudo!)' : ''}</p>`;
+      } else {
+        combatLog.innerHTML = `<p class="text-amber-500/80 italic">Inizia lo scontro! 2 dadi per parte: ogni 6 toglie 1 PF.${combatData.hero_buff ? ' (Roland combatte con te!)' : ''}</p>`;
+      }
     }
 
     function handleCombatRound() {
@@ -2083,6 +2194,9 @@
       const enemyD1 = Math.floor(Math.random() * 6) + 1;
       const enemyD2 = Math.floor(Math.random() * 6) + 1;
 
+      const currentNode = storyNodes[gameState.current_node];
+      const isMalakorMagic = currentNode && currentNode.combat && currentNode.combat.enemy_hits_on_5;
+
       // Visual Dice Update
       const heroVisual = document.getElementById('hero-dice-visual');
       const enemyVisual = document.getElementById('enemy-dice-visual');
@@ -2093,15 +2207,19 @@
         `;
       }
       if (enemyVisual) {
+        const d1Hit = isMalakorMagic ? (enemyD1 >= 5) : (enemyD1 === 6);
+        const d2Hit = isMalakorMagic ? (enemyD2 >= 5) : (enemyD2 === 6);
         enemyVisual.innerHTML = `
-          <span class="px-2.5 py-0.5 rounded border transition-all ${enemyD1 === 6 ? 'bg-red-500/40 border-red-400 text-red-200 font-extrabold shadow-[0_0_12px_rgba(239,68,68,0.6)] scale-105' : 'bg-black/60 border-red-900/60 text-red-300'}">${diceIcons[enemyD1]} ${enemyD1}</span>
-          <span class="px-2.5 py-0.5 rounded border transition-all ${enemyD2 === 6 ? 'bg-red-500/40 border-red-400 text-red-200 font-extrabold shadow-[0_0_12px_rgba(239,68,68,0.6)] scale-105' : 'bg-black/60 border-red-900/60 text-red-300'}">${diceIcons[enemyD2]} ${enemyD2}</span>
+          <span class="px-2.5 py-0.5 rounded border transition-all ${d1Hit ? 'bg-red-500/40 border-red-400 text-red-200 font-extrabold shadow-[0_0_12px_rgba(239,68,68,0.6)] scale-105' : 'bg-black/60 border-red-900/60 text-red-300'}">${diceIcons[enemyD1]} ${enemyD1}${isMalakorMagic && enemyD1 === 5 ? '⚡' : ''}</span>
+          <span class="px-2.5 py-0.5 rounded border transition-all ${d2Hit ? 'bg-red-500/40 border-red-400 text-red-200 font-extrabold shadow-[0_0_12px_rgba(239,68,68,0.6)] scale-105' : 'bg-black/60 border-red-900/60 text-red-300'}">${diceIcons[enemyD2]} ${enemyD2}${isMalakorMagic && enemyD2 === 5 ? '⚡' : ''}</span>
         `;
       }
 
-      // Count 6s
+      // Count hits (Malakor hits on 5 and 6 with shadow magic!)
       let heroHits = (heroD1 === 6 ? 1 : 0) + (heroD2 === 6 ? 1 : 0);
-      let enemyHits = (enemyD1 === 6 ? 1 : 0) + (enemyD2 === 6 ? 1 : 0);
+      let enemyHits = isMalakorMagic 
+        ? ((enemyD1 >= 5 ? 1 : 0) + (enemyD2 >= 5 ? 1 : 0))
+        : ((enemyD1 === 6 ? 1 : 0) + (enemyD2 === 6 ? 1 : 0));
 
       // Weapon damage bonus on hits
       if (heroHits > 0 && gameState.weapon.damage_bonus) {
@@ -2112,7 +2230,6 @@
       }
 
       // Roland Buff in Final Fight (parries 1 enemy hit)
-      const currentNode = storyNodes[gameState.current_node];
       if (currentNode && currentNode.combat && currentNode.combat.hero_buff && enemyHits > 0) {
         enemyHits -= 1; // Roland defends you!
       }
@@ -2132,11 +2249,12 @@
           ? `<span class="text-emerald-400 font-bold text-sm">🔥 COLPO CRITICO DEVASTANTE! Infliggi ${heroHits} Danni al nemico!</span>`
           : `<span class="text-emerald-400 font-semibold">⚔️ Fendente a segno! Il nemico perde ${heroHits} PF.</span>`;
       } else if (enemyHits > 0) {
+        const magicNote = isMalakorMagic && (enemyD1 === 5 || enemyD2 === 5) ? " 🔮 [Magia d'Ombra]" : "";
         logMessage = enemyHits >= 2
-          ? `<span class="text-red-400 font-bold text-sm">⚠️ Colpo pesante nemico! Subisci ${enemyHits} danni!</span>`
-          : `<span class="text-red-400 font-semibold">🩸 Sei stat${getPronouns(gameState).o_a} colpit${getPronouns(gameState).o_a}! Perdi 1 PF.</span>`;
+          ? `<span class="text-red-400 font-bold text-sm">⚠️ Colpo pesante nemico${magicNote}! Subisci ${enemyHits} danni!</span>`
+          : `<span class="text-red-400 font-semibold">🩸 Sei stat${getPronouns(gameState).o_a} colpit${getPronouns(gameState).o_a}${magicNote}! Perdi 1 PF.</span>`;
       } else {
-        logMessage = `<span class="text-amber-400/70">Nessun colpo critico in questo round (nessun 6).</span>`;
+        logMessage = `<span class="text-amber-400/70">Nessun colpo critico in questo round (nessun ${isMalakorMagic ? '5 o 6' : '6'}).</span>`;
       }
 
       combatLog.innerHTML = `<p>${logMessage}</p>`;
