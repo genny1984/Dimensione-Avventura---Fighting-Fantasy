@@ -1166,8 +1166,8 @@
   },
   "30": {
     title: "30. Duello Finale: Malakor l'Ombromante (da Solo)",
-    image: "assets/node_30.jpg",
-    image_caption: "La caduta di Malakor l'Ombromante e la sua dissoluzione in cenere",
+    image: "assets/node_30_combat.jpg",
+    image_caption: "Il duello supremo: Malakor l'Ombromante scaglia sortilegi oscuri dalla terrazza",
     text: (p) => `Varchi da sol${p.o_a} la terrazza sommitale, con la spada intrisa del sangue del tuo migliore amico e il cuore colmo d'ira. Malakor ridacchia dall'alto del suo vortice oscuro:<br><br>
                  «Hai dovuto uccidere il tuo cavaliere più fedele con le tue stesse mani! Sei ${p.solo_a}, ultim${p.o_a} rampoll${p.o_a} di una stirpe estinta!»<br><br>
                  «Non sono ${p.solo_a},» ribatti con voce fiera che rimbomba tra le pietre della rocca. «Tutta Aldergàrdia combatte nel mio pugno!»`,
@@ -1177,7 +1177,10 @@
       enemy_hits_on_5: true
     },
     on_victory: {
+      image: "assets/node_30.jpg",
+      image_caption: "La caduta di Malakor: lo stregone si disintegra in cenere e fumo",
       text: (p) => `Con un affondo disperato guidato dalla memoria di tuo padre e di Roland, trafiggi il cuore corrotto dello stregone. Malakor si disintegra in vortici di cenere e fumo mentre le nubi scure si diradano e la luce dell'Alba risplende sulla terrazza.`,
+      btn_text: "Sali i gradini verso il Trono di Aldergàrdia",
       target: "33"
     }
   },
@@ -2247,6 +2250,12 @@
           const pronouns = getPronouns(gameState);
           const baseText = typeof node.text === 'function' ? node.text(pronouns) : node.text;
           nodeText.innerHTML = `${baseText}<br><br><div class="p-3 bg-emerald-950/40 border border-emerald-700/60 rounded-xl text-emerald-300 text-xs sm:text-sm">⚔️ <em>La creatura nemica giace già abbattuta al suolo. Il passaggio è sgombro.</em></div>`;
+          if (node.on_victory && node.on_victory.image && illustImg) {
+            illustImg.src = node.on_victory.image;
+            if (illustCaption && node.on_victory.image_caption) {
+              illustCaption.textContent = typeof node.on_victory.image_caption === 'function' ? node.on_victory.image_caption(pronouns) : node.on_victory.image_caption;
+            }
+          }
           renderVictoryChoices(node.on_victory, pronouns);
         } else {
           setupCombat(node.combat, node.on_victory);
@@ -2466,6 +2475,20 @@
           const pronouns = getPronouns(gameState);
           if (currentCombatVictory.text) {
             nodeText.innerHTML = typeof currentCombatVictory.text === 'function' ? currentCombatVictory.text(pronouns) : currentCombatVictory.text;
+          }
+          if (currentCombatVictory.image) {
+            const illustImg = document.getElementById('node-illustration-img');
+            const illustCaption = document.getElementById('node-illustration-caption');
+            if (illustImg) {
+              illustImg.style.opacity = '0.35';
+              illustImg.src = currentCombatVictory.image;
+              illustImg.onload = () => { illustImg.style.opacity = '1'; };
+            }
+            if (illustCaption && currentCombatVictory.image_caption) {
+              illustCaption.textContent = typeof currentCombatVictory.image_caption === 'function' 
+                ? currentCombatVictory.image_caption(pronouns) 
+                : currentCombatVictory.image_caption;
+            }
           }
           if (currentCombatVictory.loot) {
             showLoot(currentCombatVictory.loot);
