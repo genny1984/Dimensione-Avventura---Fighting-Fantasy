@@ -44,3 +44,11 @@ Questo documento definisce le linee guida architetturali, narrative e sistemiche
   - Il Boss Finale (Malakor l'Ombromante), essendo un potente stregone oscuro, colpisce con 5 e 6 (`enemy_hits_on_5: true`).
   - La presenza di Roland al fianco dell'eroe riduce di 1 i danni nemici a round (`hero_buff: true`), fornendo una ricompensa tangibile per averlo salvato.
   - Se l'eroe è costretto ad affrontare Malakor da solo (dopo aver ucciso Roland al Nodo 28), deve poter trovare un ristoro o pozione tra le spoglie per non arrivare allo scontro finale con 1-2 PF.
+
+---
+
+## 5. Illustrazioni e Coerenza Visiva
+- **Scena di Caduta/Morte Universale (Nodo 34 e 37):**
+  - **Sfondo Neutro e Atmosferico:** La scena di sconfitta non deve mai mostrare architetture distintive specifiche (es. colonne di castello, volte di cattedrale, sale del trono o formazioni carsiche), poiché l'eroe può cadere in battaglia in luoghi eterogenei (caverne, vicoli, bastioni, torri). Lo sfondo deve essere puramente atmosferico, composto da nebbia, fumo e ombre calanti.
+  - **Dinamismo di Genere/Avatar:** L'illustrazione della caduta si adatta dinamicamente all'avatar e genere selezionato all'inizio dell'avventura (`elyan`, `elysia`, `elen`), garantendo piena immedesimazione per ogni eroe.
+

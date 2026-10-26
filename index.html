@@ -1257,14 +1257,17 @@
     ]
   },
   "34": {
-    title: "34. Caduto in Battaglia",
-    image: "assets/node_34.jpg",
-    image_caption: "La caduta in battaglia dell'ultimo erede",
+    title: (p) => `34. Cadut${p.o_a} in Battaglia`,
+    image: (state) => {
+      const av = state && state.avatar ? state.avatar : (state && state.gender === 'F' ? 'elysia' : (state && state.gender === 'NB' ? 'elen' : 'elyan'));
+      return `assets/node_34_${av}.jpg`;
+    },
+    image_caption: (p) => `La caduta dell'erede: le forze ti abbandonano nell'oscurità`,
     text: (p) => `<div class="text-center space-y-3">
                    <span class="text-4xl">💀</span>
                    <h3 class="font-fantasy text-2xl text-red-400">La Tua Resistenza è Scaduta</h3>
                    <p class="text-sm sm:text-base text-amber-200/90 leading-relaxed">
-                     Le tue forze ti abbandonano mentre crolli sul freddo suolo di pietra. L'eco dei tuoi passi si spegne nell'oscurità e il destino di Aethelgard resta avvolto nelle ombre di Malakor...
+                     Le tue forze ti abbandonano mentre crolli esaust${p.o_a} nel buio. L'arma scivola dalle tue dita tremanti e la vista ti si annebbia in un vortice di nebbia fredda e ombre silenziose. Il destino di Aethelgard resta avvolto per sempre nelle tenebre di Malakor...
                    </p>
                  </div>`,
     is_game_over: true,
@@ -1308,9 +1311,12 @@
     ]
   },
   "37": {
-    title: "37. Sopraffatt${p.o_a} dal Presidio",
-    image: "assets/node_34.jpg",
-    image_caption: "Accerchiat${p.o_a} e sopraffatt${p.o_a} dal presidio delle guardie",
+    title: (p) => `37. Sopraffatt${p.o_a} dal Presidio`,
+    image: (state) => {
+      const av = state && state.avatar ? state.avatar : (state && state.gender === 'F' ? 'elysia' : (state && state.gender === 'NB' ? 'elen' : 'elyan'));
+      return `assets/node_34_${av}.jpg`;
+    },
+    image_caption: (p) => `Accerchiat${p.o_a} e sopraffatt${p.o_a} nell'oscurità`,
     text: (p) => `<div class="text-center space-y-3">
                    <span class="text-4xl">⚔️</span>
                    <h3 class="font-fantasy text-2xl text-red-400">Allarme e Massacro al Presidio</h3>
@@ -2103,6 +2109,22 @@
       }
     }
 
+    function resolveNodeImage(targetNode) {
+      if (!targetNode || !targetNode.image) return null;
+      if (typeof targetNode.image === 'function') {
+        return targetNode.image(gameState);
+      }
+      return targetNode.image;
+    }
+
+    function resolveNodeCaption(targetNode, p) {
+      if (!targetNode) return '';
+      if (typeof targetNode.image_caption === 'function') {
+        return targetNode.image_caption(p);
+      }
+      return targetNode.image_caption || (typeof targetNode.title === 'function' ? targetNode.title(p) : targetNode.title);
+    }
+
     function goToNode(nodeId) {
       stopAutoCombat();
       combatBox.classList.add('hidden');
@@ -2118,24 +2140,27 @@
       }
 
       const pronouns = getPronouns(gameState);
-      nodeTitle.textContent = node.title;
+      nodeTitle.textContent = typeof node.title === 'function' ? node.title(pronouns) : node.title;
       nodeText.innerHTML = typeof node.text === 'function' ? node.text(pronouns) : node.text;
 
       // Handle Paragraph Scene Illustration (Medieval Ink Etching) with Smooth Crossfade & Preloading
       const illustBox = document.getElementById('node-illustration-box');
       const illustImg = document.getElementById('node-illustration-img');
       const illustCaption = document.getElementById('node-illustration-caption');
+      const currentImage = resolveNodeImage(node);
+      const currentCaption = resolveNodeCaption(node, pronouns);
+
       if (illustBox && illustImg) {
-        if (node.image) {
-          if (illustImg.getAttribute('data-current-src') !== node.image) {
-            illustImg.setAttribute('data-current-src', node.image);
+        if (currentImage) {
+          if (illustImg.getAttribute('data-current-src') !== currentImage) {
+            illustImg.setAttribute('data-current-src', currentImage);
             illustImg.style.opacity = '0.35';
-            illustImg.src = node.image;
+            illustImg.src = currentImage;
             illustImg.onload = () => { illustImg.style.opacity = '1'; };
           } else {
             illustImg.style.opacity = '1';
           }
-          if (illustCaption) illustCaption.textContent = node.image_caption || node.title;
+          if (illustCaption) illustCaption.textContent = currentCaption;
           illustBox.classList.remove('hidden');
         } else {
           illustBox.classList.add('hidden');
@@ -2145,21 +2170,17 @@
       // Preload next choice images for instantaneous zero-lag navigation on mobile
       if (node.choices && Array.isArray(node.choices)) {
         node.choices.forEach(ch => {
-          if (ch.target && storyNodes[ch.target] && storyNodes[ch.target].image) {
-            const pre = new Image();
-            pre.decoding = 'async';
-            pre.src = storyNodes[ch.target].image;
-          }
-          if (ch.target_spadone && storyNodes[ch.target_spadone] && storyNodes[ch.target_spadone].image) {
-            const pre = new Image();
-            pre.decoding = 'async';
-            pre.src = storyNodes[ch.target_spadone].image;
-          }
-          if (ch.target_normal && storyNodes[ch.target_normal] && storyNodes[ch.target_normal].image) {
-            const pre = new Image();
-            pre.decoding = 'async';
-            pre.src = storyNodes[ch.target_normal].image;
-          }
+          const possibleTargets = [ch.target, ch.target_spadone, ch.target_normal];
+          possibleTargets.forEach(t => {
+            if (t && storyNodes[t]) {
+              const pImg = resolveNodeImage(storyNodes[t]);
+              if (pImg) {
+                const pre = new Image();
+                pre.decoding = 'async';
+                pre.src = pImg;
+              }
+            }
+          });
         });
       }
 
