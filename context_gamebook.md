@@ -1,6 +1,9 @@
-# Regole d'Oro di Game Design Narrativo e Architettura Librogame: Dimensione Avventura
+# Regole d'Oro di Game Design Narrativo e Architettura Librogame: Le Cronache di Aldergàrdia - L'Ombra del Crepuscolo
 
-Questo documento definisce le linee guida architetturali, narrative e sistemiche per il librogame interattivo *Dimensione Avventura* (ispirato ai classici Fighting Fantasy).
+**Ideazione, Storia e Progettazione Narrativa:** Genny84  
+**Ispirazione:** Grandi classici della letteratura interattiva e dei librogame (*Fighting Fantasy*, *Lupo Solitario*)
+
+Questo documento definisce le linee guida architetturali, narrative e sistemiche per il librogame interattivo *Le Cronache di Aldergàrdia: L'Ombra del Crepuscolo*.
 
 ---
 

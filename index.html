@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
-  <title>Le Cronache di Aethelgard - L'Erede delle Ombre</title>
+  <title>Le Cronache di Aldergàrdia - L'Ombra del Crepuscolo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@600;700;800&family=Metamorphous&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
   <style>
@@ -163,13 +163,14 @@
       </div>
 
       <h1 class="font-title text-2xl sm:text-4xl text-amber-500 font-bold tracking-wider mb-1 drop-shadow-md">
-        LE CRONACHE DI AETHELGARD
+        LE CRONACHE DI ALDERGÀRDIA
       </h1>
-      <h2 class="font-fantasy text-base sm:text-xl text-amber-200/90 mb-2">
-        L'Erede delle Ombre
+      <h2 class="font-fantasy text-base sm:text-xl text-amber-200/90 mb-1">
+        L'Ombra del Crepuscolo
       </h2>
+      <p class="text-xs text-amber-400 font-semibold mb-2">Storia e progettazione: <span class="text-amber-200 font-bold tracking-wide">Genny84</span></p>
       <p class="text-xs sm:text-sm text-amber-400/70 italic max-w-md mx-auto mb-6">
-        «Il trono d'Alba è caduto nelle tenebre. L'antico regno attende il ritorno del suo principe esule.»
+        «Il trono d'Alba è caduto nelle tenebre. L'antico regno attende il ritorno del suo erede esule.»
       </p>
 
       <!-- Main Menu Buttons -->
@@ -208,7 +209,7 @@
       
       <div class="text-center border-b border-amber-900/60 pb-3">
         <span class="text-xs uppercase tracking-widest text-amber-500 font-semibold">Creazione Eroe</span>
-        <h2 class="font-title text-xl sm:text-3xl text-amber-400 font-bold mt-1">L'Ultima Speranza d'Aethelgard</h2>
+        <h2 class="font-title text-xl sm:text-3xl text-amber-400 font-bold mt-1">L'Ultima Speranza d'Aldergàrdia</h2>
         <p class="text-xs sm:text-sm text-amber-200/80 italic mt-1">
           Vent'anni di vita nei boschi di confine hanno temprato il tuo corpo e forgiato il tuo coraggio. Chi sei, esule delle terre selvagge?
         </p>
@@ -319,7 +320,7 @@
             <div id="drawer-avatar-slot" class="w-12 h-12 rounded-lg ink-portrait shrink-0 border border-amber-800"></div>
             <div>
               <h3 id="drawer-hero-name" class="font-fantasy text-lg text-amber-300 font-bold leading-tight">Elyan</h3>
-              <span id="drawer-hero-title" class="text-xs text-amber-500/80">Principe d'Aethelgard</span>
+              <span id="drawer-hero-title" class="text-xs text-amber-500/80">Principe d'Aldergàrdia</span>
             </div>
           </div>
           <button onclick="toggleMobileDrawer()" class="text-amber-400/80 hover:text-amber-200 p-1.5 rounded-lg border border-amber-900/50 bg-black/30">
@@ -400,8 +401,8 @@
       </div>
 
       <div class="min-w-0">
-        <h1 class="font-title text-base sm:text-xl md:text-2xl text-amber-400 font-bold truncate">AETHELGARD</h1>
-        <p class="text-[10px] sm:text-xs text-amber-500/70 italic truncate">Le Cronache dell'Erede delle Ombre</p>
+        <h1 class="font-title text-base sm:text-xl md:text-2xl text-amber-400 font-bold truncate">ALDERGÀRDIA</h1>
+        <p class="text-[10px] sm:text-xs text-amber-500/70 italic truncate">L'Ombra del Crepuscolo • di Genny84</p>
       </div>
 
       <button onclick="manualSaveGame()" class="btn-fantasy p-1.5 sm:px-2.5 sm:py-1 rounded-lg text-xs text-amber-300 border border-amber-700/70 flex items-center gap-1">
@@ -458,7 +459,7 @@
             <div id="desktop-avatar-slot" class="w-14 h-14 rounded-xl ink-portrait shrink-0 border-2 border-amber-700/80 shadow"></div>
             <div class="min-w-0">
               <h3 id="desktop-hero-name" class="font-title text-base lg:text-lg text-amber-300 font-bold truncate">Elyan</h3>
-              <p id="desktop-hero-title" class="text-xs text-amber-500/80 truncate font-fantasy">Principe d'Aethelgard</p>
+              <p id="desktop-hero-title" class="text-xs text-amber-500/80 truncate font-fantasy">Principe d'Aldergàrdia</p>
             </div>
           </div>
 
@@ -632,7 +633,7 @@
 
     <!-- FOOTER IN-GAME -->
     <footer class="text-center text-[11px] sm:text-xs text-amber-600/60 my-2 px-2">
-      Le Cronache di Aethelgard • Storia originale protetta da licenza aperta • Tutti i diritti riservati
+      Le Cronache di Aldergàrdia • Storia e progettazione: <strong class="text-amber-500">Genny84</strong> • Tutti i diritti riservati
     </footer>
   </div>
 
@@ -715,7 +716,7 @@
     let autoCombatTimer = null;
 
     // ==========================================
-    // 34 STORY NODES - LE CRONACHE DI AETHELGARD
+    // 34 STORY NODES - LE CRONACHE DI ALDERGÀRDIA
     // ==========================================
     const storyNodes = {
   "1": {
@@ -723,7 +724,7 @@
     image: "assets/node_1.jpg",
     image_caption: "I confini nebbiosi del Bosco d'Argento",
     text: (p) => `Una pioggia sottile picchietta sulle foglie dorate del Bosco d'Argento. Sotto il mantello bruno da ramingo, ${p.hero_title} osserva la sagoma tetra della <em>Rocca del Crepuscolo</em> ergersi contro i lampi dell'orizzonte.<br><br>
-                 Sono trascorsi cinque lunghi anni da quando il tiranno <strong>Malakor l'Ombromante</strong> assassinò il Re tuo padre, costringendoti all'esilio tra i boschi di frontiera. Ora, ventenne e ${p.temprato_a} dalle intemperie, sei ${p.tornato_a} per liberare Aethelgard.<br><br>
+                 Sono trascorsi cinque lunghi anni da quando il tiranno <strong>Malakor l'Ombromante</strong> assassinò il Re tuo padre, costringendoti all'esilio tra i boschi di frontiera. Ora, ventenne e ${p.temprato_a} dalle intemperie, sei ${p.tornato_a} per liberare Aldergàrdia.<br><br>
                  Due vie si aprono davanti a te per raggiungere la cittadella: l'oscuro <strong>Sentiero dei Contrabbandieri</strong> celato tra rovi e nebbie d'acquitrino, oppure la <strong>Vecchia Strada Reale</strong> solcata dal fango e dalle torce delle ronde nemiche.`,
     choices: [
       { text: "Infiltrati nel Sentiero dei Contrabbandieri (Furtivo)", target: "2" },
@@ -808,7 +809,7 @@
       enemy_stamina: 3
     },
     on_victory: {
-      text: (p) => `Con un affondo preciso spezzi la guardia dei due soldati, che crollano a terra privi di sensi. Frugando tra i loro equipaggiamenti trovi <strong>6 Monete d'Oro</strong> e l'imponente <strong>Spadone del Crociato</strong> abbandonato dal capitano.<br><br>Davanti a te si aprono diverse vie per penetrare le difese di Aethelgard.`,
+      text: (p) => `Con un affondo preciso spezzi la guardia dei due soldati, che crollano a terra privi di sensi. Frugando tra i loro equipaggiamenti trovi <strong>6 Monete d'Oro</strong> e l'imponente <strong>Spadone del Crociato</strong> abbandonato dal capitano.<br><br>Davanti a te si aprono diverse vie per penetrare le difese di Aldergàrdia.`,
       loot: {
         gold: 6,
         items: [],
@@ -1096,7 +1097,7 @@
     title: "25. La Galleria dei Balconi",
     image: "assets/node_25.jpg",
     image_caption: "La Galleria dei Balconi e la vista sul mercato della cittadella",
-    text: (p) => `Attraversi i corridoi affrescati dove un tempo risuonavano le arpe dei Re d'Aethelgard. Dalle maestose arcate gotiche e dalle ampie balconate in pietra che affacciano sulla parte bassa della cittadella, salgono nitide le voci concitate, il vociare indaffarato e i richiami dei mercanti del mercato cittadino.<br><br>
+    text: (p) => `Attraversi i corridoi affrescati dove un tempo risuonavano le arpe dei Re d'Aldergàrdia. Dalle maestose arcate gotiche e dalle ampie balconate in pietra che affacciano sulla parte bassa della cittadella, salgono nitide le voci concitate, il vociare indaffarato e i richiami dei mercanti del mercato cittadino.<br><br>
                  Ti trovi a uno snodo cruciale: davanti a te si stagliano le imponenti porte di ferro nero del Salone del Trono, mentre una rampa laterale di servizio scende verso la piazza del mercato, offrendo l'opportunità di uscire e cercare una via secondaria per raggiungere la sala reale evitando l'ingresso principale.`,
     choices: [
       { text: "Avanza con determinazione verso le imponenti porte del Salone del Trono d'Ossidiana", target: "26" },
@@ -1109,7 +1110,7 @@
     image_caption: "Il Salone del Trono d'Ossidiana: Roland il Campione Corrotto",
     text: (p) => `Spalanchi le porte. Nel vasto salone colonnato, ai piedi del Trono d'Ossidiana avvolto da spire di nebbia nera, si staglia un guerriero in armatura scintillante con la spada sguainata.<br><br>
                  Il tuo cuore ha un sussulto: è <strong>Roland</strong>, il tuo compagno d'infanzia, l'amico più fraterno con cui sei ${p.cresciuto_a}! Ma i suoi occhi sono velati da un bagliore violaceo spettrale: sulla sua fronte pulsa il marchio del <em>Sigillo Notturno</em>.<br><br>
-                 «Fermati!» proclama Roland con voce roca e disumana. «Riconosco il tuo volto nei frammenti perduti della mia memoria... dicono che sei ${p.heir_title}... ma Malakor è il solo e unico padrone di Aethelgard! Muori!»`,
+                 «Fermati!» proclama Roland con voce roca e disumana. «Riconosco il tuo volto nei frammenti perduti della mia memoria... dicono che sei ${p.heir_title}... ma Malakor è il solo e unico padrone di Aldergàrdia! Muori!»`,
     has_friend_encounter: true
   },
   "27": {
@@ -1152,7 +1153,7 @@
     image_caption: "Il duello supremo: Roland e l'Erede contro lo stregone Malakor",
     text: (p) => `Varcate la terrazza sommitale. Al centro di un vortice di tempesta fluttua <strong>Malakor l'Ombromante</strong>, avvolto da vesti di fumo nero e con il bastone sormontato da un teschio di drago.<br><br>
                  «Maledetti ribelli!» sibila lo stregone con una risata gelida. «Dunque ${p.heir_title} è ${p.tornato_a} a reclamare la cenere del suo trono! E tu, stolto Roland, hai osato spezzare il mio giogo? Morirete entrambi tra le fiamme d'ombra!»<br><br>
-                 Ma Roland solleva lo scudo bloccando una raffica di dardi oscuri: «Non vincerai, stregone! Per ${p.hero_title} e per Aethelgard!»`,
+                 Ma Roland solleva lo scudo bloccando una raffica di dardi oscuri: «Non vincerai, stregone! Per ${p.hero_title} e per Aldergàrdia!»`,
     combat: {
       enemy_name: "Malakor l'Ombromante",
       enemy_stamina: 4,
@@ -1170,7 +1171,7 @@
     image_caption: "La caduta di Malakor l'Ombromante e la sua dissoluzione in cenere",
     text: (p) => `Varchi da sol${p.o_a} la terrazza sommitale, con la spada intrisa del sangue del tuo migliore amico e il cuore colmo d'ira. Malakor ridacchia dall'alto del suo vortice oscuro:<br><br>
                  «Hai dovuto uccidere il tuo cavaliere più fedele con le tue stesse mani! Sei ${p.solo_a}, ultim${p.o_a} rampoll${p.o_a} di una stirpe estinta!»<br><br>
-                 «Non sono ${p.solo_a},» ribatti con voce fiera che rimbomba tra le pietre della rocca. «Tutta Aethelgard combatte nel mio pugno!»`,
+                 «Non sono ${p.solo_a},» ribatti con voce fiera che rimbomba tra le pietre della rocca. «Tutta Aldergàrdia combatte nel mio pugno!»`,
     combat: {
       enemy_name: "Malakor l'Ombromante",
       enemy_stamina: 4,
@@ -1182,9 +1183,9 @@
     }
   },
   "31": {
-    title: "31. IL RINASCIMENTO DI AETHELGARD (FINALE OTTIMO)",
+    title: "31. IL RINASCIMENTO DI ALDERGÀRDIA (FINALE OTTIMO)",
     image: "assets/node_31.jpg",
-    image_caption: "La rinascita gloriosa del Regno di Aethelgard",
+    image_caption: "La rinascita gloriosa del Regno di Aldergàrdia",
     text: (p) => `<div class="p-4 bg-amber-950/40 border-2 border-amber-500 rounded-2xl text-center space-y-4 shadow-2xl">
                    <span class="text-4xl">👑</span>
                    <h2 class="font-title text-2xl sm:text-3xl text-amber-300 font-bold">LA LUCE DELL'ALBA RISORGE</h2>
@@ -1192,7 +1193,7 @@
                      Hai compiuto l'impresa più grande mai cantata dai bardi. Roland è al tuo fianco, salvo e redento; tutte e tre le Reliquie Ancestrali dell'Alba (il Sigillo dei Sovrani, il Prisma di Stella e l'Egida d'Argento) brillano all'unisono sul trono reale, purificando la terra da ogni traccia di corruzione.
                    </p>
                    <p class="text-sm sm:text-base text-emerald-300 font-semibold">
-                     Il popolo di Aethelgard e i cavalieri liberati accorrono nella piazza acclamando a festa: <strong>“Lunga vita a ${p.title} ${p.name}!”</strong> Roland viene nominato Primo Paladino del Reame, e con ${p.hero_title} ${p.crowned_a} sul trono ha inizio una splendida Età dell'Oro.
+                     Il popolo di Aldergàrdia e i cavalieri liberati accorrono nella piazza acclamando a festa: <strong>“Lunga vita a ${p.title} ${p.name}!”</strong> Roland viene nominato Primo Paladino del Reame, e con ${p.hero_title} ${p.crowned_a} sul trono ha inizio una splendida Età dell'Oro.
                    </p>
                    <div class="pt-3 border-t border-amber-900/60 font-fantasy text-amber-400 text-lg">
                      ✨ VITTORIA LEGGENDARIA - VERO FINALE RAGGIUNTO ✨
@@ -1217,7 +1218,7 @@
                      Malakor è stato distrutto per sempre e il tuo fedele amico Roland è salvo al tuo fianco. Anche se non tutte le antiche Reliquie dei Re sono state recuperate, la tirannia dell'Ombromante è spezzata.
                    </p>
                    <p class="text-sm sm:text-base text-amber-200">
-                     Insieme a Roland e ai capitani ribelli, ${p.hero_title} inizia la grande opera di ricostruzione di Aethelgard. Ci vorranno anni di fatiche, ma la libertà è tornata a fiorire nei cuori della gente.
+                     Insieme a Roland e ai capitani ribelli, ${p.hero_title} inizia la grande opera di ricostruzione di Aldergàrdia. Ci vorranno anni di fatiche, ma la libertà è tornata a fiorire nei cuori della gente.
                    </p>
                    <div class="pt-3 border-t border-emerald-900/60 font-fantasy text-emerald-400">
                      🌟 FINALE POSITIVO RAGGIUNTO 🌟
@@ -1234,12 +1235,12 @@
   "33": {
     title: "33. Il Trono Solitario (Finale Buono I)",
     image: "assets/node_33.jpg",
-    image_caption: "Il Trono Solitario di Aethelgard",
+    image_caption: "Il Trono Solitario di Aldergàrdia",
     text: (p) => `<div class="p-4 bg-blue-950/30 border border-blue-700 rounded-2xl text-center space-y-4">
                    <span class="text-4xl">⚔️</span>
                    <h2 class="font-title text-2xl text-blue-300 font-bold">IL TRIONFO AMARO</h2>
                    <p class="text-sm sm:text-base text-amber-100 leading-relaxed italic">
-                     La campana della cattedrale suona a festa: Aethelgard è libera dal giogo di Malakor l'Ombromante. Sali i gradini del trono paterno mentre la folla applaude in festa.
+                     La campana della cattedrale suona a festa: Aldergàrdia è libera dal giogo di Malakor l'Ombromante. Sali i gradini del trono paterno mentre la folla applaude in festa.
                    </p>
                    <p class="text-sm sm:text-base text-amber-200/90">
                      Eppure, lo sguardo di ${p.hero_title} rimane fisso sulla spada d'ordinanza posata accanto allo scettro: l'arma di Roland, caduto per tua mano sotto l'incantesimo del mago. Governerai con saggezza e rettitudine, ma il tuo cuore porterà per sempre il peso del sacrificio.
@@ -1267,7 +1268,7 @@
                    <span class="text-4xl">💀</span>
                    <h3 class="font-fantasy text-2xl text-red-400">La Tua Resistenza è Scaduta</h3>
                    <p class="text-sm sm:text-base text-amber-200/90 leading-relaxed">
-                     Le tue forze ti abbandonano mentre crolli esaust${p.o_a} nel buio. L'arma scivola dalle tue dita tremanti e la vista ti si annebbia in un vortice di nebbia fredda e ombre silenziose. Il destino di Aethelgard resta avvolto per sempre nelle tenebre di Malakor...
+                     Le tue forze ti abbandonano mentre crolli esaust${p.o_a} nel buio. L'arma scivola dalle tue dita tremanti e la vista ti si annebbia in un vortice di nebbia fredda e ombre silenziose. Il destino di Aldergàrdia resta avvolto per sempre nelle tenebre di Malakor...
                    </p>
                  </div>`,
     is_game_over: true,
@@ -1400,7 +1401,7 @@
       gender: 'F',
       name: name,
       title: "la Regina",
-      sub_title: "Principessa d'Aethelgard",
+      sub_title: "Principessa d'Aldergàrdia",
       hero_title: `Principessa ${name}`,
       vocative: "mia principessa",
       vocative_cap: "Mia Principessa",
@@ -1442,7 +1443,7 @@
       gender: 'NB',
       name: name,
       title: "il Sovrano",
-      sub_title: "Erede d'Aethelgard",
+      sub_title: "Erede d'Aldergàrdia",
       hero_title: `Erede ${name}`,
       vocative: "nobile erede",
       vocative_cap: "Nobile Erede",
@@ -1484,7 +1485,7 @@
       gender: 'M',
       name: name,
       title: "il Re",
-      sub_title: "Principe d'Aethelgard",
+      sub_title: "Principe d'Aldergàrdia",
       hero_title: `Principe ${name}`,
       vocative: "mio principe",
       vocative_cap: "Mio Principe",
@@ -1592,7 +1593,7 @@
     // NAVIGATION & VIEW CONTROLS
     // ==========================================
     function checkExistingSave() {
-      const saved = localStorage.getItem('aethelgard_save');
+      const saved = localStorage.getItem('aldergardia_save') || localStorage.getItem('aethelgard_save');
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
@@ -1720,7 +1721,7 @@
     // ==========================================
     function saveGameAuto() {
       try {
-        localStorage.setItem('aethelgard_save', JSON.stringify(gameState));
+        localStorage.setItem('aldergardia_save', JSON.stringify(gameState));
       } catch(e) {
         console.error("Auto-save fallito:", e);
       }
@@ -1736,7 +1737,7 @@
     }
 
     function loadSavedGame() {
-      const saved = localStorage.getItem('aethelgard_save');
+      const saved = localStorage.getItem('aldergardia_save') || localStorage.getItem('aethelgard_save');
       if (!saved) return;
       try {
         gameState = JSON.parse(saved);
@@ -1758,7 +1759,8 @@
         `<div class="text-left space-y-3 text-xs sm:text-sm">
           <p><strong>⚔️ Combattimenti Veloci:</strong> Ad ogni round vengono lanciati 2 dadi per te e 2 per il mostro. Ogni 6 ottenuto infligge 1 punto di danno (Resistenza). Un doppio 6 infligge 2 danni critici!</p>
           <p><strong>🗡️ Armi & Ingombro:</strong> Alcune armi (come lo Spadone o l'Ascia) infliggono danni maggiori ma hanno <em>Ingombro Pesante</em>: ti impediranno scelte situazionali come nuotare o passare strettoie.</p>
-          <p><strong>👑 Destino del Regno:</strong> Le tue decisioni morali, gli alleati che saprai salvare e le reliquie che riuscirai a scoprire plasmeranno la sorte finale di Aethelgard.</p>
+          <p><strong>👑 Destino del Regno:</strong> Le tue decisioni morali, gli alleati che saprai salvare e le reliquie che riuscirai a scoprire plasmeranno la sorte finale di Aldergàrdia.</p>
+          <div class="pt-2 border-t border-amber-900/60 text-amber-300 font-semibold">🏛️ <strong>Storia e Progettazione:</strong> Opera originale ideata e sviluppata da <span class="text-amber-200 font-bold">Genny84</span>.</div><p class="hidden"></p>
           <p><strong>💾 Salvataggi:</strong> Il gioco salva automaticamente ad ogni paragrafo.</p>
         </div>`,
         "Ho Capito"
@@ -1864,7 +1866,7 @@
         "Sigillo dei Sovrani": {
           title: "Sigillo dei Sovrani (Reliquia I)",
           icon: "💍",
-          desc: "Anello d'oro puro intarsiato con rubini dell'Aurora. Risuona con il sangue dei primi Re di Aethelgard.<br><br><strong>Potere:</strong> Aumenta permanentemente la Resistenza Massima di +2 PF (e recupera +2 PF attuali)."
+          desc: "Anello d'oro puro intarsiato con rubini dell'Aurora. Risuona con il sangue dei primi Re di Aldergàrdia.<br><br><strong>Potere:</strong> Aumenta permanentemente la Resistenza Massima di +2 PF (e recupera +2 PF attuali)."
         },
         "Prisma di Stella": {
           title: "Prisma di Stella (Reliquia II)",
