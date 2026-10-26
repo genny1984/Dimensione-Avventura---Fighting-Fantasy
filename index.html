@@ -700,11 +700,14 @@
       gold: 5,
       weapon: { ...WEAPONS.ranger_blade },
       relics: [], // Reliquia I (Sigillo), Reliquia II (Prisma), Reliquia III (Egida)
+      relic_powers_used: {},
       has_elisir: false,
       roland_saved: false,
-      inventory: [],
+      inventory: ["Mappa delle Terre d'Ombra", "Corda da Viaggio"],
       current_node: "1",
-      current_enemy_stamina: 0
+      current_enemy_stamina: 0,
+      defeated_enemies: {},
+      visited_nodes: {}
     };
 
     // Dice & Animation Globals
@@ -773,7 +776,12 @@
     text: (p) => `Le assi di legno del ponte scricchiolano lugubremente sopra un precipizio senza fondo. Il vento montano sibila tra le corde consunte.<br><br>
                  I canapi logori oscillano minacciosamente nel vuoto. Più in basso, una cengia rocciosa scende tra gli spuntoni verso il buio delle caverne inferiori.`,
     choices: [
-      { text: "Attraversa di corsa il ponte oscillante", target: "10" },
+      { 
+        text: "Lega la Corda da Viaggio al pilone di pietra e attraversa in sicurezza assicurandoti alla fune", 
+        require_item: "Corda da Viaggio", 
+        target: "18" 
+      },
+      { text: "Attraversa di corsa il ponte oscillante sfidando il destino", target: "10" },
       { text: "Discendi con cautela tra gli spuntoni verso le Grotte dei Sussurri", target: "4" }
     ]
   },
@@ -785,7 +793,8 @@
                  Due soldati in armatura scura sguainano le spade corte e ti sbarrano la strada. I loro sguardi sono vitrei, asserviti alla volontà oscura di Malakor. «Che tu sia ${p.heir_title} o un miserabile ribelle, da qui non si passa!» I dardi delle loro balestre sono incoccati e puntati al tuo petto a bruciapelo.`,
     choices: [
       { text: "Estrai la lama e combatti i Guardiani Neri!", target: "6_combat" },
-      { text: "Getta l'arma e arrenditi confidando nella clemenza nemica", target: "12" },
+      { text: "Deponi l'arma e lasciati catturare con l'inganno per farti condurre nelle prigioni interne", target: "21" },
+      { text: "Getta la spada e implora pietà in ginocchio confidando nella loro misericordia", target: "12" },
       { text: "Lancia polvere accecante e fuggi verso la Locanda del Cinghiale Cieco", target: "7" }
     ]
   },
@@ -820,7 +829,20 @@
                  In un angolo, un vecchio cantastorie cieco pizzica un liuto intonando strofe clandestine sulla dinastia caduta. Lo sguardo cieco del bardo si volge verso di te intuendo la tua stirpe reale: <em>“${p.vocative_cap}... il vostro passo ha la fierezza dell'antico Re!”</em> sussurra a mezza voce.<br><br>
                  Dall'altro capo della sala, un caporale nemico rovescia la panca sguainando il ferro con un grido d'allarme!`,
     choices: [
+      { text: "Lancia 3 Monete d'Oro all'oste per una corroborante zuppa calda e sidro forte (+3 PF)", cost_gold: 3, heal: 3, target: "7_rest" },
       { text: "Avvicinati al Bardo Ribelle e ascolta il suo messaggio segreto", target: "14" },
+      { text: "Balza sui tavoli e fuggi attraverso la finestra sui tetti", target: "15" },
+      { text: "Rovescia una botte di sidro e sgattaiola nella cantina verso il Canale di Scolo", target: "19" }
+    ]
+  },
+  "7_rest": {
+    title: "7. Ristoro alla Locanda del Cinghiale Cieco",
+    image: "assets/node_7.jpg",
+    image_caption: "Ristoro fugace alla locanda prima della mischia",
+    text: (p) => `Ingolli in fretta la zuppa bollente e un boccale di sidro speziato: il calore e il nutrimento rinvigoriscono i tuoi muscoli provati dalla marcia (<strong>Recuperi +3 Punti Ferita</strong>).<br><br>
+                 Ma il caporale nemico al tavolo vicino sbatte il boccale e sguaina la spada corta: <em>«Fermate quell'estrane${p.o_a}! È una spia ribelle!»</em> Non c'è più un secondo da perdere:`,
+    choices: [
+      { text: "Raggiungi d'un balzo il Bardo Ribelle e ascolta il suo messaggio segreto", target: "14" },
       { text: "Balza sui tavoli e fuggi attraverso la finestra sui tetti", target: "15" },
       { text: "Rovescia una botte di sidro e sgattaiola nella cantina verso il Canale di Scolo", target: "19" }
     ]
@@ -830,11 +852,11 @@
     image: "assets/node_8.jpg",
     image_caption: "Il Sigillo dei Sovrani nella Cripta Reale",
     text: (p) => `Polvere e silenzio sacro regnano in questa maestosa sala sepolcrale. Al centro, sopra il sarcofago del Reale Fondatore, splende incontaminato il <strong>Sigillo dei Sovrani</strong>, anello d'oro puro intarsiato con rubini dell'Alba.<br><br>
-                 Quando indossi l'anello, senti il calore degli antenati scorrere nelle tue vene (Recuperi +3 PF). Davanti a te, gli antichi corridoi collegano la cripta sia alle altezze dell'eremo che alle profondità della rocca.`,
+                 Indossando l'anello, il sangue dei primi Re arde nelle tue vene. Il Sigillo racchiude l'antico <strong>Vigore dei Sovrani</strong>: potrai invocare il suo potere in qualsiasi momento dalla scheda delle Reliquie per aumentare permanentemente la tua Resistenza Massima di <strong>+2 PF</strong>!<br><br>
+                 Davanti a te, gli antichi corridoi collegano la cripta sia alle altezze dell'eremo che alle profondità della rocca.`,
     loot: {
       gold: 4,
-      relic: "Sigillo dei Sovrani",
-      heal: 3
+      relic: "Sigillo dei Sovrani"
     },
     choices: [
       { text: "Percorri la galleria sotterranea che conduce alle Prigioni della Rocca", target: "21" },
@@ -852,16 +874,15 @@
     ]
   },
   "10": {
-    title: "10. Il Tracollo del Ponte",
+    title: "10. Il Tracollo del Ponte e la Caduta Frenata",
     image: "assets/node_10.jpg",
-    image_caption: "Il tracollo improvviso del ponte di corda",
-    text: (p) => `Le funi centrali, corrose dal tempo e dall'umidità, cedono di colpo sotto il tuo peso. Con uno strappo terrificante il ponte si spezza a metà!<br><br>
-                 Cerchi disperatamente un appiglio, ma la roccia umida scivola via tra le tue dita mentre precipiti nell'abisso senza fine del crepaccio...<br><br>
-                 <strong class="text-red-500 font-fantasy text-xl">Fine dell'Impresa (Caduta Fatale)</strong>`,
-    is_game_over: true,
+    image_caption: "Il tracollo improvviso del ponte e la caduta frenata sulle cenge",
+    text: (p) => `Le funi centrali consunte cedono di schianto sotto i tuoi passi! Con uno strappo terrificante il ponte di corda si spezza a metà e precipiti nel vuoto!<br><br>
+                 Allarghi disperatamente le braccia impigliandoti a una fitta coltre di rovi e arbusti sporgenti dalla parete del precipizio. La caduta viene frenata, ma l'impatto violento contro gli speroni di roccia ti toglie il fiato (<strong>Subisci 4 Punti Ferita di danno</strong>).<br><br>
+                 Scivoli lungo il pendio di ciottoli fino ad atterrare dolorante ma viv${p.o_a} proprio all'imbocco dell'antro di montagna: sei giunt${p.o_a} alle <strong>Grotte dei Sussurri</strong>!`,
+    damage: 4,
     choices: [
-      { text: "Ricarica Ultimo Salvataggio", load_game: true },
-      { text: "Ricomincia dall'Inizio", target: "1", reset_game: true }
+      { text: "Rialzati dolorante ed esplora le Grotte dei Sussurri", target: "4" }
     ]
   },
   "11": {
@@ -975,7 +996,7 @@
         require_light_weapon: true
       },
       { text: "Affronta il camminamento principale del Bastione Esterno", target: "22" },
-      { text: "Calati lungo la corda del bastione verso il Portale delle Radici", target: "16" }
+      { text: "Usa la Corda da Viaggio per calarti lungo il bastione verso il Portale delle Radici", require_item: "Corda da Viaggio", target: "16" }
     ]
   },
   "19": {
@@ -1044,14 +1065,15 @@
     image: "assets/node_23.jpg",
     image_caption: "Il Santuario del Vetro e il Prisma di Stella ancestrale",
     text: (p) => `All'interno del padiglione di cristallo, immune alla corruzione della nebbia oscura, riposa sopra un altare d'ebano la seconda Reliquia Ancestrale: il <strong>Prisma di Stella</strong>.<br><br>
-                 Quando lo raccogli, una luce calda pervade la tua mente, scacciando la fatica (Recuperi +4 PF). Dalla loggia vetrata, il corridoio principale conduce dritto alle monumentali porte del Salone del Trono.`,
+                 La gemma risplende di luce aurorale purissima. Racchiude un immenso potere sanatore: potrai liberare la sua <strong>Luce Ristoratrice (+5 PF)</strong> in qualsiasi momento aprendo la scheda delle Reliquie quando avrai subito ferite!<br><br>
+                 Dalla loggia vetrata, il corridoio principale conduce alle monumentali porte del Salone del Trono, mentre oltre la vetrata scheggiata si apre la facciata esterna sul crepaccio.`,
     loot: {
-      relic: "Prisma di Stella",
-      heal: 4
+      relic: "Prisma di Stella"
     },
     choices: [
       { text: "Spalanca le monumentali porte dorate verso il Salone del Trono", target: "26" },
-      { text: "Spingi con troppa foga la vetrata scheggiata sporgendoti nel vuoto del crepaccio", target: "35" }
+      { text: "Lega la Corda da Viaggio alla colonna e calati all'esterno verso la Galleria dei Balconi", require_item: "Corda da Viaggio", target: "25" },
+      { text: "Tenta incautamente di arrampicarti a mani nude sulla vetrata scheggiata sporgendoti nel vuoto", target: "35" }
     ]
   },
   "24": {
@@ -1113,7 +1135,12 @@
     },
     on_victory: {
       text: (p) => `La tua lama trafigge il suo fianco. Roland crolla al suolo. Con il colpo mortale, la nebbia purpurea svanisce dai suoi occhi. «${p.name}... ${p.brother_sister}... perdonami... ti ho riconosciut${p.o_a}... troppo tardi... perdonami, ${p.vocative}...» sussurra con un filo di voce prima di spirare tra le tue braccia.<br><br>
+                   Tra le vesti del tuo fraterno compagno trovi la sua fiaschetta di elisir rigenerante: ne bevi il contenuto risanando le ferite più gravi (<strong>Recuperi +4 Punti Ferita</strong>) e raccogli <strong>3 Monete d'Oro</strong>.<br><br>
                    Con il cuore straziato dal dolore e le lacrime agli occhi, ti rialzi. Ora non c'è pietà: Malakor pagherà per ogni vita spezzata!`,
+      loot: {
+        heal: 4,
+        gold: 3
+      },
       choices: [
         { text: "Sali con il cuore straziato e la spada in pugno verso la Torre Alta", target: "30" }
       ]
@@ -1274,8 +1301,10 @@
     text: (p) => `Scendendo con passo felpato lungo la rampa di servizio, sbuchi nella piazza affollata del mercato della cittadella. Tra banchi di spezie, stoffe, ceste di granaglie e botteghe di fabbri, la gente del popolo si muove sotto lo sguardo torvo e vigile degli armigeri di Malakor.<br><br>
                  Di fronte a te, a sbarramento della grande scalinata nobiliare che risale verso l'ala reale, un drappello di guardie pesanti in armatura a piastre ha allestito un rigido posto di blocco, perquisendo e interrogando rudemente chiunque provi ad avvicinarsi al palazzo. Come decidi di procedere?`,
     choices: [
-      { text: "Tenta di forzare il passaggio a testa alta oltre il posto di blocco", target: "37" },
-      { text: "Copriti con un vecchio mantello lacerato e prova a sfuggire fingendoti un mendicante", check_spadone: true, target_normal: "41", target_spadone: "38" }
+      { text: "Allunga 5 Monete d'Oro al sergente di ronda per farti passare il posto di blocco senza domande", cost_gold: 5, target: "41" },
+      { text: "Non rischiare il blocco: allontanati con discrezione e dileguati nei vicoli bui della cittadella", target: "38" },
+      { text: "Copriti con un vecchio mantello lacerato e prova a sfuggire fingendoti un mendicante", check_spadone: true, target_normal: "41", target_spadone: "38" },
+      { text: "Tenta imprudentemente di forzare il passaggio a testa alta oltre il posto di blocco", target: "37" }
     ]
   },
   "37": {
@@ -1648,11 +1677,14 @@
         gold: 5,
         weapon: { ...WEAPONS.ranger_blade },
         relics: [],
+        relic_powers_used: {},
         has_elisir: false,
         roland_saved: false,
         inventory: ["Mappa delle Terre d'Ombra", "Corda da Viaggio"],
         current_node: "1",
-        current_enemy_stamina: 0
+        current_enemy_stamina: 0,
+        defeated_enemies: {},
+        visited_nodes: {}
       };
 
       viewCharCreation.classList.add('hidden');
@@ -1750,18 +1782,103 @@
       container.innerHTML = '';
       
       const allRelics = [
-        { name: "Sigillo dei Sovrani", icon: "👑", key: "Sigillo dei Sovrani" },
-        { name: "Prisma di Stella", icon: "💎", key: "Prisma di Stella" },
-        { name: "Egida d'Argento", icon: "🛡️", key: "Egida d'Argento" }
+        { name: "Sigillo dei Sovrani", icon: "💍", key: "Sigillo dei Sovrani", powerKey: "sigillo" },
+        { name: "Prisma di Stella", icon: "💎", key: "Prisma di Stella", powerKey: "prisma" },
+        { name: "Egida d'Argento", icon: "🛡️", key: "Egida d'Argento", powerKey: "egida" }
       ];
 
       allRelics.forEach(r => {
         const hasIt = gameState.relics.includes(r.key);
         const div = document.createElement('div');
-        div.className = `p-1.5 rounded-lg border flex flex-col items-center justify-center ${hasIt ? 'border-amber-500 bg-amber-950/60 text-amber-200' : 'border-amber-950/80 bg-black/40 text-amber-600/40 opacity-40'}`;
-        div.innerHTML = `<span class="text-sm">${r.icon}</span><span class="text-[9px] truncate max-w-full font-bold">${hasIt ? r.name.split(' ')[0] : '???'}</span>`;
+        div.className = `p-1.5 rounded-lg border flex flex-col items-center justify-between transition-all ${hasIt ? 'border-amber-500 bg-amber-950/70 text-amber-200 shadow-md' : 'border-amber-950/80 bg-black/40 text-amber-600/40 opacity-40'}`;
+        
+        let actionBtnHtml = '';
+        if (hasIt) {
+          if (r.powerKey === 'prisma') {
+            const used = gameState.relic_powers_used && gameState.relic_powers_used['prisma'];
+            actionBtnHtml = used 
+              ? `<span class="text-[9px] text-amber-500/60 italic mt-0.5">Usata</span>`
+              : `<button onclick="useRelicPower('prisma')" class="mt-1 px-1.5 py-0.5 rounded text-[9px] bg-emerald-700 hover:bg-emerald-600 text-white font-bold border border-emerald-400 active:scale-95 shadow">✨ +5 PF</button>`;
+          } else if (r.powerKey === 'sigillo') {
+            const used = gameState.relic_powers_used && gameState.relic_powers_used['sigillo'];
+            actionBtnHtml = used
+              ? `<span class="text-[9px] text-amber-500/60 italic mt-0.5">Attivo</span>`
+              : `<button onclick="useRelicPower('sigillo')" class="mt-1 px-1.5 py-0.5 rounded text-[9px] bg-amber-600 hover:bg-amber-500 text-black font-extrabold border border-amber-300 active:scale-95 shadow">✨ +2 Max</button>`;
+          } else if (r.powerKey === 'egida') {
+            actionBtnHtml = `<span class="text-[9px] text-amber-300 font-semibold mt-0.5">Difesa -1</span>`;
+          }
+        } else {
+          actionBtnHtml = `<span class="text-[9px] text-amber-800/60">Non trovata</span>`;
+        }
+
+        div.innerHTML = `
+          <span class="text-base cursor-pointer hover:scale-110 transition-transform" onclick="showRelicInfo('${r.key}')" title="Clicca per info">${r.icon}</span>
+          <span class="text-[9px] truncate max-w-full font-bold cursor-pointer" onclick="showRelicInfo('${r.key}')">${hasIt ? r.name.split(' ')[0] : '???'}</span>
+          ${actionBtnHtml}
+        `;
         container.appendChild(div);
       });
+    }
+
+    function useRelicPower(relicKey) {
+      if (!gameState.relic_powers_used) gameState.relic_powers_used = {};
+      if (relicKey === 'prisma') {
+        if (gameState.relic_powers_used['prisma']) return;
+        if (gameState.stamina >= gameState.max_stamina) {
+          showModal("Punti Ferita al Massimo", "Il tuo vigore è già al massimo! Conserva la Luce del Prisma per quando avrai subito ferite in battaglia.", "D'accordo");
+          return;
+        }
+        const healed = Math.min(gameState.max_stamina - gameState.stamina, 5);
+        gameState.stamina = Math.min(gameState.max_stamina, gameState.stamina + 5);
+        gameState.relic_powers_used['prisma'] = true;
+        updateUI();
+        saveGameAuto();
+        showModal(
+          "Luce Astrale del Prisma", 
+          `Invochi la luce ancestrale del <strong>Prisma di Stella</strong>!<br><br>Un raggio di calda luce aurorale avvolge le tue membra scacciando il dolore e cicatrizzando le ferite.<br><br><strong class="text-emerald-400 font-bold text-base">+${healed} Punti Ferita Risanati!</strong><br>(Resistenza attuale: ${gameState.stamina}/${gameState.max_stamina} PF)`,
+          "Magnifico!"
+        );
+      } else if (relicKey === 'sigillo') {
+        if (gameState.relic_powers_used['sigillo']) return;
+        gameState.max_stamina += 2;
+        gameState.stamina = Math.min(gameState.max_stamina, gameState.stamina + 2);
+        gameState.relic_powers_used['sigillo'] = true;
+        updateUI();
+        saveGameAuto();
+        showModal(
+          "Vigore del Sigillo Reale",
+          `Il <strong>Sigillo dei Sovrani</strong> arde a contatto con la tua mano risvegliando il retaggio dei Re dell'Alba!<br><br><strong class="text-amber-300 font-bold text-base">La tua Resistenza Massima aumenta permanentemente a ${gameState.max_stamina} PF!</strong><br>(+2 PF attuali recuperati)`,
+          "Gloria ai Re!"
+        );
+      }
+    }
+
+    function showRelicInfo(relicKey) {
+      const allRelics = {
+        "Sigillo dei Sovrani": {
+          title: "Sigillo dei Sovrani (Reliquia I)",
+          icon: "💍",
+          desc: "Anello d'oro puro intarsiato con rubini dell'Aurora. Risuona con il sangue dei primi Re di Aethelgard.<br><br><strong>Potere:</strong> Aumenta permanentemente la Resistenza Massima di +2 PF (e recupera +2 PF attuali)."
+        },
+        "Prisma di Stella": {
+          title: "Prisma di Stella (Reliquia II)",
+          icon: "💎",
+          desc: "Cristallo puro immune alla corruzione dell'Ombra, forgiato con la luce delle prime stelle.<br><br><strong>Potere:</strong> Risana all'istante +5 Punti Ferita quando decidi di attivarlo dallo zaino/scheda reliquie."
+        },
+        "Egida d'Argento": {
+          title: "Egida d'Argento (Reliquia III)",
+          icon: "🛡️",
+          desc: "Scudo ancestrale dei Grandi Paladini, indistruttibile e leggero come piuma d'acciaio.<br><br><strong>Potere Passivo:</strong> Emana un campo protettivo che riduce di 1 punto i danni subiti quando un nemico infligge un colpo pesante (2+ danni)."
+        }
+      };
+      const info = allRelics[relicKey];
+      if (!info) return;
+      const hasIt = gameState.relics.includes(relicKey);
+      showModal(
+        `${info.icon} ${info.title}`,
+        `<p class="text-amber-100 text-sm leading-relaxed">${info.desc}</p><br><p class="text-xs font-semibold ${hasIt ? 'text-emerald-400' : 'text-amber-600/70'}">${hasIt ? '✅ Reliquia attualmente in tuo possesso' : '🔒 Non ancora recuperata'}</p>`,
+        "Chiudi"
+      );
     }
 
     function renderInventoryItems(listElement) {
@@ -1837,6 +1954,21 @@
       if (choice.load_game) {
         loadSavedGame();
         return;
+      }
+      if (choice.cost_gold) {
+        if (gameState.gold < choice.cost_gold) return;
+        gameState.gold -= choice.cost_gold;
+      }
+      if (choice.heal) {
+        gameState.stamina = Math.min(gameState.max_stamina, gameState.stamina + choice.heal);
+      }
+      if (choice.damage) {
+        gameState.stamina = Math.max(0, gameState.stamina - choice.damage);
+        if (gameState.stamina <= 0) {
+          updateUI();
+          goToNode("34");
+          return;
+        }
       }
       if (choice.check_spadone) {
         if (gameState.weapon && gameState.weapon.id === 'greatsword') {
@@ -2036,6 +2168,19 @@
         gameState.roland_saved = true;
       }
 
+      // Handle Environmental Damage
+      if (node.damage) {
+        if (!gameState.visited_nodes) gameState.visited_nodes = {};
+        if (!gameState.visited_nodes[nodeId]) {
+          gameState.stamina = Math.max(0, gameState.stamina - node.damage);
+          if (gameState.stamina <= 0) {
+            updateUI();
+            goToNode("34");
+            return;
+          }
+        }
+      }
+
       // Handle Healing / Relic effects (only once per node)
       if (!gameState.visited_nodes) gameState.visited_nodes = {};
       if (node.loot && node.loot.heal && !gameState.visited_nodes[nodeId]) {
@@ -2069,7 +2214,15 @@
         btnFight.onclick = () => goToNode("28");
         choicesContainer.appendChild(btnFight);
       } else if (node.combat) {
-        setupCombat(node.combat, node.on_victory);
+        if (!gameState.defeated_enemies) gameState.defeated_enemies = {};
+        if (gameState.defeated_enemies[nodeId]) {
+          const pronouns = getPronouns(gameState);
+          const baseText = typeof node.text === 'function' ? node.text(pronouns) : node.text;
+          nodeText.innerHTML = `${baseText}<br><br><div class="p-3 bg-emerald-950/40 border border-emerald-700/60 rounded-xl text-emerald-300 text-xs sm:text-sm">⚔️ <em>La creatura nemica giace già abbattuta al suolo. Il passaggio è sgombro.</em></div>`;
+          renderVictoryChoices(node.on_victory, pronouns);
+        } else {
+          setupCombat(node.combat, node.on_victory);
+        }
       } else if (node.input_riddle) {
         riddleBox.classList.remove('hidden');
         setTimeout(() => riddleInput.focus(), 250);
@@ -2077,12 +2230,20 @@
         node.choices.forEach(choice => {
           const btn = document.createElement('button');
           
-          // Check Encumbrance Requirement (e.g. Swimming / Narrow crevices)
+          // Check Encumbrance / Item / Gold Requirements
           let isBlocked = false;
           let blockReason = "";
           if (choice.require_light_weapon && gameState.weapon.encumbrance === 'pesante') {
             isBlocked = true;
-            blockReason = ` [Bloccato: Troppo pesante per nuotare/infiltrarsi con ${gameState.weapon.name}]`;
+            blockReason = ` [Bloccato: Troppo pesante per ${gameState.weapon.name}]`;
+          }
+          if (choice.require_item && !gameState.inventory.includes(choice.require_item)) {
+            isBlocked = true;
+            blockReason = ` [Richiede: ${choice.require_item}]`;
+          }
+          if (choice.cost_gold && gameState.gold < choice.cost_gold) {
+            isBlocked = true;
+            blockReason = ` [Richiede ${choice.cost_gold} Monete d'Oro]`;
           }
 
           if (isBlocked) {
@@ -2234,6 +2395,11 @@
         enemyHits -= 1; // Roland defends you!
       }
 
+      // Passive Egida d'Argento Protection (absorbs 1 damage on heavy hits)
+      if (gameState.relics.includes("Egida d'Argento") && enemyHits >= 2) {
+        enemyHits -= 1;
+      }
+
       if (heroHits > 0) {
         gameState.current_enemy_stamina = Math.max(0, gameState.current_enemy_stamina - heroHits);
       }
@@ -2265,6 +2431,8 @@
       if (gameState.current_enemy_stamina <= 0) {
         stopAutoCombat();
         combatBox.classList.add('hidden');
+        if (!gameState.defeated_enemies) gameState.defeated_enemies = {};
+        gameState.defeated_enemies[gameState.current_node] = true;
         
         if (currentCombatVictory) {
           const pronouns = getPronouns(gameState);
@@ -2283,41 +2451,54 @@
             }
             return;
           }
-          if (currentCombatVictory.choices && Array.isArray(currentCombatVictory.choices)) {
-            choicesContainer.innerHTML = '';
-            currentCombatVictory.choices.forEach(choice => {
-              const btn = document.createElement('button');
-              const label = typeof choice.text === 'function' ? choice.text(pronouns) : choice.text;
-              let isBlocked = false;
-              let blockReason = "";
-              if (choice.require_light_weapon && gameState.weapon.encumbrance === 'pesante') {
-                isBlocked = true;
-                blockReason = ` [Bloccato: Troppo pesante per ${gameState.weapon.name}]`;
-              }
-              if (isBlocked) {
-                btn.disabled = true;
-                btn.className = 'w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-amber-500/50 font-semibold text-xs sm:text-sm flex items-center justify-between border border-amber-950 min-h-[48px] cursor-not-allowed';
-                btn.innerHTML = `<span class="pr-2 flex items-center gap-2"><span class="text-amber-600">🔒</span> <span>${label} <em class="text-red-400/80 font-normal text-[11px]">${blockReason}</em></span></span>`;
-              } else {
-                btn.className = 'w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-amber-100 font-semibold text-sm sm:text-base flex items-center justify-between border border-amber-800/80 shadow-md active:scale-98 min-h-[48px]';
-                btn.innerHTML = `<span class="pr-2">${label}</span> <span class="text-amber-400 text-lg shrink-0">➔</span>`;
-                btn.onclick = () => goToNode(choice.target);
-              }
-              choicesContainer.appendChild(btn);
-            });
-          } else if (currentCombatVictory.target) {
-            const btnText = currentCombatVictory.btn_text || "Prosegui l'Avventura";
-            choicesContainer.innerHTML = `
-              <button onclick="goToNode('${currentCombatVictory.target}')" class="w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-amber-100 font-semibold text-sm sm:text-base flex items-center justify-between border border-amber-800 shadow-md active:scale-98 min-h-[48px]">
-                <span>${btnText}</span> <span class="text-amber-400 text-lg shrink-0">➔</span>
-              </button>
-            `;
-          }
+          renderVictoryChoices(currentCombatVictory, pronouns);
         }
       } else if (gameState.stamina <= 0) {
         stopAutoCombat();
         combatBox.classList.add('hidden');
         goToNode("34"); // Game Over Screen
+      }
+    }
+
+    function renderVictoryChoices(victoryData, pronouns) {
+      if (!victoryData) return;
+      if (victoryData.choices && Array.isArray(victoryData.choices)) {
+        choicesContainer.innerHTML = '';
+        victoryData.choices.forEach(choice => {
+          const btn = document.createElement('button');
+          const label = typeof choice.text === 'function' ? choice.text(pronouns) : choice.text;
+          let isBlocked = false;
+          let blockReason = "";
+          if (choice.require_light_weapon && gameState.weapon.encumbrance === 'pesante') {
+            isBlocked = true;
+            blockReason = ` [Bloccato: Troppo pesante per ${gameState.weapon.name}]`;
+          }
+          if (choice.require_item && !gameState.inventory.includes(choice.require_item)) {
+            isBlocked = true;
+            blockReason = ` [Richiede: ${choice.require_item}]`;
+          }
+          if (choice.cost_gold && gameState.gold < choice.cost_gold) {
+            isBlocked = true;
+            blockReason = ` [Richiede ${choice.cost_gold} Monete d'Oro]`;
+          }
+          if (isBlocked) {
+            btn.disabled = true;
+            btn.className = 'w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-amber-500/50 font-semibold text-xs sm:text-sm flex items-center justify-between border border-amber-950 min-h-[48px] cursor-not-allowed';
+            btn.innerHTML = `<span class="pr-2 flex items-center gap-2"><span class="text-amber-600">🔒</span> <span>${label} <em class="text-red-400/80 font-normal text-[11px]">${blockReason}</em></span></span>`;
+          } else {
+            btn.className = 'w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-amber-100 font-semibold text-sm sm:text-base flex items-center justify-between border border-amber-800/80 shadow-md active:scale-98 min-h-[48px]';
+            btn.innerHTML = `<span class="pr-2">${label}</span> <span class="text-amber-400 text-lg shrink-0">➔</span>`;
+            btn.onclick = () => handleChoiceClick(choice);
+          }
+          choicesContainer.appendChild(btn);
+        });
+      } else if (victoryData.target) {
+        const btnText = victoryData.btn_text || "Prosegui l'Avventura";
+        choicesContainer.innerHTML = `
+          <button onclick="goToNode('${victoryData.target}')" class="w-full text-left btn-fantasy p-3.5 sm:p-4 rounded-xl text-amber-100 font-semibold text-sm sm:text-base flex items-center justify-between border border-amber-800 shadow-md active:scale-98 min-h-[48px]">
+            <span>${btnText}</span> <span class="text-amber-400 text-lg shrink-0">➔</span>
+          </button>
+        `;
       }
     }
 
