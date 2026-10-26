@@ -894,7 +894,6 @@
                  «Ti aspettavo, ${p.vocative},» sussurra con voce commossa inginocchiandosi al tuo cospetto. «I venti dell'Alba mi avevano annunciato che ${p.heir_title} sarebbe ${p.tornato_a}. Malakor tiene il tuo compagno d'infanzia, <strong>Roland</strong>, prigioniero di una maledizione mentale: il <em>Sigillo Notturno</em>. Se lo incontrerai nel palazzo egli ti attaccherà come un nemico mortale!<br><br>
                  Prendi questa fiala: è l'<strong>Elisir Spezzaincanto</strong>. Soltanto infrangendola su di lui potrai risvegliare la sua vera anima!»`,
     loot: {
-      items: ["Elisir Spezzaincanto"],
       is_elisir: true
     },
     choices: [
@@ -2050,6 +2049,11 @@
           btn.remove();
           updateUI();
           if (lootButtons.children.length === 0) lootBox.classList.add('hidden');
+          showModal(
+            "Elisir Spezzaincanto Ricevuto",
+            "Hai riposto la preziosa fiala di cristallo nello zaino.<br><br><em>«Infrangila su Roland se dovessi affrontarlo nel palazzo: solo così potrai spezzare la maledizione oscura di Malakor e salvare la sua vita!»</em>",
+            "Custodisci nello Zaino"
+          );
         };
         lootButtons.appendChild(btn);
       }
@@ -2088,6 +2092,7 @@
 
       if (lootData.items) {
         lootData.items.forEach(item => {
+          if (item === "Elisir Spezzaincanto" && lootData.is_elisir) return;
           if (!gameState.inventory.includes(item)) {
             hasLoot = true;
             const btn = document.createElement('button');
